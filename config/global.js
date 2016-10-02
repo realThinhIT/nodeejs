@@ -1,6 +1,8 @@
+// GLOBAL CONFIGURATIONS
+
 module.exports = {
     // server environment
-    APP_NAME:       'Node + Express RESTful API Starter Pack by ThinhDev',
+    APP_NAME:       'Node + Express + MongoDB RESTful API Starter Pack by ThinhDev',
     SERVER_PORT:    91,
 
     // debugging

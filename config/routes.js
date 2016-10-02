@@ -1,20 +1,22 @@
-module.exports = [
-    // DEMO CONFIGURATIONS FOR A GROUP ##########
-    // this will be the configuration for /api/students -> controller: v1/students.getAllStudents()
-    // {
-    //     group: '/api',
-    //
-    //     endPoints: [
-    //         {
-    //             verb: 'get',
-    //             path: '/students',
-    //             controller: 'v1/students',
-    //             callback: 'getAllStudents',
-    //         }
-    //     ],
-    // }
-    // ##########################################
+// ROUTES CONFIGURATIONS
+// 
+// DEMO CONFIGURATIONS FOR A GROUP ##########
+// this will be the configuration for /api/students -> controller: v1/students.getAllStudents()
+// {
+//     group: '/api',
+//
+//     endPoints: [
+//         {
+//             verb: 'get',
+//             path: '/students',
+//             controller: 'v1/students',
+//             callback: 'getAllStudents',
+//         }
+//     ],
+// }
+// ##########################################
 
+module.exports = [
     {
         group: '/',
 

@@ -1,3 +1,6 @@
+// API CONFIGURATIONS
+// this is common configurations for API system
+
 module.exports = {
     // api default headers
     DEFAULT_TYPE:       'application/json',

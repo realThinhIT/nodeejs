@@ -1,13 +1,10 @@
 // DATABASE CONFIGURATIONS
-module.exports = {
-    TYPE:       'mongodb',      // 1: 'mongodb', 2: 'mysql'
+// this is configurations to work with MongoDB engine
 
-    // mongodb database
-    CONNECTION: {
-        host:   'localhost',
-        port:   '27017',
-        dbName: 'test',
-        user:   '',
-        pass:   ''
-    }
+module.exports = {
+    host:   'localhost',
+    port:   '27017',
+    dbName: 'test',
+    user:   '',
+    pass:   ''
 };
