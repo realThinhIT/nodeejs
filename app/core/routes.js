@@ -9,21 +9,17 @@ module.exports = function (app) {
             var endPoint        = group.group + point.path;
             var method          = point.verb;
             var callbackMethod  = point.callback;
+            var func = require('../controllers/' + point.controller)[callbackMethod];
+
+            // throw an exception if the callback function is illegal
+            if (typeof(func) !== 'function') {
+                var message = 'route: callback function \'' + callbackMethod + '\' (' + typeof(func) + ') is not available at ' + endPoint;
+
+                log.throwException(message);
+            }
 
             var callbackFunction = function (req, res, next) {
-                var func = require('../controllers/' + point.controller)[callbackMethod];
-
-                if (typeof(func) === 'function') {
-                    func(req, res);
-                } else {
-                    var message = 'route: callback function \'' + callbackMethod + '\' is not available at ' + endPoint;
-
-                    log.put(message);
-                    res.json({
-                        status: 0,
-                        message: message
-                    });
-                }
+                func(req, res);
 
                 next();
             };

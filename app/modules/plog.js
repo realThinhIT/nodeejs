@@ -1,6 +1,9 @@
 module.exports = function(enable, mode) {
     var logMode;
 
+    enable  = (enable === undefined || enable === null) ? true : enable;
+    mode    = (mode === undefined || mode === null) ? 'console' : mode;
+
     // user specified
     if (mode === 'file') {
         logMode = 1;
@@ -58,7 +61,11 @@ module.exports = function(enable, mode) {
                 message = message || 'The program threw an exception. Process stopped.';
 
                 this.put(message, false);
-                this.put(err.stack, false);
+
+                if (err !== undefined && err !== null) {
+                    this.put(err.stack, false);
+                }
+
                 process.exit(500);
             },
 
@@ -66,7 +73,10 @@ module.exports = function(enable, mode) {
                 message = message || 'The program put an exception. Process continues.';
 
                 this.put(message, false);
-                this.put(err.stack, false);
+
+                if (err !== undefined && err !== null) {
+                    this.put(err.stack, false);
+                }
             }
         };
     }

@@ -10,8 +10,6 @@ var express         = require('express'),
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Logging
-
 // Server default headers
 app.use(function (req, res, next) {
     res.type(apiConfig.DEFAULT_TYPE);
@@ -27,6 +25,6 @@ app.use(function (req, res, next) {
 require('./routes')(app);
 
 // Start the server
-app.listen(globalConfig.SERVER_PORT, function (err) {
-    log.put('server listening on port ' + globalConfig.SERVER_PORT + '.');
+app.listen(globalConfig.SERVER_PORT || 8080, function (err) {
+    log.put('server listening on port ' + globalConfig.SERVER_PORT || 8080 + '.');
 });
