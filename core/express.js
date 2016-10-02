@@ -1,4 +1,4 @@
-// Set the server up
+// set the server up
 var express         = require('express'),
     app             = express(),
     bodyParser      = require('body-parser'),
@@ -6,11 +6,11 @@ var express         = require('express'),
     apiConfig       = require('../config/api-config'),
     log             = require('../modules/plog')(globalConfig.LOG_ENABLE, globalConfig.LOG_MODE);
 
-// Middlewares
+// middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Server default headers
+// server default headers
 app.use(function (req, res, next) {
     res.type(apiConfig.DEFAULT_TYPE);
 
@@ -21,10 +21,13 @@ app.use(function (req, res, next) {
     next();
 });
 
-// Configure Routes
+// json customizations
+app.set('json spaces', apiConfig.JSON_SPACES);
+
+// configure Routes
 require('./routes')(app);
 
-// Start the server
+// start the server
 app.listen(globalConfig.SERVER_PORT || 8080, function (err) {
     log.put('server listening on port ' + globalConfig.SERVER_PORT || 8080 + '.');
 });

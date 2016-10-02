@@ -19,7 +19,9 @@ module.exports = function (app) {
             }
 
             var callbackFunction = function (req, res, next) {
-                func(req, res);
+                var response = require('../modules/presponse');
+
+                func(req, response.to(res));
 
                 next();
             };

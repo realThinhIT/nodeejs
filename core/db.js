@@ -7,11 +7,11 @@ var connection = {};
 var _database;
 
 // MongoDb
-var loginInfo = (db.CONNECTION.user !== '') ? db.CONNECTION.user : '';
-loginInfo += (db.CONNECTION.pass !== '') ? ':' + db.CONNECTION.user : '';
+var loginInfo = (db.user !== '') ? db.user : '';
+loginInfo += (db.pass !== '') ? ':' + db.user : '';
 loginInfo += (loginInfo !== '') ? '@' : '';
 
-var mongoUrl = 'mongodb://' + loginInfo + db.CONNECTION.host + ':' + db.CONNECTION.port + '/' + db.CONNECTION.dbName;
+var mongoUrl = 'mongodb://' + loginInfo + db.host + ':' + db.port + '/' + db.dbName;
 
 connection.init = function (callback) {
     log.put('connecting to the database: ' + mongoUrl);

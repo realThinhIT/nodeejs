@@ -7,4 +7,4 @@
 // # Github: https://github.com/thinhdev/node-express-mongo-rest-api
 // ############################################################################
 
-require('./app/core/init');
+require('./core/init');

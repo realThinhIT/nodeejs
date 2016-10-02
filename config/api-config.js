@@ -10,5 +10,8 @@ module.exports = {
         'Expires': '0',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-    }
+    },
+
+    // json customizations
+    JSON_SPACES:        4,          // recommend '0' for production
 };

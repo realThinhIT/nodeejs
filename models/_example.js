@@ -3,6 +3,11 @@ var db          = require('../core/db').getConnection(),
 
 // ########################################
 // POPULATE DATA AND VALIDATION
+//
+// - call from the controllers by:
+//      var example = new _example(data);
+// - validate the input by:
+//      if (example.validate()) {}
 // ########################################
 var _data = {};
 
@@ -10,7 +15,6 @@ var _example = function (data) {
     _data = data;
 
     _example.populate();
-    _example.validate();
 };
 
 // Data population on _data (default values)

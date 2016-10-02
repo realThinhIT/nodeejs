@@ -3,6 +3,8 @@ var _res;
 module.exports = {
     to: function (res) {
         _res = res;
+
+        return this;
     },
 
     success: function (data, message, statusCode) {
@@ -32,5 +34,9 @@ module.exports = {
         }
 
         _res.status(parseInt(statusCode)).json(json);
+    },
+
+    set: function (key, value) {
+        return _res.set(key, value);
     }
 };
