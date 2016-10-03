@@ -2,9 +2,7 @@
 var express         = require('express'),
     app             = express(),
     bodyParser      = require('body-parser'),
-    globalConfig    = require('../config/global'),
-    apiConfig       = require('../config/api-config'),
-    log             = require('../modules/plog')(globalConfig.LOG_ENABLE, globalConfig.LOG_MODE);
+    apiConfig       = require('../config/api-config');
 
 // middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -28,6 +26,6 @@ app.set('json spaces', apiConfig.JSON_SPACES);
 require('./routes')(app);
 
 // start the server
-app.listen(globalConfig.SERVER_PORT || 8080, function (err) {
-    log.put('server listening on port ' + globalConfig.SERVER_PORT || 8080 + '.');
+app.listen(global.globalConfig.SERVER_PORT || 8080, function (err) {
+    log.put('server listening on port ' + global.globalConfig.SERVER_PORT || 8080 + '.');
 });

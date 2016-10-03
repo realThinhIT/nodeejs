@@ -1,5 +1,5 @@
 var db          = require('../core/db').getConnection(),
-    populate    = require('../modules/populate')[populate];
+    crud        = require('../core/crud-common.js');
 
 // ########################################
 // POPULATE DATA AND VALIDATION
@@ -9,25 +9,35 @@ var db          = require('../core/db').getConnection(),
 // - validate the input by:
 //      if (example.validate()) {}
 // ########################################
-var _data = {};
 
-var _example = function (data) {
-    _data = data;
+var _example        = function() {};
+var d               = {};
+d.data              = {};
 
-    _example.populate();
+// Model configurations
+d.collection        = "_example";
+d.defaultValues     = {
+
+};
+
+// IMPLEMENT THIS!
+// Data validation logic on _data
+_example.validate = function () {
+
 };
 
 // Data population on _data (default values)
-_example.populate = function () {
-    var defaultValues = {
-
-    };
-
-    data = populate(data, defaultValues);
+_example.populate = function (data) {
+    d.data = data;
+    d.data = crud.set(this[d.collection], db, d).populate();
 };
 
-// Data validation logic on _data
-_example.validate = function () {
+// CRUD Operations
+_example.insert = function (callback) {
+    return crud.set(this[d.collection], db, d).insert(callback);
+};
+
+_example.delete = function (callback) {
 
 };
 

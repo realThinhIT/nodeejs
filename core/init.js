@@ -1,16 +1,21 @@
 // clear the console
-var globalConfig    = require('../config/global.js');
-var log             = require('../modules/plog.js')();
+global.globalConfig = require('../config/global.js');
+global.log          = require('../modules/plog.js')();
 
-if (globalConfig.LOG_CLEAR_CONSOLE_ON_STARTUP) {
+if (global.globalConfig.LOG_CLEAR_CONSOLE_ON_STARTUP) {
     log.clear();
 }
 
-log.put(globalConfig.APP_NAME.toUpperCase() + '', true);
+log.put(global.globalConfig.APP_NAME.toUpperCase() + '', true);
 log.endl();
 
 // connect to database
-require('./db').init();
+global.db = require('./db');
+global.db.init(function (err, db) {
+    if (err) {
+        global.log.putException(err);
+    }
 
-// run the server
-require('./express');
+    // run the server
+    require('./express');
+});

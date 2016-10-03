@@ -1,10 +1,8 @@
-var globalConfig    = require('../config/global'),
-    db              = require('../config/database'),
-    mongoDb         = require('mongodb').MongoClient,
-    log             = require('../modules/plog')(globalConfig.LOG_ENABLE, globalConfig.LOG_MODE);
+var db              = require('../config/database'),
+    mongoDb         = require('mongodb').MongoClient;
 
 var connection = {};
-var _database;
+connection._database = null;
 
 // MongoDb
 var loginInfo = (db.user !== '') ? db.user : '';
@@ -14,31 +12,31 @@ loginInfo += (loginInfo !== '') ? '@' : '';
 var mongoUrl = 'mongodb://' + loginInfo + db.host + ':' + db.port + '/' + db.dbName;
 
 connection.init = function (callback) {
-    log.put('connecting to the database: ' + mongoUrl);
+    global.log.put('connecting to the database: ' + mongoUrl);
 
     mongoDb.connect(mongoUrl, function (err, db) {
         if (err) {
-            log.throwException(err);
+            global.log.throwException(err);
         }
 
         log.put('successfully connect to the database: ' + mongoUrl);
 
-        _database = db;
+        connection._database = db;
 
-        if (callback !== undefined) {
+        if (typeof(callback) === 'function') {
             callback(err, db);
         }
     });
 };
 
 connection.getConnection = function () {
-    if (_database === null || _database === undefined) {
-        log.put('reconnect to the database...');
+    if (connection._database === null || connection._database === undefined) {
+        global.log.put('reconnect to the database...');
 
         connection.init();
     }
 
-    return _database;
+    return connection._database;
 };
 
 connection.close = function () {

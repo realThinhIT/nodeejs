@@ -1,6 +1,4 @@
-var routes          = require('../config/routes'),
-    globalConfig    = require('../config/global'),
-    log             = require('../modules/plog')(globalConfig.LOG_ENABLE, globalConfig.LOG_MODE);
+var routes          = require('../config/routes');
 
 module.exports = function (app) {
     routes.forEach(function (group) {
@@ -15,7 +13,7 @@ module.exports = function (app) {
             if (typeof(func) !== 'function') {
                 var message = 'route: callback function \'' + callbackMethod + '\' (' + typeof(func) + ') is not available at ' + endPoint;
 
-                log.throwException(message);
+                global.log.throwException(message);
             }
 
             var callbackFunction = function (req, res, next) {
@@ -26,9 +24,15 @@ module.exports = function (app) {
                 next();
             };
 
-            log.put('setup endpoint: ' + method.toUpperCase() + ' ' + endPoint + ' -> ' + point.controller + '/' + callbackMethod);
+            log.put('setup endpoint: ' + method.toUpperCase() + ' ' + endPoint);
 
-            app.use(endPoint, callbackFunction);
+            // app.use(endPoint, callbackFunction);
+
+            if (method === 'post') {
+                app.post(endPoint, callbackFunction);
+            } else if (method === 'get') {
+                app.get(endPoint, callbackFunction);
+            }
         });
     });
 };
