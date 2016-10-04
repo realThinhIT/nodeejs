@@ -2,11 +2,16 @@
 var express         = require('express'),
     app             = express(),
     bodyParser      = require('body-parser'),
-    apiConfig       = require('../config/api-config');
+    apiConfig       = require('../config/api-config'),
+    morgan          = require('morgan');
 
 // middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+if (global.globalConfig.LOG_REQUEST) {
+    app.use(morgan('dev'));
+}
 
 // server default headers
 app.use(function (req, res, next) {

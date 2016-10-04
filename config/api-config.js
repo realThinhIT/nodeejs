@@ -14,4 +14,7 @@ module.exports = {
 
     // json customizations
     JSON_SPACES:        4,          // recommend '0' for production
+
+    // api security
+    API_KEY:        'TvGpPbCwebLVA0YeswemQgYPCRKno8XaTUCaTuFz',     // recommended to change this for every app
 };
