@@ -1,5 +1,10 @@
+// ######################################################
+// CORE: DATABASE CONNECTOR
+// ######################################################
+
 var db              = require('../config/database'),
-    mongoDb         = require('mongodb').MongoClient;
+    mongoDb         = require('mongodb').MongoClient,
+    log             = global.app.log;
 
 var connection = {};
 connection._database = null;
@@ -12,14 +17,14 @@ loginInfo += (loginInfo !== '') ? '@' : '';
 var mongoUrl = 'mongodb://' + loginInfo + db.host + ':' + db.port + '/' + db.dbName;
 
 connection.init = function (callback) {
-    global.log.put('connecting to the database: ' + mongoUrl);
+    log.put('[db] connecting to the database: ' + mongoUrl);
 
     mongoDb.connect(mongoUrl, function (err, db) {
         if (err) {
-            global.log.throwException(err);
+            log.throwException(err);
         }
 
-        log.put('successfully connect to the database: ' + mongoUrl);
+        log.put('[db] successfully connect to the database: ' + mongoUrl);
 
         connection._database = db;
 
@@ -31,7 +36,7 @@ connection.init = function (callback) {
 
 connection.getConnection = function () {
     if (connection._database === null || connection._database === undefined) {
-        global.log.put('reconnect to the database...');
+        log.put('[db] reconnect to the database...');
 
         connection.init();
     }

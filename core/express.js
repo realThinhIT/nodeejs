@@ -1,15 +1,21 @@
+// ######################################################
+// CORE: EXPRESSJS
+// ######################################################
+
 // set the server up
 var express         = require('express'),
     app             = express(),
     bodyParser      = require('body-parser'),
-    apiConfig       = require('../config/api-config'),
-    morgan          = require('morgan');
+    apiConfig       = global.app.apiConfig,
+    globalConfig    = global.app.globalConfig,
+    morgan          = require('morgan'),
+    log             = global.app.log;
 
 // middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-if (global.globalConfig.LOG_REQUEST) {
+if (globalConfig.LOG_REQUEST) {
     app.use(morgan('dev'));
 }
 
@@ -31,6 +37,6 @@ app.set('json spaces', apiConfig.JSON_SPACES);
 require('./routes')(app);
 
 // start the server
-app.listen(global.globalConfig.SERVER_PORT || 8080, function (err) {
-    log.put('server listening on port ' + global.globalConfig.SERVER_PORT || 8080 + '.');
+app.listen(global.app.globalConfig.SERVER_PORT || 8080, function (err) {
+    log.put('[webserver] server listening on port ' + global.app.globalConfig.SERVER_PORT || 8080 + '.');
 });
