@@ -19,7 +19,7 @@ controller.middlewares = [
 // ################################
 
 controller.register = function (req, res, middleware) {
-    var newUser = new users(res.body);
+    var newUser = new users(req.body);
 
     newUser.validate(function (pass, msg, code, detail) {
         if (!pass) {

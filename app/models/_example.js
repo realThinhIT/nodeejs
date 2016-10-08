@@ -6,7 +6,7 @@ var db          = global.app.db.getConnection(),
     crud        = global.app.crud,
     crudFunc    = global.app.crudFunc,
     log         = global.app.log,
-    cb          = global.app.cb;
+    cb          = global.app.cb,
     md5         = require('md5');
 
 // ################################

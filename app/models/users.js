@@ -6,8 +6,9 @@ var db          = global.app.db.getConnection(),
     crud        = global.app.crud,
     crudFunc    = global.app.crudFunc,
     log         = global.app.log,
-    cb          = global.app.cb;
-    md5         = require('md5');
+    cb          = global.app.cb,
+    md5         = require('md5'),
+    validator   = require('../../core/modules/pvalidator');
 
 // ################################
 
@@ -70,8 +71,8 @@ var model           = function (userData) {
             return cb(callback)(false, 'password too short', 400, 'SHORT_PASSWORD');
         }
 
-        if (!this.data.email || this.data.email === '' || typeof(this.data.email) !== 'string') {
-            return cb(callback)(false, 'email invalid', 400, "INVALID_EMAIL");
+        if (!this.data.email || this.data.email === '' || typeof(this.data.email) !== 'string' || !validator.email(this.data.email)) {
+            return cb(callback)(false, 'email invalid', 400, 'INVALID_EMAIL');
         }
 
         cb(callback)(true, 'all tests successfully', 200);
@@ -80,6 +81,10 @@ var model           = function (userData) {
 
     this.transform = function (callback) {
         // custom transformations before inserting goes here
+
+        if (this.data.password) {
+            this.data.password = md5(this.data.password);
+        }
 
         cb(callback)(model);
         return this;
