@@ -1,7 +1,26 @@
-var index = {};
+// ######################################################
+// CONTROLLER: register
+// ######################################################
 
-index.homepage = function (req, res) {
-    res.success(null, 'this app is running properly.');
+var controller      = {};
+var users           = global.model.users;
+
+// ################################
+// MODIFY THIS!
+// ################################
+
+controller.name     = 'index';
+controller.middlewares = [
+];
+
+// ################################
+// CUSTOM FUNCTIONS
+// ################################
+
+controller.homepage = function (req, res, middleware) {
+    res.success(null, 'server is listening');
 };
 
-module.exports = index;
+// ################################
+
+module.exports = controller;

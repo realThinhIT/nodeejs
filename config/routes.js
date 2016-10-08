@@ -22,7 +22,7 @@ module.exports = [
 
         endPoints: [
             {
-                verb: 'get',
+                verb: 'all',
                 path: '/',
                 controller: 'default/index',
                 callback: 'homepage',

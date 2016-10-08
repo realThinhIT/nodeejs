@@ -5,6 +5,39 @@
 var routes          = require('../config/routes'),
     log             = global.app.log;
 
+var validationProcess = function (req, res, func, callback) {
+    var response = global.app.presponse;
+    var middlewares = {};
+    var validationPass = true;
+
+    // set and execute the middlewares
+    func.middlewares.forEach(function (mid) {
+        // if the validation is not pass somewhere,
+        // useful for a controller that has multiple middlewares
+        if (validationPass === false) {
+            return;
+        }
+
+        // execute the middlewares then get the callback
+        middlewares[mid] = require('../app/middlewares/' + mid);
+        middlewares[mid].beforeAction(req, response.to(res),
+            function (isValidated, data, code, detailCode) {
+                if (!isValidated || isValidated === null || isValidated === undefined) {
+                    // log.put('[middleware] failed to execute middleware ' + mid + ' at ' + endPoint + ': ' + data , false);
+                    response.to(res).fail('the app failed in executing middleware ' + mid + ( (typeof(data) === 'string') ? ': ' + data : '' ), code || 500, detailCode);
+
+                    validationPass = false;
+                    return;
+                } else {
+                    middlewares[mid] = data;
+                }
+            }
+        );
+    });
+
+    callback(validationPass, middlewares);
+};
+
 module.exports = function (app) {
     routes.forEach(function (group) {
         group.endPoints.forEach(function (point) {
@@ -22,40 +55,17 @@ module.exports = function (app) {
             }
 
             if (!(func.middlewares instanceof Array)) {
-                log.put('- [middleware] warning: ' + callbackMethod + '.middlewares is not available', false);
+                log.put('[middleware] warning: ' + callbackMethod + '.middlewares is not available', false);
             }
 
-            var callbackFunction = function (req, res) {
+            var callbackFunction = function (req, res, next) {
                 var response = global.app.presponse;
-                var middlewares = {};
-                var validationPass = true;
 
-                // set and execute the middlewares
-                func.middlewares.forEach(function (mid) {
-                    // if the validation is not pass somewhere,
-                    // useful for a controller that has multiple middlewares
-                    if (validationPass === false) {
-                        return;
-                    }
-
-                    // execute the middlewares then get the callback
-                    middlewares[mid] = require('../app/middlewares/' + mid);
-                    middlewares[mid].beforeAction(req, response.to(res),
-                        function (isValidated, data, code) {
-                            if (!isValidated || isValidated === null || isValidated === undefined) {
-                                // log.put('[middleware] failed to execute middleware ' + mid + ' at ' + endPoint + ': ' + data , false);
-                                response.to(res).fail('the app failed in executing middleware ' + mid + ( (typeof(data) === 'string') ? ': ' + data : '' ), code || 500);
-
-                                validationPass = false;
-                                return;
-                            } else {
-                                middlewares[mid] = data;
-                            }
-                        }
-                    );
+                validationProcess(req, res, func, function (validationPass, middlewares) {
+                    if (validationPass === true) func[callbackMethod](req, response.to(res, next), middlewares);
                 });
 
-                if (validationPass === true) func[callbackMethod](req, response.to(res), middlewares);
+                // next();
             };
 
             log.put('[route] setup endpoint: ' + method.toUpperCase() + ' ' + endPoint);
@@ -70,6 +80,8 @@ module.exports = function (app) {
                 app.put(endPoint, callbackFunction);
             } else if (method === 'delete') {
                 app.delete(endPoint, callbackFunction);
+            } else if (method === 'all') {
+                app.all(endPoint, callbackFunction);
             }
         });
     });

@@ -11,7 +11,6 @@ var users           = global.model.users;
 
 controller.name     = 'register';
 controller.middlewares = [
-    '_example',
     'api-key',
 ];
 
@@ -20,7 +19,21 @@ controller.middlewares = [
 // ################################
 
 controller.register = function (req, res, middleware) {
-    res.success(null, 'all functioning properly');
+    var newUser = new users(res.body);
+
+    newUser.validate(function (pass, msg, code, detail) {
+        if (!pass) {
+            return res.fail(msg, code, detail);
+        }
+
+        newUser.create(function (err, row) {
+            if (err) {
+                return res.fail('there was something wrong registering new user');
+            }
+
+            return res.success(row, 'user registered');
+        });
+    });
 };
 
 // ################################

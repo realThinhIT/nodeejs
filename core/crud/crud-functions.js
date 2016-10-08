@@ -3,39 +3,49 @@
 // ######################################################
 
 var cb          = global.app.cb;
+var self;
 
-var crud = {};
-crud.model = null;
-crud.db    = null;
-crud.core  = null;
+var crud = function (m, c, d) {
+    self = this;
 
-crud.set = function (c, m, d) {
-    crud.model = m;
-    crud.db    = d;
-    crud.core  = c;
+    self.model = m;
+    self.db    = d;
+    self.core  = new c(m, d);
 
-    return crud;
+    return self;
 };
 
-crud.create = function (callback) {
-    return crud.model.transform(function () {
-        return crud.core.set(crud.model, crud.db).insert(callback);
+crud.prototype.populate = function (data, callback) {
+    self.model.data = data || {};
+
+    return self.core.populate(function (newData) {
+        self.model.data = newData;
+
+        cb(callback)(self.model.data);
     });
 };
 
-crud.read = function (conditions, callback, limit, offset) {
-    return crud.core.set(crud.model, crud.db).find(conditions, function (err, data) {
-        crud.model.data = data;
-        cb(callback)(err, crud.model.data);
+crud.prototype.create = function (callback) {
+    return self.model.transform(function () {
+        return self.core.insert(callback);
+    });
+};
+
+crud.prototype.read = function (conditions, callback, limit, offset) {
+    return self.core.find(conditions, function (err, data) {
+        self.model.data = data;
+        cb(callback)(err, self.model.data);
     }, {offset: offset || 0, limit: limit || 1});
 };
 
-crud.update = function (conditions, callback, multiple) {
-    return crud.core.set(crud.model, crud.db).update(conditions || null, callback, multiple || false);
+crud.prototype.update = function (callback, update, conditions, multiple) {
+    return self.model.transform(function () {
+        return self.core.update(conditions || null, update || null, callback, multiple || false);
+    });
 };
 
-crud.delete = function (conditions, callback, multiple) {
-    return crud.core.set(crud.model, crud.db).delete(conditions || null, callback, multiple || false);
+crud.prototype.delete = function (conditions, callback, multiple) {
+    return self.core.delete(conditions || null, callback, multiple || false);
 };
 
 module.exports = crud;

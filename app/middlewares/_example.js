@@ -8,7 +8,7 @@ var users = global.model.users;
 // ################################
 // MODIFY THIS!
 // after finish verifying, send
-// the done(isValidated, data, status)
+// the done(isValidated, data, status, detailCode)
 // to pass to the controller.
 // ################################
 

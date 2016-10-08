@@ -1,5 +1,5 @@
 // ######################################################
-// # MODEL:
+// # MODEL: Users
 // ######################################################
 
 var db          = global.app.db.getConnection(),
@@ -7,58 +7,61 @@ var db          = global.app.db.getConnection(),
     crudFunc    = global.app.crudFunc,
     log         = global.app.log,
     cb          = global.app.cb;
+    md5         = require('md5');
 
 // ################################
 
-var model           = {};
-model.data          = {};
+var model           = function (userData) {
+    // ================================
+    this.data       = {};
 
-// Model configurations
-model.collection        = '_example';
-model.defaultValues     = {
+    // ################################
+    // Model configurations
+    // ################################
+    this.collection        = '_example';
+    this.defaultValues     = {
+
+    };
+
+    // ################################
+    // DEFAULT FUNCTIONS
+    // ################################
+
+    // Data population on _data (default values)
+    this.populate = (new crudFunc(this, crud, db)).populate;
+    this.populate(userData);
+
+    // CRUD Operations
+    this.create   = (new crudFunc(this, crud, db)).create;
+    this.read     = (new crudFunc(this, crud, db)).read;
+    this.update   = (new crudFunc(this, crud, db)).update;
+    this.delete   = (new crudFunc(this, crud, db)).delete;
+
+    // ################################
+    // MODIFY THESE FUNCTIONS
+    // ################################
+
+    // Data validation logic on _data
+    this.validate = function (callback) {
+        // custom validations goes here
+
+        cb(callback)(true, 'all tests successfully', 200);
+        return this;
+    };
+
+    this.transform = function (callback) {
+        // custom transformations before inserting goes here
+
+        cb(callback)(model);
+        return this;
+    };
+
+    // ################################
+    // CUSTOM FUNCTIONS GOES HERE
+    // ################################
+
 
 };
-
-// ################################
-// MODIFY THESE FUNCTIONS
-// ################################
-
-// IMPLEMENT THIS!
-// Data validation logic on _data
-model.validate = function (callback) {
-    // custom validations goes here
-
-    cb(callback)(true, 'all tests successfully');
-    return model;
-};
-
-model.transform = function (callback) {
-    // custom transformations goes here
-
-    cb(callback)(model);
-    return model;
-};
-
-// ################################
-
-// Data population on _data (default values)
-model.populate = function (data) {
-    model.data = data;
-    crud.set(model, db).populate(function (data) {
-        model.data = data;
-    });
-};
-
-// CRUD Operations
-model.create = crudFunc.set(crud, model, db).create;
-model.read = crudFunc.set(crud, model, db).read;
-model.update = crudFunc.set(crud, model, db).update;
-model.delete = crudFunc.set(crud, model, db).delete;
-
-// ################################
-// CUSTOM FUNCTIONS GOES HERE
-// ################################
-
 
 // ################################
 
