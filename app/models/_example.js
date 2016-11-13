@@ -1,68 +1,83 @@
 // ######################################################
-// # MODEL: Users
+// MODEL: _example
 // ######################################################
 
-var db          = global.app.db.getConnection(),
-    crud        = global.app.crud,
-    crudFunc    = global.app.crudFunc,
-    log         = global.app.log,
-    cb          = global.app.cb,
-    md5         = require('md5');
+var mongoose    = global.app.mongoose,
+    Schema      = mongoose.Schema,
+    md5         = require('md5'),
+    validator   = require('../../core/modules/pvalidator');
 
 // ################################
 
-var model           = function (userData) {
-    // ================================
-    this.data       = {};
+// model configurations
+var modelName   = '_example';
+var timestamps  = true;
 
-    // ################################
-    // Model configurations
-    // ################################
-    this.collection        = '_example';
-    this.defaultValues     = {
+// define schema
+var modelSchema = new Schema({
+    username: {
+        type: String,
+        required: [true, 'username is required'],
+        unique: true,
+    }
+});
 
-    };
+// ################################
+// PRE-EXECUTIONS
+// ################################
+modelSchema.pre('save', function (next) {
+    if (timestamps) {
+        var currentDate = new Date();
 
-    // ################################
-    // DEFAULT FUNCTIONS
-    // ################################
+        this.createdAt = currentDate;
+        this.updatedAt = currentDate;
+    }
 
-    // Data population on _data (default values)
-    this.populate = (new crudFunc(this, crud, db)).populate;
-    this.populate(userData);
+    next();
+});
 
-    // CRUD Operations
-    this.create   = (new crudFunc(this, crud, db)).create;
-    this.read     = (new crudFunc(this, crud, db)).read;
-    this.update   = (new crudFunc(this, crud, db)).update;
-    this.delete   = (new crudFunc(this, crud, db)).delete;
+modelSchema.pre('update', function (next) {
 
-    // ################################
-    // MODIFY THESE FUNCTIONS
-    // ################################
+    next();
+});
 
-    // Data validation logic on _data
-    this.validate = function (callback) {
-        // custom validations goes here
+modelSchema.pre('find', function (next) {
 
-        cb(callback)(true, 'all tests successfully', 200);
-        return this;
-    };
+    next();
+});
 
-    this.transform = function (callback) {
-        // custom transformations before inserting goes here
+modelSchema.pre('delete', function (next) {
 
-        cb(callback)(model);
-        return this;
-    };
+    next();
+});
 
-    // ################################
-    // CUSTOM FUNCTIONS GOES HERE
-    // ################################
+// ################################
+// POST-EXECUTIONS
+// ################################
+modelSchema.post('save', function () {
 
+});
 
-};
+modelSchema.post('update', function () {
+
+});
+
+modelSchema.post('find', function () {
+
+});
+
+modelSchema.post('delete', function () {
+
+});
+
+// ################################
+// CUSTOM METHODS
+// ################################
+// modelSchema.methods.findSomething = function (callback) {
+//     callback();
+// };
 
 // ################################
 
+var model = mongoose.model(modelName, modelSchema);
 module.exports = model;

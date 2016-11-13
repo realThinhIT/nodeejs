@@ -3,7 +3,8 @@
 // ######################################################
 
 var controller      = {};
-var users           = global.model.users;
+var User            = global.model.User;
+var mge             = global.app.monerr;
 
 // ################################
 // MODIFY THIS!
@@ -19,7 +20,7 @@ controller.middlewares = [
 // ################################
 
 controller.index = function (req, res, middleware) {
-    res.success(null, 'all functioning properly');
+    return res.success(null, 'all functioning properly');
 };
 
 // ################################

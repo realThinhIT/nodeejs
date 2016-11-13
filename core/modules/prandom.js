@@ -1,5 +1,5 @@
-module.exports = function() {
-	this.string = function (len, charSet) {
+module.exports = {
+	string: function (len, charSet) {
 		charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$';
 		len = len || this.int();
 
@@ -8,13 +8,14 @@ module.exports = function() {
 			var randomPoz = Math.floor(Math.random() * charSet.length);
 			randomString += charSet.substring(randomPoz, randomPoz + 1);
 		}
-		return randomString;
-	};
 
-    this.int = function (min, max) {
+		return randomString;
+	},
+
+    int: function (min, max) {
 		min = min || 0;
 		max = max || 9999999;
 
         return Math.floor(Math.random() * (max - min)) + min;
-    };
+    }
 };

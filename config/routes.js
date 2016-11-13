@@ -41,12 +41,12 @@ module.exports = [
                 controller: 'v1/authentication/register',
                 callback: 'register'
             },
-            // {
-            //     verb: 'post',
-            //     path: '/login',
-            //     controller: 'v1/authentication/login',
-            //     callback: 'login'
-            // },
+            {
+                verb: 'post',
+                path: '/login',
+                controller: 'v1/authentication/login',
+                callback: 'login'
+            },
             // {
             //     verb: 'post',
             //     path: '/logout',

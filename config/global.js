@@ -9,5 +9,5 @@ module.exports = {
     LOG_ENABLE:     true,
     LOG_MODE:       'console',      // 2: 'console', 1: 'file'
     LOG_REQUEST:    true,
-    LOG_CLEAR_CONSOLE_ON_STARTUP:   true,
+    LOG_CLEAR_CONSOLE_ON_STARTUP:   !true,
 };

@@ -3,8 +3,10 @@
 // ######################################################
 
 var db              = require('../config/database'),
-    mongoDb         = require('mongodb').MongoClient,
+    mongoDb         = require('mongoose'),
     log             = global.app.log;
+
+    mongoDb.Promise = require('bluebird');
 
 var connection = {};
 connection._database = null;
@@ -45,6 +47,7 @@ connection.getConnection = function () {
 };
 
 connection.close = function () {
+    log.put('[db] closing current database...');
     return _database.close();
 };
 

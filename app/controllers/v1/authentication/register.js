@@ -3,7 +3,8 @@
 // ######################################################
 
 var controller      = {};
-var users           = global.model.users;
+var User            = global.model.User;
+var mge             = global.app.monerr;
 
 // ################################
 // MODIFY THIS!
@@ -11,7 +12,7 @@ var users           = global.model.users;
 
 controller.name     = 'register';
 controller.middlewares = [
-    'api-key',
+    'api-key', 'authentication/register'
 ];
 
 // ################################
@@ -19,20 +20,14 @@ controller.middlewares = [
 // ################################
 
 controller.register = function (req, res, middleware) {
-    var newUser = new users(req.body);
+    var newUser = new User(req.body);
 
-    newUser.validate(function (pass, msg, code, detail) {
-        if (!pass) {
-            return res.fail(msg, code, detail);
+    newUser.save(function (err, user) {
+        if (err) {
+            return res.fail('there was some errors in user registering', null, null, mge(err));
         }
 
-        newUser.create(function (err, row) {
-            if (err) {
-                return res.fail('there was something wrong registering new user');
-            }
-
-            return res.success(row, 'user registered');
-        });
+        return res.success(user);
     });
 };
 

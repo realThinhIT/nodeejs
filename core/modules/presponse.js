@@ -47,7 +47,7 @@ module.exports = {
             _res.end();
 
             _sent = true;
-            global.app.log.put('[warning] response was sent. a response was cancelled.', false);
+            // global.app.log.put('[warning] response was sent. a response was cancelled.', false);
         }
 
         _next();

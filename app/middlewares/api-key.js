@@ -3,7 +3,7 @@
 // ######################################################
 
 var middleware = {};
-var users = global.model.users;
+var User = global.model.user;
 
 // ################################
 // MODIFY THIS!
@@ -16,10 +16,10 @@ var users = global.model.users;
 middleware.beforeAction = function (req, res, done) {
     // insert middleware logic here
     if (req.get('X-Api-Key') !== global.app.apiConfig.API_KEY) {
-        done(false, 'invalid api key', 401, "INVALID_API_KEY");
+        return done(false, 'invalid api key', 401, 'INVALID_API_KEY');
     }
 
-    done(true, {}, 200);
+    return done(true, {}, 200);
 };
 
 // ################################

@@ -3,7 +3,7 @@
 // ######################################################
 
 var middleware = {};
-var users = global.model.users;
+var User = global.model.user;
 
 // ################################
 // MODIFY THIS!
@@ -16,7 +16,7 @@ var users = global.model.users;
 middleware.beforeAction = function (req, res, done) {
     // insert middleware logic here
 
-    done(true, {}, 200);
+    return done(true, {}, 200);
 };
 
 // ################################
