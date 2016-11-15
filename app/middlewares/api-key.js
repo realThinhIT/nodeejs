@@ -3,7 +3,7 @@
 // ######################################################
 
 var middleware = {};
-var User = global.model.user;
+var User = global.model.User;
 
 // ################################
 // MODIFY THIS!

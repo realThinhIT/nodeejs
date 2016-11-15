@@ -47,12 +47,12 @@ module.exports = [
                 controller: 'v1/authentication/login',
                 callback: 'login'
             },
-            // {
-            //     verb: 'post',
-            //     path: '/logout',
-            //     controller: 'v1/authentication/logout',
-            //     callback: 'logout'
-            // },
+            {
+                verb: 'post',
+                path: '/logout',
+                controller: 'v1/authentication/logout',
+                callback: 'logout'
+            },
             // {
             //     verb: 'post',
             //     path: '/forgotPassword',

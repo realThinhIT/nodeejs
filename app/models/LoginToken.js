@@ -17,7 +17,7 @@ var timestamps  = true;
 
 // define schema
 var modelSchema = new Schema({
-    user: {
+    userId: {
         type: Schema.Types.ObjectId,
         required: true,
         ref: 'User'
@@ -33,7 +33,10 @@ var modelSchema = new Schema({
     },
     userAgent: String,
     deviceId: String,
-    ip: String
+    ip: String,
+
+    createdAt: Date,
+    updatedAt: Date,
 });
 
 // ################################
@@ -51,6 +54,9 @@ modelSchema.pre('save', function (next) {
 });
 
 modelSchema.pre('update', function (next) {
+    if (timestamps) {
+        this.updatedAt = new Date();
+    }
 
     next();
 });
@@ -89,15 +95,15 @@ modelSchema.post('delete', function () {
 // ################################
 modelSchema.methods.findUserByLoginToken = function (loginToken, callback) {
     this.model(modelName).findOne({ loginToken: loginToken }, function (err, token) {
-        if (err) {
+        if (err || !token) {
             return callback(err, false);
         }
 
         if (token.expiredAt < new Date()) {
-            return callback(Error('token has expired'), false);
+            return callback(new Error('token has expired'), false);
         }
 
-        global.model.User.findOne({ _id: token._id }, function (err, user) {
+        global.model.User.findOne({ _id: token.userId }, function (err, user) {
             return callback(err, true, user);
         });
     });
@@ -107,11 +113,12 @@ modelSchema.methods.generateNewToken = function () {
     return random.string(global.app.apiConfig.LOGIN_TOKEN_LENGTH);
 };
 
-modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, remember, callback) {
+modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememberMe, callback) {
     var self = this;
+    var now = new Date();
 
     this.model(modelName).findOne({
-        user: userId,
+        userId: userId,
         userAgent: userAgent,
         deviceId: deviceId
     }, function (err, token) {
@@ -124,7 +131,8 @@ modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememb
             self.model(modelName).findOneAndUpdate({ _id: token._id }, {
                 $set: {
                     loginToken: self.model(modelName).schema.methods.generateNewToken(),
-                    expiredAt: dates.addDays(new Date(), ( (rememberMe === true) ? global.app.apiConfig.LOGIN_TOKEN_EXPIRED_LONG : global.app.apiConfig.LOGIN_TOKEN_EXPIRED_SHORT ) )
+                    expiredAt: dates.addDays(now, ( (rememberMe === true) ? global.app.apiConfig.LOGIN_TOKEN_EXPIRED_LONG : global.app.apiConfig.LOGIN_TOKEN_EXPIRED_SHORT ) ),
+                    updatedAt: now
                 }
             }, { new: true }, function (err, token) {
                 return callback(err, token);
@@ -133,11 +141,11 @@ modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememb
         // or it doesn't exist
         } else {
             var newToken = new (self.model(modelName))({
-                user: userId,
+                userId: userId,
                 loginToken: self.model(modelName).schema.methods.generateNewToken(),
                 userAgent: userAgent,
                 deviceId: deviceId,
-                expiredAt: dates.addDays(new Date(), ( (rememberMe === true) ? global.app.apiConfig.LOGIN_TOKEN_EXPIRED_LONG : global.app.apiConfig.LOGIN_TOKEN_EXPIRED_SHORT ) )
+                expiredAt: dates.addDays(now, ( (rememberMe === true) ? global.app.apiConfig.LOGIN_TOKEN_EXPIRED_LONG : global.app.apiConfig.LOGIN_TOKEN_EXPIRED_SHORT ) )
             }).save(function (err, token) {
                 return callback(err, token);
             });

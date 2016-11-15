@@ -19,7 +19,10 @@ var modelSchema = new Schema({
         type: String,
         required: [true, 'username is required'],
         unique: true,
-    }
+    },
+    
+    createdAt: Date,
+    updatedAt: Date,
 });
 
 // ################################
@@ -37,6 +40,9 @@ modelSchema.pre('save', function (next) {
 });
 
 modelSchema.pre('update', function (next) {
+    if (timestamps) {
+        this.updatedAt = new Date();
+    }
 
     next();
 });

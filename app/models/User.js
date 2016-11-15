@@ -65,7 +65,9 @@ var modelSchema = new Schema({
     socialIds: {
         facebook: String,
         googlePlus: String
-    }
+    },
+    createdAt: Date,
+    updatedAt: Date,
 });
 
 // ################################
@@ -85,6 +87,9 @@ modelSchema.pre('save', function (next) {
 });
 
 modelSchema.pre('update', function (next) {
+    if (timestamps) {
+        this.updatedAt = new Date();
+    }
 
     next();
 });

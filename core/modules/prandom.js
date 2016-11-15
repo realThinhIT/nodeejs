@@ -1,6 +1,6 @@
 module.exports = {
 	string: function (len, charSet) {
-		charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$';
+		charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$.=-#@!~';
 		len = len || this.int();
 
 		var randomString = '';

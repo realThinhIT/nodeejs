@@ -4,6 +4,7 @@
 
 var routes          = require('../config/routes'),
     log             = global.app.log;
+var async           = require('async');
 
 var validationProcess = function (req, res, func, callback) {
     var response = global.app.presponse;
@@ -11,31 +12,46 @@ var validationProcess = function (req, res, func, callback) {
     var validationPass = true;
 
     // set and execute the middlewares
-    func.middlewares.forEach(function (mid) {
+    async.each(func.middlewares, function (mid, callback) {
+        var middleware = null;
+
+        var midName = mid.replace(/\//g, '.');
+
         // if the validation is not pass somewhere,
         // useful for a controller that has multiple middlewares
         if (validationPass === false) {
-            return;
+            return false;
         }
 
         // execute the middlewares then get the callback
-        middlewares[mid] = require('../app/middlewares/' + mid);
-        middlewares[mid].beforeAction(req, response.to(res),
+        // middlewares[mid] = require('../app/middlewares/' + mid);
+        try {
+            middleware = require('../app/middlewares/' + mid);
+        } catch (e) {
+            validationPass = false;
+
+            log.put('[middleware] error: ' + midName + ' doesn\'t exist', false);
+            return response.to(res).fail('middleware named ' + midName + ' is not available');
+        }
+
+        middleware.beforeAction(req, response.to(res),
             function (isValidated, data, code, detailCode) {
                 if (!isValidated || isValidated === null || isValidated === undefined) {
-                    // log.put('[middleware] failed to execute middleware ' + mid + ' at ' + endPoint + ': ' + data , false);
-                    response.to(res).fail('the app failed in executing middleware ' + mid + ( (typeof(data) === 'string') ? ': ' + data : '' ), code || 500, detailCode);
-
                     validationPass = false;
-                    return;
+
+                    // log.put('[middleware] failed to execute middleware ' + mid + ' at ' + endPoint + ': ' + data , false);
+                    return response.to(res).fail('the app failed in executing middleware ' + midName + ( (typeof(data) === 'string') ? ': ' + data : '' ), code || 500, detailCode);
                 } else {
-                    middlewares[mid] = data;
+                    middlewares[midName] = data;
+
+                    callback(null);
                 }
             }
         );
+    },
+    function (err) {
+        callback(validationPass, middlewares);
     });
-
-    callback(validationPass, middlewares);
 };
 
 module.exports = function (app) {
