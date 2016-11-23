@@ -2,9 +2,10 @@
 // CONTROLLER: register
 // ######################################################
 
-var controller      = {};
-var User            = global.model.User;
-var mge             = global.app.monerr;
+let controller      = {};
+const User            = global.model.User;
+const LoginToken      = global.model.LoginToken;
+const mge             = global.app.monerr;
 
 // ################################
 // MODIFY THIS!
@@ -19,10 +20,12 @@ controller.middlewares = [
 // CUSTOM FUNCTIONS
 // ################################
 
-controller.index = function (req, res, middleware) {
-    return res.success(null, 'all functioning properly');
+controller.index = (req, res, middleware) => {
+    // insert controller logic here
+
+    res.success(null, 'all functioning properly');
 };
 
 // ################################
 
-module.exports = controller;
+export default controller;

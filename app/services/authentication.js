@@ -1,10 +1,10 @@
-module.exports = {
-    getAuthorizationHeader: function (req, callback) {
-        var authorization = (req.headers.authorization) ? req.headers.authorization : ' ';
+export default {
+    getAuthorizationHeader(req, callback) {
+        let authorization = (req.headers.authorization) ? req.headers.authorization : ' ';
 
-        var parts = authorization.split(' '),
-            authorizationType    = parts[0].toLowerCase(),
-            authorizationContent = parts[1];
+        let parts = authorization.split(' ');
+        let authorizationType    = parts[0].toLowerCase();
+        let authorizationContent = parts[1];
 
         if (authorizationType === 'basic') {
             if (authorizationContent) {
@@ -14,8 +14,8 @@ module.exports = {
             }
             authorizationContent = authorizationContent.split(':');
 
-            var username = authorizationContent[0],
-                password = authorizationContent[1];
+            let username = authorizationContent[0];
+            let password = authorizationContent[1];
 
             return callback(undefined, {
                 type: 'basic',

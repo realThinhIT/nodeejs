@@ -2,25 +2,26 @@
 // MODEL: _example
 // ######################################################
 
-var mongoose    = global.app.mongoose,
-    Schema      = mongoose.Schema,
-    md5         = require('md5'),
-    validator   = require('../../core/modules/pvalidator');
+let mongoose        = global.app.mongoose;
+let Schema          = mongoose.Schema;
+import md5          from 'md5';
+import validator    from '../../core/modules/pvalidator';
 
 // ################################
 
 // model configurations
-var modelName   = '_example';
-var timestamps  = true;
+let modelName   = '_example';
+let timestamps  = true;
 
 // define schema
-var modelSchema = new Schema({
+let modelSchema = new Schema({
     username: {
         type: String,
         required: [true, 'username is required'],
         unique: true,
     },
-    
+
+    status: Number,
     createdAt: Date,
     updatedAt: Date,
 });
@@ -28,31 +29,31 @@ var modelSchema = new Schema({
 // ################################
 // PRE-EXECUTIONS
 // ################################
-modelSchema.pre('save', function (next) {
+modelSchema.pre('save', next => {
     if (timestamps) {
-        var currentDate = new Date();
+        let currentDate = new Date();
 
-        this.createdAt = currentDate;
-        this.updatedAt = currentDate;
+        _model.createdAt = currentDate;
+        _model.updatedAt = currentDate;
     }
 
     next();
 });
 
-modelSchema.pre('update', function (next) {
+modelSchema.pre('update', next => {
     if (timestamps) {
-        this.updatedAt = new Date();
+        _model.updatedAt = new Date();
     }
 
     next();
 });
 
-modelSchema.pre('find', function (next) {
+modelSchema.pre('find', next => {
 
     next();
 });
 
-modelSchema.pre('delete', function (next) {
+modelSchema.pre('delete', next => {
 
     next();
 });
@@ -60,19 +61,19 @@ modelSchema.pre('delete', function (next) {
 // ################################
 // POST-EXECUTIONS
 // ################################
-modelSchema.post('save', function () {
+modelSchema.post('save', () => {
 
 });
 
-modelSchema.post('update', function () {
+modelSchema.post('update', () => {
 
 });
 
-modelSchema.post('find', function () {
+modelSchema.post('find', () => {
 
 });
 
-modelSchema.post('delete', function () {
+modelSchema.post('delete', () => {
 
 });
 
@@ -85,5 +86,5 @@ modelSchema.post('delete', function () {
 
 // ################################
 
-var model = mongoose.model(modelName, modelSchema);
-module.exports = model;
+let _model = mongoose.model(modelName, modelSchema);
+export default _model;

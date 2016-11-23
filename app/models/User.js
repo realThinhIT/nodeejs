@@ -2,19 +2,19 @@
 // MODEL: user
 // ######################################################
 
-var mongoose    = global.app.mongoose,
-    Schema      = mongoose.Schema,
-    md5         = require('md5'),
-    validator   = require('../../core/modules/pvalidator');
+let mongoose        = global.app.mongoose;
+let Schema          = mongoose.Schema;
+import md5          from 'md5';
+import validator    from '../../core/modules/pvalidator';
 
 // ################################
 
 // model configurations
-var modelName   = 'User';
-var timestamps  = true;
+let modelName   = 'User';
+let timestamps  = true;
 
 // define schema
-var modelSchema = new Schema({
+const modelSchema = new Schema({
     username: {
         type: String,
         required: [true, 'username is required'],
@@ -22,8 +22,8 @@ var modelSchema = new Schema({
 
         validate: [
             {
-                validator: function (value, cb) {
-                    this.model(modelName).count({ username: this.username }, function (err, count) {
+                validator: (value, cb) => {
+                    this.model(modelName).count({ username: this.username }, (err, count) => {
                         if (err) {
                             return cb(err);
                         }
@@ -34,7 +34,7 @@ var modelSchema = new Schema({
                 message: 'username is duplicated'
             },
             {
-                validator: function (value, cb) {
+                validator: (value, cb) => {
                     cb(validator.length(value, 6, 20));
                 },
                 message: 'username is allowed to be between 6 - 20 characters'
@@ -45,7 +45,7 @@ var modelSchema = new Schema({
         type: String,
         required: [true, 'password is required'],
         validate: {
-            validator: function (value, cb) {
+            validator: (value, cb) => {
                 cb(validator.length(value, 6, 20));
             },
             message: 'password is allowed to be between 6 - 20 characters'
@@ -55,7 +55,7 @@ var modelSchema = new Schema({
         type: String,
         required: [true, 'email is required'],
         validate: {
-            validator: function (value, cb) {
+            validator: (value, cb) => {
                 cb(validator.email(value));
             },
             message: 'email is invalid'
@@ -66,6 +66,8 @@ var modelSchema = new Schema({
         facebook: String,
         googlePlus: String
     },
+
+    status: Number,
     createdAt: Date,
     updatedAt: Date,
 });
@@ -73,12 +75,12 @@ var modelSchema = new Schema({
 // ################################
 // PRE-EXECUTIONS
 // ################################
-modelSchema.pre('save', function (next) {
+modelSchema.pre('save', next => {
     if (timestamps) {
-        var currentDate = new Date();
+        let currentDate = new Date();
 
-        this.createdAt = currentDate;
-        this.updatedAt = currentDate;
+        _model.createdAt = currentDate;
+        _model.updatedAt = currentDate;
     }
 
     this.password = md5(this.password);
@@ -86,20 +88,20 @@ modelSchema.pre('save', function (next) {
     next();
 });
 
-modelSchema.pre('update', function (next) {
+modelSchema.pre('update', next => {
     if (timestamps) {
-        this.updatedAt = new Date();
+        _model.updatedAt = new Date();
     }
 
     next();
 });
 
-modelSchema.pre('find', function (next) {
+modelSchema.pre('find', next => {
 
     next();
 });
 
-modelSchema.pre('delete', function (next) {
+modelSchema.pre('delete', next => {
 
     next();
 });
@@ -107,36 +109,36 @@ modelSchema.pre('delete', function (next) {
 // ################################
 // POST-EXECUTIONS
 // ################################
-modelSchema.post('save', function () {
+modelSchema.post('save', () => {
 
 });
 
-modelSchema.post('update', function () {
+modelSchema.post('update', () => {
 
 });
 
-modelSchema.post('find', function () {
+modelSchema.post('find', () => {
 
 });
 
-modelSchema.post('delete', function () {
+modelSchema.post('delete', () => {
 
 });
 
 // ################################
 // CUSTOM METHODS
 // ################################
-modelSchema.methods.findByUsernameAndPassword = function (username, password, callback) {
+modelSchema.methods.findByUsernameAndPassword = (username, password, callback) => {
     if (!username || !password) {
         return callback(Error('username or password is not defined'));
     }
 
-    this.model(modelName).findOne({ username: username, password: md5(password) }, function (err, user) {
+    _model.findOne({ username: username, password: md5(password) }, (err, user) => {
         callback(err, user);
     });
 };
 
 // ################################
 
-var model = mongoose.model(modelName, modelSchema);
-module.exports = model;
+let _model = mongoose.model(modelName, modelSchema);
+export default _model;

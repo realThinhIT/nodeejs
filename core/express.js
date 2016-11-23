@@ -3,13 +3,16 @@
 // ######################################################
 
 // set the server up
-var express         = require('express'),
-    app             = express(),
-    bodyParser      = require('body-parser'),
-    apiConfig       = global.app.apiConfig,
-    globalConfig    = global.app.globalConfig,
-    morgan          = require('morgan'),
-    log             = global.app.log;
+import express      from 'express';
+
+import bodyParser   from 'body-parser';
+import morgan       from 'morgan';
+import routes       from './routes';
+
+let app             = express();
+let apiConfig       = global.app.apiConfig;
+let globalConfig    = global.app.globalConfig;
+let log             = global.app.log;
 
 // middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,12 +23,12 @@ if (globalConfig.LOG_REQUEST) {
 }
 
 // server default headers
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
     res.type(apiConfig.DEFAULT_TYPE);
 
-    Object.keys(apiConfig.DEFAULT_HEADERS).forEach(function (key) {
+    for (const key in Object.keys(apiConfig.DEFAULT_HEADERS)) {
         res.set(key, apiConfig.DEFAULT_HEADERS[key]);
-    });
+    }
 
     next();
 });
@@ -34,9 +37,9 @@ app.use(function (req, res, next) {
 app.set('json spaces', apiConfig.JSON_SPACES);
 
 // configure Routes
-require('./routes')(app);
+routes(app);
 
 // start the server
-app.listen(global.app.globalConfig.SERVER_PORT || 8080, function (err) {
+app.listen(global.app.globalConfig.SERVER_PORT || 8080, err => {
     log.put('[webserver] server listening on port ' + global.app.globalConfig.SERVER_PORT || 8080 + '.');
 });

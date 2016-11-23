@@ -1,5 +1,5 @@
-module.exports = function(enable, mode) {
-    var logMode;
+export default (enable, mode) => {
+    let logMode;
 
     enable  = (enable === undefined || enable === null) ? true : enable;
     mode    = (mode === undefined || mode === null) ? 'console' : mode;
@@ -12,9 +12,9 @@ module.exports = function(enable, mode) {
     }
 
     // common functions
-    var getTime = function() {
-        var d = new Date();
-        var dateLog = d.getDate() + '/' + d.getMonth() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+    let getTime = () => {
+        let d = new Date();
+        let dateLog = d.getDate() + '/' + d.getMonth() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
 
         return dateLog;
     };
@@ -30,7 +30,7 @@ module.exports = function(enable, mode) {
     // put the log to the console
     if (logMode === 0) {
         return {
-            put: function (log, type) {
+            put(log, type) {
                 if (
                     (type !== true && type !== false && type !== 1 && type !== 0) ||
                     (type === null || type === undefined)
@@ -49,15 +49,15 @@ module.exports = function(enable, mode) {
                 console.log('[' + getTime() + '] ' + type + ': ' + log);
             },
 
-            clear: function() {
-                console.log('\033[2J');
+            clear() {
+                console.log('\x1Bc');
             },
 
-            endl: function() {
+            endl() {
                 console.log('\n');
             },
 
-            throwException: function (message, err) {
+            throwException(message, err) {
                 message = message || 'The program threw an exception. Process stopped.';
 
                 this.put(message, false);
@@ -69,7 +69,7 @@ module.exports = function(enable, mode) {
                 process.exit(500);
             },
 
-            putException: function (message, err) {
+            putException(message, err) {
                 message = message || 'The program put an exception. Process continues.';
 
                 this.put(message, false);
@@ -91,11 +91,11 @@ module.exports = function(enable, mode) {
         console.log('[' + getTime() + '] error: ' + 'No plogging method was specified.');
 
         return {
-            put: function (log, type) {},
-            clear: function() {},
-            endl: function() {},
-            throwException: function (message, err) {},
-            putException: function (message, err) {}
+            put(log, type) {},
+            clear() {},
+            endl() {},
+            throwException(message, err) {},
+            putException(message, err) {}
         };
     }
 };

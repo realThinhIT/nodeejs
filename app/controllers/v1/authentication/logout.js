@@ -2,12 +2,12 @@
 // CONTROLLER: login
 // ######################################################
 
-var controller      = {};
-var User            = global.model.User;
-var LoginToken      = global.model.LoginToken;
-var mge             = global.app.monerr;
+let controller      = {};
+const User            = global.model.User;
+const LoginToken      = global.model.LoginToken;
+const mge             = global.app.monerr;
 
-var authenticationService = require('../../../services/authentication');
+import authenticationService from '../../../services/authentication';
 
 // ################################
 // MODIFY THIS!
@@ -22,12 +22,12 @@ controller.middlewares = [
 // CUSTOM FUNCTIONS
 // ################################
 
-controller.logout = function (req, res, middleware) {
+controller.logout = (req, res, middleware) => {
     LoginToken.remove({
         userId: middleware['auth.require-login']._id,
         deviceId: req.headers['X-Device-Id'],
         userAgent: req.headers['user-agent']
-    }, function (err) {
+    }, err => {
         if (err) return res.fail('an error has occurred while logging out', 500);
 
         return res.success('logged out successfully');
@@ -36,4 +36,4 @@ controller.logout = function (req, res, middleware) {
 
 // ################################
 
-module.exports = controller;
+export default controller;

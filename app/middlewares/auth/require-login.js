@@ -2,11 +2,11 @@
 // MIDDLEWARE: authentication/require-login
 // ######################################################
 
-var middleware = {};
-var User = global.model.User;
-var LoginToken = global.model.LoginToken;
+let middleware      = {};
+const User          = global.model.User;
+const LoginToken    = global.model.LoginToken;
 
-var authenticationService = require('../../services/authentication');
+import authenticationService from '../../services/authentication';
 
 // ################################
 // MODIFY THIS!
@@ -16,16 +16,16 @@ var authenticationService = require('../../services/authentication');
 // ################################
 
 // execute before controller
-middleware.beforeAction = function (req, res, done) {
+middleware.beforeAction = (req, res, done) => {
     // insert middleware logic here
 
-    authenticationService.getAuthorizationHeader(req, function (err, login) {
+    authenticationService.getAuthorizationHeader(req, (err, login) => {
         if (err || login.type !== 'bearer') return done(false, 'invalid authentication type', 400, 'INVALID_AUTH_TYPE');
 
-        var logIn = new LoginToken();
+        let logIn = new LoginToken();
 
-        return logIn.findUserByLoginToken(login.token, function (err, isValidated, user) {
-            if (err || !user || !isValidated) return done(false, 'invalid access token or token has expired', 401, 'INVALID_ACCESS_TOKEN');
+        return logIn.findUserByLoginToken(login.token, (err, isValidated, user) => {
+            if (err || !user || !isValidated) return done(false, 'invalid access token, token has been disabled or token has expired', 401, 'INVALID_ACCESS_TOKEN');
 
             return done(true, user, 200);
         });
@@ -34,4 +34,4 @@ middleware.beforeAction = function (req, res, done) {
 
 // ################################
 
-module.exports = middleware;
+export default middleware;

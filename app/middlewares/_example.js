@@ -2,8 +2,8 @@
 // MIDDLEWARE:
 // ######################################################
 
-var middleware = {};
-var User = global.model.user;
+let middleware      = {};
+const User          = global.model.User;
 
 // ################################
 // MODIFY THIS!
@@ -13,7 +13,7 @@ var User = global.model.user;
 // ################################
 
 // execute before controller
-middleware.beforeAction = function (req, res, done) {
+middleware.beforeAction = (req, res, done) => {
     // insert middleware logic here
 
     return done(true, {}, 200);

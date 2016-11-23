@@ -2,21 +2,21 @@
 // MODEL: _example
 // ######################################################
 
-var mongoose    = global.app.mongoose,
-    Schema      = mongoose.Schema,
-    md5         = require('md5'),
-    validator   = require('../../core/modules/pvalidator'),
-    dates       = require('../../core/modules/pdate'),
-    random      = require('../../core/modules/prandom');
+let mongoose        = global.app.mongoose;
+let Schema          = mongoose.Schema;
+import md5          from 'md5';
+import validator    from '../../core/modules/pvalidator';
+import dates        from '../../core/modules/pdate';
+import random       from '../../core/modules/prandom';
 
 // ################################
 
 // model configurations
-var modelName   = 'LoginToken';
-var timestamps  = true;
+let modelName   = 'LoginToken';
+let timestamps  = true;
 
 // define schema
-var modelSchema = new Schema({
+let modelSchema = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
         required: true,
@@ -35,6 +35,7 @@ var modelSchema = new Schema({
     deviceId: String,
     ip: String,
 
+    status: Number,
     createdAt: Date,
     updatedAt: Date,
 });
@@ -42,9 +43,9 @@ var modelSchema = new Schema({
 // ################################
 // PRE-EXECUTIONS
 // ################################
-modelSchema.pre('save', function (next) {
+modelSchema.pre('save', next => {
     if (timestamps) {
-        var currentDate = new Date();
+        let currentDate = new Date();
 
         this.createdAt = currentDate;
         this.updatedAt = currentDate;
@@ -53,7 +54,7 @@ modelSchema.pre('save', function (next) {
     next();
 });
 
-modelSchema.pre('update', function (next) {
+modelSchema.pre('update', next => {
     if (timestamps) {
         this.updatedAt = new Date();
     }
@@ -61,12 +62,12 @@ modelSchema.pre('update', function (next) {
     next();
 });
 
-modelSchema.pre('find', function (next) {
+modelSchema.pre('find', next => {
 
     next();
 });
 
-modelSchema.pre('delete', function (next) {
+modelSchema.pre('delete', next => {
 
     next();
 });
@@ -74,27 +75,27 @@ modelSchema.pre('delete', function (next) {
 // ################################
 // POST-EXECUTIONS
 // ################################
-modelSchema.post('save', function () {
+modelSchema.post('save', () => {
 
 });
 
-modelSchema.post('update', function () {
+modelSchema.post('update', () => {
 
 });
 
-modelSchema.post('find', function () {
+modelSchema.post('find', () => {
 
 });
 
-modelSchema.post('delete', function () {
+modelSchema.post('delete', () => {
 
 });
 
 // ################################
 // CUSTOM METHODS
 // ################################
-modelSchema.methods.findUserByLoginToken = function (loginToken, callback) {
-    this.model(modelName).findOne({ loginToken: loginToken }, function (err, token) {
+modelSchema.methods.findUserByLoginToken = (loginToken, callback) => {
+    _model.findOne({ loginToken }, (err, token) => {
         if (err || !token) {
             return callback(err, false);
         }
@@ -103,25 +104,29 @@ modelSchema.methods.findUserByLoginToken = function (loginToken, callback) {
             return callback(new Error('token has expired'), false);
         }
 
-        global.model.User.findOne({ _id: token.userId }, function (err, user) {
+        if (token.status === 0) {
+            return callback(new Error('token has been disabled'), false);
+        }
+
+        global.model.User.findOne({ _id: token.userId }, (err, user) => {
+            if (err || !user) return callback(new Error('user not found'), false);
+
             return callback(err, true, user);
         });
     });
 };
 
-modelSchema.methods.generateNewToken = function () {
-    return random.string(global.app.apiConfig.LOGIN_TOKEN_LENGTH);
-};
+modelSchema.methods.generateNewToken = () => random.string(global.app.apiConfig.LOGIN_TOKEN_LENGTH);
 
-modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememberMe, callback) {
-    var self = this;
-    var now = new Date();
+modelSchema.methods.saveNewToken = (userId, userAgent, deviceId, rememberMe, callback) => {
+    let self = _model;
+    let now = new Date();
 
-    this.model(modelName).findOne({
-        userId: userId,
-        userAgent: userAgent,
-        deviceId: deviceId
-    }, function (err, token) {
+    _model.findOne({
+        userId,
+        userAgent,
+        deviceId
+    }, (err, token) => {
         if (err) {
             return callback(err);
         }
@@ -132,28 +137,25 @@ modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememb
                 $set: {
                     loginToken: self.model(modelName).schema.methods.generateNewToken(),
                     expiredAt: dates.addDays(now, ( (rememberMe === true) ? global.app.apiConfig.LOGIN_TOKEN_EXPIRED_LONG : global.app.apiConfig.LOGIN_TOKEN_EXPIRED_SHORT ) ),
-                    updatedAt: now
+                    updatedAt: now,
                 }
-            }, { new: true }, function (err, token) {
-                return callback(err, token);
-            });
+            }, { new: true }, (err, token) => callback(err, token));
 
         // or it doesn't exist
         } else {
-            var newToken = new (self.model(modelName))({
-                userId: userId,
+            let newToken = new (self.model(modelName))({
+                userId,
                 loginToken: self.model(modelName).schema.methods.generateNewToken(),
-                userAgent: userAgent,
-                deviceId: deviceId,
-                expiredAt: dates.addDays(now, ( (rememberMe === true) ? global.app.apiConfig.LOGIN_TOKEN_EXPIRED_LONG : global.app.apiConfig.LOGIN_TOKEN_EXPIRED_SHORT ) )
-            }).save(function (err, token) {
-                return callback(err, token);
-            });
+                userAgent,
+                deviceId,
+                expiredAt: dates.addDays(now, ( (rememberMe === true) ? global.app.apiConfig.LOGIN_TOKEN_EXPIRED_LONG : global.app.apiConfig.LOGIN_TOKEN_EXPIRED_SHORT ) ),
+                status: 1
+            }).save((err, token) => callback(err, token));
         }
     });
 };
 
 // ################################
 
-var model = mongoose.model(modelName, modelSchema);
-module.exports = model;
+let _model = mongoose.model(modelName, modelSchema);
+export default _model;

@@ -2,12 +2,13 @@
 // CONTROLLER: login
 // ######################################################
 
-var controller      = {};
-var User            = global.model.User;
-var LoginToken      = global.model.LoginToken;
-var mge             = global.app.monerr;
+let controller      = {};
+const User            = global.model.User;
+const LoginToken      = global.model.LoginToken;
+const mge             = global.app.monerr;
+const obj             = global.app.pobj;
 
-var authenticationService = require('../../../services/authentication');
+import authenticationService from '../../../services/authentication';
 
 // ################################
 // MODIFY THIS!
@@ -22,27 +23,24 @@ controller.middlewares = [
 // CUSTOM FUNCTIONS
 // ################################
 
-controller.login = function (req, res, middleware) {
-    var loginIn = new User();
-
+controller.login = (req, res, middleware) => {
     // authentication headers
-    authenticationService.getAuthorizationHeader(req, function (err, login) {
+    authenticationService.getAuthorizationHeader(req, (err, login) => {
         if (err || login.type !== 'basic') return res.fail('invalid authentication type', 400, 'INVALID_AUTH_TYPE');
-
+        
         // validate user
-        loginIn.findByUsernameAndPassword(login.username, login.password, function (err, user) {
+        (new User()).findByUsernameAndPassword(login.username, login.password, (err, user) => {
             if (err) return res.fail('an error has occurred while authenticating', 500);
 
             if (!user) return res.fail('user not found', 401, 'USER_NOT_FOUND');
 
             // grant this user a new access token
-            (new LoginToken()).saveNewToken(user._id, req.headers['user-agent'], req.headers['X-Device-Id'], ( (req.body.rememberMe === 1) ? true : false ), function (err, token) {
+            (new LoginToken()).saveNewToken(user._id, req.headers['user-agent'], req.headers['X-Device-Id'], ( (req.body.rememberMe === 1) ? true : false ), (err, token) => {
                 if (err || !token) return res.fail('an error has occurred while granting access token', 500);
 
                 // remove sensitive information
-                user._id = user.__v = user.password = undefined;
-                token._id = token.userId = token.__v = token.userAgent = undefined;
-                user.createdAt = user.updatedAt = token.createdAt = token.updatedAt = undefined;
+                obj.deleteKeys(user, ['_id', 'password', '__v', 'createdAt', 'updatedAt']);
+                obj.deleteKeys(token, ['_id', 'userId', '__v', 'userAgent', 'createdAt', 'updatedAt']);
 
                 return res.success({
                     userInfo: user,
@@ -55,4 +53,4 @@ controller.login = function (req, res, middleware) {
 
 // ################################
 
-module.exports = controller;
+export default controller;

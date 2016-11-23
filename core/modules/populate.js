@@ -1,7 +1,7 @@
-module.exports = module = {
-    populate: function (array, defaultValues) {
+export default module = {
+    populate(array, defaultValues) {
         // populate
-        for (var prop in defaultValues) {
+        for (let prop in defaultValues) {
             if (typeof(array[prop]) === 'object') {
                 array[prop] = module.populate(array[prop], defaultValues[prop]);
                 continue;
@@ -17,9 +17,9 @@ module.exports = module = {
         return array;
     },
 
-    deleteUnused: function (array, defaultValues) {
+    deleteUnused(array, defaultValues) {
         // delete unused keys
-        for (var prop in array) {
+        for (let prop in array) {
             if (typeof(array[prop]) === 'object') {
                 array[prop] = module.deleteUnused(array[prop], defaultValues[prop]);
                 continue;

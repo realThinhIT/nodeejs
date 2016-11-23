@@ -2,26 +2,27 @@
 // CORE: DATABASE CONNECTOR
 // ######################################################
 
-var db              = require('../config/database'),
-    mongoDb         = require('mongoose'),
-    log             = global.app.log;
+import db           from '../config/database';
+import mongoDb      from 'mongoose';
 
-    mongoDb.Promise = require('bluebird');
+const log           = global.app.log;
+import bluebird     from 'bluebird';
+mongoDb.Promise     = bluebird;
 
-var connection = {};
+let connection = {};
 connection._database = null;
 
 // MongoDb
-var loginInfo = (db.user !== '') ? db.user : '';
+let loginInfo = (db.user !== '') ? db.user : '';
 loginInfo += (db.pass !== '') ? ':' + db.user : '';
 loginInfo += (loginInfo !== '') ? '@' : '';
 
-var mongoUrl = 'mongodb://' + loginInfo + db.host + ':' + db.port + '/' + db.dbName;
+const mongoUrl = 'mongodb://' + loginInfo + db.host + ':' + db.port + '/' + db.dbName;
 
-connection.init = function (callback) {
+connection.init = callback => {
     log.put('[db] connecting to the database: ' + mongoUrl);
 
-    mongoDb.connect(mongoUrl, function (err, db) {
+    mongoDb.connect(mongoUrl, (err, db) => {
         if (err) {
             log.throwException(err);
         }
@@ -36,7 +37,7 @@ connection.init = function (callback) {
     });
 };
 
-connection.getConnection = function () {
+connection.getConnection = () => {
     if (connection._database === null || connection._database === undefined) {
         log.put('[db] reconnect to the database...');
 
@@ -46,9 +47,9 @@ connection.getConnection = function () {
     return connection._database;
 };
 
-connection.close = function () {
+connection.close = () => {
     log.put('[db] closing current database...');
     return _database.close();
 };
 
-module.exports = connection;
+export default connection;

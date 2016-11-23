@@ -2,8 +2,8 @@
 // MIDDLEWARE: authentication/register
 // ######################################################
 
-var middleware = {};
-var User = global.model.User;
+let middleware      = {};
+const User          = global.model.User;
 
 // ################################
 // MODIFY THIS!
@@ -13,7 +13,7 @@ var User = global.model.User;
 // ################################
 
 // execute before controller
-middleware.beforeAction = function (req, res, done) {
+middleware.beforeAction = (req, res, done) => {
     // insert middleware logic here
     if (!req.body) {
         return done(false, 'user registration info is empty', 400, 'INFO_EMPTY');
@@ -24,4 +24,4 @@ middleware.beforeAction = function (req, res, done) {
 
 // ################################
 
-module.exports = middleware;
+export default middleware;

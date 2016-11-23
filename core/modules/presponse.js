@@ -1,10 +1,10 @@
-var cb = require('./pcallback.js');
-var _res;
-var _next;
-var _sent;
+import cb from './pcallback.js';
+let _res;
+let _next;
+let _sent;
 
-module.exports = {
-    to: function (res, next) {
+export default {
+    to(res, next) {
         _res = res;
         _next = cb(next);
         _sent = false;
@@ -12,20 +12,20 @@ module.exports = {
         return this;
     },
 
-    success: function (data, message, statusCode, detailCode) {
+    success(data, message, statusCode, detailCode) {
         this.send(1, data, message, statusCode || 200, detailCode);
     },
 
-    fail: function (message, statusCode, detailCode, data) {
+    fail(message, statusCode, detailCode, data) {
         this.send(0, data, message, statusCode || 500, detailCode);
     },
 
-    send: function (success, data, message, statusCode, detailCode) {
+    send(success, data, message, statusCode, detailCode) {
         data = data || {};
         message = message || '';
         statusCode = statusCode || 500;
 
-        var json = {
+        let json = {
             status:     parseInt(success),
             code:       parseInt(statusCode),
         };
@@ -53,7 +53,7 @@ module.exports = {
         _next();
     },
 
-    set: function (key, value) {
+    set(key, value) {
         return _res.set(key, value);
     }
 };

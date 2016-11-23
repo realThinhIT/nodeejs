@@ -2,8 +2,8 @@
 // CONTROLLER: register
 // ######################################################
 
-var controller      = {};
-var users           = global.model.users;
+let controller      = {};
+let users           = global.model.users;
 
 // ################################
 // MODIFY THIS!
@@ -17,10 +17,10 @@ controller.middlewares = [
 // CUSTOM FUNCTIONS
 // ################################
 
-controller.homepage = function (req, res, middleware) {
+controller.homepage = (req, res, middleware) => {
     res.success(null, 'server is listening');
 };
 
 // ################################
 
-module.exports = controller;
+export default controller;

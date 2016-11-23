@@ -1,17 +1,17 @@
-module.exports = function (err) {
-        var errorFields = [];
-        var messages = {};
+export default err => {
+        let errorFields = [];
+        let messages = {};
 
-        var errs = Object.keys(err.errors);
+        let errs = Object.keys(err.errors);
         errs = errs.reverse();
 
-        errs.forEach(function (key) {
+        errs.forEach(key => {
             errorFields.push(key);
             messages[key] = err.errors[key].message;
         });
 
         return {
             fields: errorFields,
-            messages: messages
+            messages
         };
     };
