@@ -6,6 +6,7 @@ let controller      = {};
 const User            = global.model.User;
 const LoginToken      = global.model.LoginToken;
 const mge             = global.app.monerr;
+const obj             = global.app.pobj;
 
 // ################################
 // MODIFY THIS!
@@ -13,7 +14,7 @@ const mge             = global.app.monerr;
 
 controller.name     = 'register';
 controller.middlewares = [
-    'api-key', 'authentication/register'
+    'api-key', 'auth/register'
 ];
 
 // ################################
@@ -35,8 +36,19 @@ controller.register = (req, res, middleware) => {
             if (err || !token) return res.fail('an error has occurred while granting access token', 500);
 
             // remove sensitive information
-            obj.deleteKeys(user, ['_id', 'password', '__v', 'createdAt', 'updatedAt']);
-            obj.deleteKeys(token, ['_id', 'userId', '__v', 'userAgent', 'createdAt', 'updatedAt']);
+            user = obj.selectKeys(user, [
+                'username',
+                'email',
+                'name',
+                'socialIds'
+            ]);
+
+            token = obj.selectKeys(token, [
+                'loginToken',
+                'updatedAt',
+                'expiredAt',
+                'status'
+            ]);
 
             return res.success({
                 userInfo: user,

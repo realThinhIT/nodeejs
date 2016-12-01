@@ -1,8 +1,8 @@
-module.exports = {
-    deleteKeys: function (obj, deletes) {
+export default {
+    deleteKeys: (obj, deletes) => {
         deletes = deletes || [];
 
-        deletes.forEach(function (value) {
+        deletes.forEach(value => {
             let level = obj;
 
             let parts = value.split('.');
@@ -13,5 +13,32 @@ module.exports = {
 
             level[parts[parts.length - 1]] = undefined;
         });
+    },
+
+    selectKeys: (obj, selects) => {
+        let newObj = {};
+        selects = selects || [];
+
+        selects.forEach(value => {
+            let level = newObj;
+            let orgLevel = obj;
+
+            let parts = value.split('.');
+
+            for (let i = 0; i < parts.length - 1; i++) {
+                if (i < parts.length - 2) {
+                    if (level[parts[i]] == undefined) {
+                        level[parts[i]] = [];
+                    }
+                }
+
+                level = level[parts[i]];
+                orgLevel = orgLevel[parts[i]];
+            }
+
+            level[parts[parts.length - 1]] = orgLevel[parts[parts.length - 1]];
+        });
+
+        return newObj;
     }
 };

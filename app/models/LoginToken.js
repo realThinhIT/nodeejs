@@ -38,12 +38,15 @@ let modelSchema = new Schema({
     status: Number,
     createdAt: Date,
     updatedAt: Date,
+}, {
+    collection: modelName,
+    safe: true
 });
 
 // ################################
 // PRE-EXECUTIONS
 // ################################
-modelSchema.pre('save', next => {
+modelSchema.pre('save', function (next) {
     if (timestamps) {
         let currentDate = new Date();
 
@@ -54,7 +57,7 @@ modelSchema.pre('save', next => {
     next();
 });
 
-modelSchema.pre('update', next => {
+modelSchema.pre('update', function (next) {
     if (timestamps) {
         this.updatedAt = new Date();
     }
@@ -62,12 +65,12 @@ modelSchema.pre('update', next => {
     next();
 });
 
-modelSchema.pre('find', next => {
+modelSchema.pre('find', function (next) {
 
     next();
 });
 
-modelSchema.pre('delete', next => {
+modelSchema.pre('delete', function (next) {
 
     next();
 });
@@ -75,27 +78,27 @@ modelSchema.pre('delete', next => {
 // ################################
 // POST-EXECUTIONS
 // ################################
-modelSchema.post('save', () => {
+modelSchema.post('save', function () {
 
 });
 
-modelSchema.post('update', () => {
+modelSchema.post('update', function () {
 
 });
 
-modelSchema.post('find', () => {
+modelSchema.post('find', function () {
 
 });
 
-modelSchema.post('delete', () => {
+modelSchema.post('delete', function () {
 
 });
 
 // ################################
 // CUSTOM METHODS
 // ################################
-modelSchema.methods.findUserByLoginToken = (loginToken, callback) => {
-    _model.findOne({ loginToken }, (err, token) => {
+modelSchema.methods.findUserByLoginToken = function (loginToken, callback) {
+    this.model(modelName).findOne({ loginToken }, (err, token) => {
         if (err || !token) {
             return callback(err, false);
         }
@@ -118,11 +121,10 @@ modelSchema.methods.findUserByLoginToken = (loginToken, callback) => {
 
 modelSchema.methods.generateNewToken = () => random.string(global.app.apiConfig.LOGIN_TOKEN_LENGTH);
 
-modelSchema.methods.saveNewToken = (userId, userAgent, deviceId, rememberMe, callback) => {
-    let self = _model;
+modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememberMe, callback) {
     let now = new Date();
 
-    _model.findOne({
+    this.model(modelName).findOne({
         userId,
         userAgent,
         deviceId
@@ -131,11 +133,11 @@ modelSchema.methods.saveNewToken = (userId, userAgent, deviceId, rememberMe, cal
             return callback(err);
         }
 
-        // this means if the token bind to this userAgent and deviceId exists
+        // _model means if the token bind to _model userAgent and deviceId exists
         if (token !== null && token._id) {
-            self.model(modelName).findOneAndUpdate({ _id: token._id }, {
+            this.model(modelName).findOneAndUpdate({ _id: token._id }, {
                 $set: {
-                    loginToken: self.model(modelName).schema.methods.generateNewToken(),
+                    loginToken: this.model(modelName).schema.methods.generateNewToken(),
                     expiredAt: dates.addDays(now, ( (rememberMe === true) ? global.app.apiConfig.LOGIN_TOKEN_EXPIRED_LONG : global.app.apiConfig.LOGIN_TOKEN_EXPIRED_SHORT ) ),
                     updatedAt: now,
                 }
@@ -143,9 +145,9 @@ modelSchema.methods.saveNewToken = (userId, userAgent, deviceId, rememberMe, cal
 
         // or it doesn't exist
         } else {
-            let newToken = new (self.model(modelName))({
+            let newToken = new (this.model(modelName))({
                 userId,
-                loginToken: self.model(modelName).schema.methods.generateNewToken(),
+                loginToken: (new this).generateNewToken(),
                 userAgent,
                 deviceId,
                 expiredAt: dates.addDays(now, ( (rememberMe === true) ? global.app.apiConfig.LOGIN_TOKEN_EXPIRED_LONG : global.app.apiConfig.LOGIN_TOKEN_EXPIRED_SHORT ) ),

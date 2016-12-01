@@ -22,6 +22,12 @@ import monerr           from './modules/pmongooserr';
 global.app.monerr       = monerr;
 import pobj             from './modules/pobject';
 global.app.pobj         = pobj;
+import middlewareGroups from '../config/middlewares';
+global.middlewares      = middlewareGroups;
+import errorCodes       from '../app/services/error-codes';
+global.errorCodes       = errorCodes;
+import detailCodes      from '../app/services/detail-codes';
+global.detailCodes      = detailCodes;
 
 // clear the console
 if (global.app.globalConfig.LOG_CLEAR_CONSOLE_ON_STARTUP) {

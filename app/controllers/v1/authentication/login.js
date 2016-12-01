@@ -26,21 +26,31 @@ controller.middlewares = [
 controller.login = (req, res, middleware) => {
     // authentication headers
     authenticationService.getAuthorizationHeader(req, (err, login) => {
-        if (err || login.type !== 'basic') return res.fail('invalid authentication type', 400, 'INVALID_AUTH_TYPE');
+        if (err || login.type !== 'basic') return res.fail('invalid authentication type', global.errorCodes.http.BAD_REQUEST, 'INVALID_AUTH_TYPE');
         
         // validate user
         (new User()).findByUsernameAndPassword(login.username, login.password, (err, user) => {
-            if (err) return res.fail('an error has occurred while authenticating', 500);
+            if (err) return res.fail('an error has occurred while authenticating', global.errorCodes.http.INTERNAL_SERVER_ERROR);
 
-            if (!user) return res.fail('user not found', 401, 'USER_NOT_FOUND');
+            if (!user) return res.fail('user not found', global.errorCodes.http.INVALID_CREDENTIALS, 'USER_NOT_FOUND');
 
             // grant this user a new access token
             (new LoginToken()).saveNewToken(user._id, req.headers['user-agent'], req.headers['X-Device-Id'], ( (req.body.rememberMe === 1) ? true : false ), (err, token) => {
-                if (err || !token) return res.fail('an error has occurred while granting access token', 500);
+                if (err || !token) return res.fail('an error has occurred while granting access token', global.errorCodes.http.INTERNAL_SERVER_ERROR);
 
-                // remove sensitive information
-                obj.deleteKeys(user, ['_id', 'password', '__v', 'createdAt', 'updatedAt']);
-                obj.deleteKeys(token, ['_id', 'userId', '__v', 'userAgent', 'createdAt', 'updatedAt']);
+                user = obj.selectKeys(user, [
+                    'username',
+                    'email',
+                    'name',
+                    'socialIds'
+                ]);
+
+                token = obj.selectKeys(token, [
+                    'loginToken',
+                    'updatedAt',
+                    'expiredAt',
+                    'status'
+                ]);
 
                 return res.success({
                     userInfo: user,

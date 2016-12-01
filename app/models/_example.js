@@ -24,36 +24,39 @@ let modelSchema = new Schema({
     status: Number,
     createdAt: Date,
     updatedAt: Date,
+}, {
+    collection: modelName,
+    safe: true
 });
 
 // ################################
 // PRE-EXECUTIONS
 // ################################
-modelSchema.pre('save', next => {
+modelSchema.pre('save', function (next) {
     if (timestamps) {
         let currentDate = new Date();
 
-        _model.createdAt = currentDate;
-        _model.updatedAt = currentDate;
+        this.createdAt = currentDate;
+        this.updatedAt = currentDate;
     }
 
     next();
 });
 
-modelSchema.pre('update', next => {
+modelSchema.pre('update', function (next) {
     if (timestamps) {
-        _model.updatedAt = new Date();
+        this.updatedAt = new Date();
     }
 
     next();
 });
 
-modelSchema.pre('find', next => {
+modelSchema.pre('find', function (next) {
 
     next();
 });
 
-modelSchema.pre('delete', next => {
+modelSchema.pre('delete', function (next) {
 
     next();
 });
@@ -61,19 +64,19 @@ modelSchema.pre('delete', next => {
 // ################################
 // POST-EXECUTIONS
 // ################################
-modelSchema.post('save', () => {
+modelSchema.post('save', function () {
 
 });
 
-modelSchema.post('update', () => {
+modelSchema.post('update', function () {
 
 });
 
-modelSchema.post('find', () => {
+modelSchema.post('find', function () {
 
 });
 
-modelSchema.post('delete', () => {
+modelSchema.post('delete', function () {
 
 });
 

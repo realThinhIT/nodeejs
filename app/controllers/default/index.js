@@ -3,7 +3,7 @@
 // ######################################################
 
 let controller      = {};
-let users           = global.model.users;
+const User            = global.model.User;
 
 // ################################
 // MODIFY THIS!

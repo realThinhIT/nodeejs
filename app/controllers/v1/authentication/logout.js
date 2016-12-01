@@ -15,7 +15,7 @@ import authenticationService from '../../../services/authentication';
 
 controller.name     = 'login';
 controller.middlewares = [
-    'api-key', 'auth/require-login'
+    global.middlewares.auth.userLoginRequired
 ];
 
 // ################################
@@ -28,7 +28,7 @@ controller.logout = (req, res, middleware) => {
         deviceId: req.headers['X-Device-Id'],
         userAgent: req.headers['user-agent']
     }, err => {
-        if (err) return res.fail('an error has occurred while logging out', 500);
+        if (err) return res.fail('an error has occurred while logging out', global.errorCodes.http.INTERNAL_SERVER_ERROR);
 
         return res.success('logged out successfully');
     });

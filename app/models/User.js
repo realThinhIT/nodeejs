@@ -23,7 +23,7 @@ const modelSchema = new Schema({
         validate: [
             {
                 validator: (value, cb) => {
-                    this.model(modelName).count({ username: this.username }, (err, count) => {
+                    _model.model(modelName).count({ username: _model.username }, (err, count) => {
                         if (err) {
                             return cb(err);
                         }
@@ -70,17 +70,20 @@ const modelSchema = new Schema({
     status: Number,
     createdAt: Date,
     updatedAt: Date,
+}, {
+    collection: modelName,
+    safe: true
 });
 
 // ################################
 // PRE-EXECUTIONS
 // ################################
-modelSchema.pre('save', next => {
+modelSchema.pre('save', function (next) {
     if (timestamps) {
         let currentDate = new Date();
 
-        _model.createdAt = currentDate;
-        _model.updatedAt = currentDate;
+        this.createdAt = currentDate;
+        this.updatedAt = currentDate;
     }
 
     this.password = md5(this.password);
@@ -88,7 +91,7 @@ modelSchema.pre('save', next => {
     next();
 });
 
-modelSchema.pre('update', next => {
+modelSchema.pre('update', function (next) {
     if (timestamps) {
         _model.updatedAt = new Date();
     }
@@ -96,12 +99,12 @@ modelSchema.pre('update', next => {
     next();
 });
 
-modelSchema.pre('find', next => {
+modelSchema.pre('find', function (next) {
 
     next();
 });
 
-modelSchema.pre('delete', next => {
+modelSchema.pre('delete', function (next) {
 
     next();
 });
@@ -109,31 +112,31 @@ modelSchema.pre('delete', next => {
 // ################################
 // POST-EXECUTIONS
 // ################################
-modelSchema.post('save', () => {
+modelSchema.post('save', function () {
 
 });
 
-modelSchema.post('update', () => {
+modelSchema.post('update', function () {
 
 });
 
-modelSchema.post('find', () => {
+modelSchema.post('find', function () {
 
 });
 
-modelSchema.post('delete', () => {
+modelSchema.post('delete', function () {
 
 });
 
 // ################################
 // CUSTOM METHODS
 // ################################
-modelSchema.methods.findByUsernameAndPassword = (username, password, callback) => {
+modelSchema.methods.findByUsernameAndPassword = function (username, password, callback) {
     if (!username || !password) {
         return callback(Error('username or password is not defined'));
     }
 
-    _model.findOne({ username: username, password: md5(password) }, (err, user) => {
+    this.model(modelName).findOne({ username: username, password: md5(password) }, (err, user) => {
         callback(err, user);
     });
 };
