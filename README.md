@@ -4,14 +4,14 @@ Starter pack to build RESTful APIs with NodeJS + ExpressJS + MongoDB
 
 ---
 
-# Initiate the project
+### Initiate the project
 
     $ git clone https://github.com/realThinhIT/es6-node-express-mongoose-rest-api.git
     $ cd es6-node-express-mongoose-rest-api && npm install
 
 
-# Run development
+### Run development
     $ npm run dev 
 
-# Run production
+### Run production
     $ npm run build && npm start
