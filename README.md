@@ -2,7 +2,7 @@
 
 Starter pack to build RESTful APIs with NodeJS + ExpressJS + MongoDB.
 
-By: [http://thinhit.net/](ThinhIT)
+By: [ThinhIT](http://thinhit.net/)
 
 ---
 
