@@ -13,6 +13,11 @@ import validator    from '../../core/modules/pvalidator';
 let modelName   = 'User';
 let timestamps  = true;
 
+const USERGROUP_ADMIN   = 'admin';
+const USERGROUP_MOD     = 'moderator';
+const USERGROUP_USER    = 'user';
+const USERGROUP_GUEST   = 'guest';
+
 // define schema
 const modelSchema = new Schema({
     username: {
@@ -66,6 +71,20 @@ const modelSchema = new Schema({
         facebook: String,
         googlePlus: String
     },
+    usergroup: {
+        type: String,
+        required: [true, 'usergroup is not defined'],
+        validate: {
+            validator: (value, cb) => {
+                if (value != USERGROUP_ADMIN && value != USERGROUP_MOD && value != USERGROUP_USER && value != USERGROUP_GUEST) {
+                    cb(false);
+                } else {
+                    cb(true);
+                }
+            },
+            message: 'usergroup is invalid'
+        }
+    },
 
     status: Number,
     createdAt: Date,
@@ -84,6 +103,14 @@ modelSchema.pre('save', function (next) {
 
         this.createdAt = currentDate;
         this.updatedAt = currentDate;
+    }
+
+    if (!this.usergroup) {
+        this.usergroup = USERGROUP_USER;
+    }
+
+    if (!this.status) {
+        this.status = global.consts.STATUS_ACTIVE;
     }
 
     this.password = md5(this.password);

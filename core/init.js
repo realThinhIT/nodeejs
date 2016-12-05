@@ -24,10 +24,12 @@ import pobj             from './modules/pobject';
 global.app.pobj         = pobj;
 import middlewareGroups from '../config/middlewares';
 global.middlewares      = middlewareGroups;
-import errorCodes       from '../app/services/error-codes';
+import errorCodes       from '../config/params/error-codes';
 global.errorCodes       = errorCodes;
-import detailCodes      from '../app/services/detail-codes';
+import detailCodes      from '../config/params/detail-codes';
 global.detailCodes      = detailCodes;
+import consts           from '../config/params/consts';
+global.consts           = consts;
 
 // clear the console
 if (global.app.globalConfig.LOG_CLEAR_CONSOLE_ON_STARTUP) {

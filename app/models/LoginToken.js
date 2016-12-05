@@ -107,12 +107,16 @@ modelSchema.methods.findUserByLoginToken = function (loginToken, callback) {
             return callback(new Error('token has expired'), false);
         }
 
-        if (token.status === 0) {
+        if (token.status === global.consts.STATUS_DEACTIVATED) {
             return callback(new Error('token has been disabled'), false);
         }
 
         global.model.User.findOne({ _id: token.userId }, (err, user) => {
             if (err || !user) return callback(new Error('user not found'), false);
+
+            if (user.status === global.consts.STATUS_DEACTIVATED) {
+                return callback(new Error('user is disabled by administrator'), false);
+            }
 
             return callback(err, true, user);
         });
@@ -147,11 +151,11 @@ modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememb
         } else {
             let newToken = new (this.model(modelName))({
                 userId,
-                loginToken: (new this).generateNewToken(),
+                loginToken: this.generateNewToken(),
                 userAgent,
                 deviceId,
                 expiredAt: dates.addDays(now, ( (rememberMe === true) ? global.app.apiConfig.LOGIN_TOKEN_EXPIRED_LONG : global.app.apiConfig.LOGIN_TOKEN_EXPIRED_SHORT ) ),
-                status: 1
+                status: global.consts.STATUS_ACTIVE
             }).save((err, token) => callback(err, token));
         }
     });

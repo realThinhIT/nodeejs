@@ -42,7 +42,8 @@ controller.login = (req, res, middleware) => {
                     'username',
                     'email',
                     'name',
-                    'socialIds'
+                    'socialIds',
+                    'usergroup'
                 ]);
 
                 token = obj.selectKeys(token, [
