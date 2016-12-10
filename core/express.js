@@ -26,7 +26,7 @@ if (globalConfig.LOG_REQUEST) {
 app.use((req, res, next) => {
     res.type(apiConfig.DEFAULT_TYPE);
 
-    for (const key in Object.keys(apiConfig.DEFAULT_HEADERS)) {
+    for (const key of Object.keys(apiConfig.DEFAULT_HEADERS)) {
         res.set(key, apiConfig.DEFAULT_HEADERS[key]);
     }
 

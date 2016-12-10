@@ -2,7 +2,7 @@
 
 export default {
     // server environment
-    APP_NAME:       'Node + Express + MongoDB RESTful API Starter Pack by ThinhDev',
+    APP_NAME:       'Node + Express + MongoDB RESTful API Starter Pack by ThinhIT',
     SERVER_PORT:    91,
 
     // debugging

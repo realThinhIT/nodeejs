@@ -1,7 +1,7 @@
 {
   "name": "node-express-rest-api-starter-pack",
   "version": "1.0.0",
-  "description": "Starter pack to build RESTful API with NodeJS + ExpressJS",
+  "description": "Starter pack to build RESTful API with NodeJS + ExpressJS + Mongoose",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,7 +12,7 @@
     "build": "npm run clean && npm run build-server",
     "start": "forever start ./build/server.js"
   },
-  "author": "ThinhDev (thinhdev.com)",
+  "author": "ThinhIT (thinhit.net)",
   "license": "MIT",
   "dependencies": {
     "babel-cli": "^6.18.0",
