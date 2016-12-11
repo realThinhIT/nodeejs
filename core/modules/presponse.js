@@ -12,18 +12,19 @@ export default {
         return this;
     },
 
-    success(data, message, statusCode, detailCode) {
-        this.send(1, data, message, statusCode || 200, detailCode);
+    success(data, message, statusCode, detailCode, additionalData) {
+        this.send(1, data, message, statusCode || 200, detailCode, additionalData);
     },
 
-    fail(message, statusCode, detailCode, data) {
-        this.send(0, data, message, statusCode || 500, detailCode);
+    fail(message, statusCode, detailCode, data, additionalData) {
+        this.send(0, data, message, statusCode || 500, detailCode, additionalData);
     },
 
-    send(success, data, message, statusCode, detailCode) {
+    send(success, data, message, statusCode, detailCode, additionalData) {
         data = data || {};
         message = message || '';
         statusCode = statusCode || 500;
+        additionalData = additionalData || {};
 
         let json = {
             status:     parseInt(success),
@@ -40,6 +41,10 @@ export default {
 
         if (data.length > 0 || Object.keys(data).length > 0) {
             json.data = data;
+        }
+
+        if (additionalData.length > 0 || Object.keys(additionalData).length > 0) {
+            json.additionalData = additionalData;
         }
 
         if (_sent === false) {
