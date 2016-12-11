@@ -39,12 +39,12 @@ export default {
             json.message = message;
         }
 
-        if (data.length > 0 || Object.keys(data).length > 0) {
-            json.data = data;
-        }
-
         if (additionalData.length > 0 || Object.keys(additionalData).length > 0) {
             json.additionalData = additionalData;
+        }
+
+        if (data.length > 0 || Object.keys(data).length > 0) {
+            json.data = data;
         }
 
         if (_sent === false) {

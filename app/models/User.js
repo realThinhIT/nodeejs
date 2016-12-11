@@ -73,7 +73,6 @@ const modelSchema = new Schema({
     },
     usergroup: {
         type: String,
-        required: [true, 'usergroup is not defined'],
         validate: {
             validator: (value, cb) => {
                 if (value != USERGROUP_ADMIN && value != USERGROUP_MOD && value != USERGROUP_USER && value != USERGROUP_GUEST) {
