@@ -129,9 +129,9 @@ modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememb
     let now = new Date();
 
     this.model(modelName).findOne({
-        userId,
-        userAgent,
-        deviceId
+        userId: userId,
+        userAgent: userAgent,
+        deviceId: deviceId
     }, (err, token) => {
         if (err) {
             return callback(err);
@@ -150,10 +150,10 @@ modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememb
         // or it doesn't exist
         } else {
             let newToken = new (this.model(modelName))({
-                userId,
+                userId: userId,
                 loginToken: this.generateNewToken(),
-                userAgent,
-                deviceId,
+                userAgent: userAgent,
+                deviceId: deviceId,
                 expiredAt: dates.addDays(now, ( (rememberMe === true) ? global.app.apiConfig.LOGIN_TOKEN_EXPIRED_LONG : global.app.apiConfig.LOGIN_TOKEN_EXPIRED_SHORT ) ),
                 status: global.consts.STATUS_ACTIVE
             }).save((err, token) => callback(err, token));
