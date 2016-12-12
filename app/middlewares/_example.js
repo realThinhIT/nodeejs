@@ -21,4 +21,4 @@ middleware.beforeAction = (req, res, done) => {
 
 // ################################
 
-module.exports = middleware;
+export default middleware;
