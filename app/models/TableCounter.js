@@ -90,7 +90,7 @@ modelSchema.statics.autoIncrement = function (columnId, callback) {
     }, {
         $inc: { counter: 1 }
     }, { new: true, upsert: true }, function (err, inc) {
-        callback(err, inc);
+        callback(err, inc.counter);
     });
 };
 
