@@ -98,7 +98,7 @@ modelSchema.post('delete', function () {
 // CUSTOM METHODS
 // ################################
 modelSchema.methods.findUserByLoginToken = function (loginToken, callback) {
-    this.model(modelName).findOne({ loginToken }, (err, token) => {
+    this.model(modelName).findOne({ loginToken: loginToken }, (err, token) => {
         if (err || !token) {
             return callback(err, false);
         }
