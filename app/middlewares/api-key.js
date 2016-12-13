@@ -2,8 +2,9 @@
 // MIDDLEWARE: API KEY AUTHENTICATION
 // ######################################################
 
+import $            from '../../core/$';
 let middleware      = {};
-const User          = global.model.User;
+const User          = $.model.User;
 
 // ################################
 // MODIFY THIS!
@@ -15,8 +16,8 @@ const User          = global.model.User;
 // execute before controller
 middleware.beforeAction = (req, res, done) => {
     // insert middleware logic here
-    if (req.get('X-Api-Key') !== global.app.apiConfig.API_KEY) {
-        return done(false, 'invalid api key', global.errorCodes.http.INVALID_CREDENTIALS, global.detailCodes.auth.INVALID_API_KEY);
+    if (req.get('X-Api-Key') !== $.config.api.API_KEY) {
+        return done(false, 'invalid api key', $.params.error.http.INVALID_CREDENTIALS, $.params.detail.auth.INVALID_API_KEY);
     }
 
     return done(true, {}, 200);

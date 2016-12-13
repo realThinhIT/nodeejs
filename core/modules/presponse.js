@@ -52,7 +52,7 @@ export default {
             _res.end();
 
             _sent = true;
-            // global.app.log.put('[warning] response was sent. a response was cancelled.', false);
+            // $.module.plog.put('[warning] response was sent. a response was cancelled.', false);
         }
 
         _next();

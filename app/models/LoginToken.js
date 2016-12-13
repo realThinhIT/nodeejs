@@ -2,12 +2,13 @@
 // MODEL: _example
 // ######################################################
 
-let mongoose        = global.app.mongoose;
+import $            from '../../core/$';
+let mongoose        = $.module.mongoose;
 let Schema          = mongoose.Schema;
 import md5          from 'md5';
-import validator    from '../../core/modules/pvalidator';
-import dates        from '../../core/modules/pdate';
-import random       from '../../core/modules/prandom';
+let validator       = $.module.pvalidator;
+let dates           = $.module.pdate;
+let random          = $.module.prandom;
 
 // ################################
 
@@ -17,11 +18,7 @@ let timestamps  = true;
 
 // define schema
 let modelSchema = new Schema({
-    userId: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'User'
-    },
+    userId: Number,
     loginToken: {
         type: String,
         required: true,
@@ -52,6 +49,10 @@ modelSchema.pre('save', function (next) {
 
         this.createdAt = currentDate;
         this.updatedAt = currentDate;
+    }
+
+    if (!this.status) {
+        this.status = global.consts.STATUS_ACTIVE;
     }
 
     next();
@@ -111,7 +112,7 @@ modelSchema.methods.findUserByLoginToken = function (loginToken, callback) {
             return callback(new Error('token has been disabled'), false);
         }
 
-        global.model.User.findOne({ _id: token.userId }, (err, user) => {
+        $.model.User.findOne({ userId: token.userId }, (err, user) => {
             if (err || !user) return callback(new Error('user not found'), false);
 
             if (user.status === global.consts.STATUS_DEACTIVATED) {
@@ -123,7 +124,7 @@ modelSchema.methods.findUserByLoginToken = function (loginToken, callback) {
     });
 };
 
-modelSchema.methods.generateNewToken = () => random.string(global.app.apiConfig.LOGIN_TOKEN_LENGTH);
+modelSchema.methods.generateNewToken = () => random.string($.config.api.LOGIN_TOKEN_LENGTH);
 
 modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememberMe, callback) {
     let now = new Date();
@@ -142,7 +143,7 @@ modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememb
             this.model(modelName).findOneAndUpdate({ _id: token._id }, {
                 $set: {
                     loginToken: this.model(modelName).schema.methods.generateNewToken(),
-                    expiredAt: dates.addDays(now, ( (rememberMe === true) ? global.app.apiConfig.LOGIN_TOKEN_EXPIRED_LONG : global.app.apiConfig.LOGIN_TOKEN_EXPIRED_SHORT ) ),
+                    expiredAt: dates.addDays(now, ( (rememberMe === true) ? $.config.api.LOGIN_TOKEN_EXPIRED_LONG : $.config.api.LOGIN_TOKEN_EXPIRED_SHORT ) ),
                     updatedAt: now,
                 }
             }, { new: true }, (err, token) => callback(err, token));
@@ -154,7 +155,7 @@ modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememb
                 loginToken: this.generateNewToken(),
                 userAgent: userAgent,
                 deviceId: deviceId,
-                expiredAt: dates.addDays(now, ( (rememberMe === true) ? global.app.apiConfig.LOGIN_TOKEN_EXPIRED_LONG : global.app.apiConfig.LOGIN_TOKEN_EXPIRED_SHORT ) ),
+                expiredAt: dates.addDays(now, ( (rememberMe === true) ? $.config.api.LOGIN_TOKEN_EXPIRED_LONG : $.config.api.LOGIN_TOKEN_EXPIRED_SHORT ) ),
                 status: global.consts.STATUS_ACTIVE
             }).save((err, token) => callback(err, token));
         }

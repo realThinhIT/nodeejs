@@ -2,10 +2,12 @@
 // MODEL: user
 // ######################################################
 
-let mongoose        = global.app.mongoose;
+import $            from '../../core/$';
+let mongoose        = $.module.mongoose;
 let Schema          = mongoose.Schema;
 import md5          from 'md5';
-import validator    from '../../core/modules/pvalidator';
+let validator       = $.module.pvalidator;
+let TableCounter    = $.model.TableCounter;
 
 // ################################
 
@@ -20,6 +22,7 @@ const USERGROUP_GUEST   = 'guest';
 
 // define schema
 const modelSchema = new Schema({
+    userId: Number,
     username: {
         type: String,
         required: [true, 'username is required'],
@@ -56,21 +59,6 @@ const modelSchema = new Schema({
             message: 'password is allowed to be between 6 - 20 characters'
         }
     },
-    email: {
-        type: String,
-        required: [true, 'email is required'],
-        validate: {
-            validator: (value, cb) => {
-                cb(validator.email(value));
-            },
-            message: 'email is invalid'
-        }
-    },
-    name: String,
-    socialIds: {
-        facebook: String,
-        googlePlus: String
-    },
     usergroup: {
         type: String,
         validate: {
@@ -97,6 +85,8 @@ const modelSchema = new Schema({
 // PRE-EXECUTIONS
 // ################################
 modelSchema.pre('save', function (next) {
+    var _self = this;
+
     if (timestamps) {
         let currentDate = new Date();
 
@@ -114,7 +104,13 @@ modelSchema.pre('save', function (next) {
 
     this.password = md5(this.password);
 
-    next();
+    TableCounter.autoIncrement('userId', function (err, id) {
+        _self.userId = id;
+
+        next();
+    });
+
+    // next();
 });
 
 modelSchema.pre('update', function (next) {

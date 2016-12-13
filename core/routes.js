@@ -2,12 +2,13 @@
 // CORE: ROUTES CONFIGURES
 // ######################################################
 
+import $        from './$';
 import routes   from '../config/routes';
 import async    from 'async';
-const log       = global.app.log;
+const log       = $.module.plog;
 
 let validationProcess = (req, res, func, callback) => {
-    let response = global.app.presponse;
+    let response = $.module.presponse;
     let middlewares = {};
     let validationPass = true;
 
@@ -74,7 +75,7 @@ export default app => {
             }
 
             let callbackFunction = (req, res, next) => {
-                let response = global.app.presponse;
+                let response = $.module.presponse;
 
                 validationProcess(req, res, func, (validationPass, middlewares) => {
                     if (validationPass === true) func[callbackMethod](req, response.to(res, next), middlewares);

@@ -2,10 +2,11 @@
 // MODEL: _example
 // ######################################################
 
-let mongoose        = global.app.mongoose;
+import $            from '../../core/$';
+let mongoose        = $.module.mongoose;
 let Schema          = mongoose.Schema;
 import md5          from 'md5';
-import validator    from '../../core/modules/pvalidator';
+let validator       = $.module.pvalidator;
 
 // ################################
 

@@ -2,8 +2,9 @@
 // MIDDLEWARE: authentication/register
 // ######################################################
 
+import $            from '../../../core/$';
 let middleware      = {};
-const User          = global.model.User;
+const User          = $.model.User;
 
 // ################################
 // MODIFY THIS!
@@ -16,7 +17,7 @@ const User          = global.model.User;
 middleware.beforeAction = (req, res, done) => {
     // insert middleware logic here
     if (!req.body) {
-        return done(false, 'user registration info is empty', global.errorCodes.http.BAD_REQUEST, 'INFO_EMPTY');
+        return done(false, 'user registration info is empty', $.params.error.http.BAD_REQUEST, 'INFO_EMPTY');
     }
 
     return done(true, {}, 200);

@@ -2,10 +2,11 @@
 // CORE: DATABASE CONNECTOR
 // ######################################################
 
+import $            from './$';
 import db           from '../config/database';
 import mongoDb      from 'mongoose';
 
-const log           = global.app.log;
+const log           = $.module.plog;
 import bluebird     from 'bluebird';
 mongoDb.Promise     = bluebird;
 

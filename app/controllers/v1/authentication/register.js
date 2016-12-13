@@ -2,11 +2,12 @@
 // CONTROLLER: register
 // ######################################################
 
+import $            from '../../../../core/$';
 let controller      = {};
-const User            = global.model.User;
-const LoginToken      = global.model.LoginToken;
-const mge             = global.app.monerr;
-const obj             = global.app.pobj;
+const User            = $.model.User;
+const LoginToken      = $.model.LoginToken;
+const mge             = $.module.monerr;
+const obj             = $.module.pobj;
 
 // ################################
 // MODIFY THIS!
@@ -32,11 +33,12 @@ controller.register = (req, res, middleware) => {
         // return res.success(user);
 
         // grant this user a new access token
-        (new LoginToken()).saveNewToken(user._id, req.headers['user-agent'], req.headers['X-Device-Id'], ( (req.body.rememberMe === 1) ? true : false ), (err, token) => {
+        (new LoginToken()).saveNewToken(user.userId, req.headers['user-agent'], req.headers['X-Device-Id'], ( (req.body.rememberMe === 1) ? true : false ), (err, token) => {
             if (err || !token) return res.fail('an error has occurred while granting access token', 500);
 
             // remove sensitive information
             user = obj.selectKeys(user, [
+                'userId',
                 'username',
                 'email',
                 'name',

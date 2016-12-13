@@ -9,10 +9,12 @@ import bodyParser   from 'body-parser';
 import morgan       from 'morgan';
 import routes       from './routes';
 
+import $        from './$';
+
 let app             = express();
-let apiConfig       = global.app.apiConfig;
-let globalConfig    = global.app.globalConfig;
-let log             = global.app.log;
+let apiConfig       = $.config.api;
+let globalConfig    = $.config.global;
+let log             = $.module.plog;
 
 // middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -40,6 +42,6 @@ app.set('json spaces', apiConfig.JSON_SPACES);
 routes(app);
 
 // start the server
-app.listen(global.app.globalConfig.SERVER_PORT || 8080, err => {
-    log.put('[webserver] server listening on port ' + global.app.globalConfig.SERVER_PORT || 8080 + '.');
+app.listen($.config.global.SERVER_PORT || 8080, err => {
+    log.put('[webserver] server listening on port ' + $.config.global.SERVER_PORT || 8080 + '.');
 });

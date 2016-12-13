@@ -2,10 +2,11 @@
 // CONTROLLER: login
 // ######################################################
 
+import $            from '../../../../core/$';
 let controller      = {};
-const User            = global.model.User;
-const LoginToken      = global.model.LoginToken;
-const mge             = global.app.monerr;
+const User          = $.model.User;
+const LoginToken    = $.model.LoginToken;
+const mge           = $.module.monerr;
 
 import authenticationService from '../../../services/authentication';
 
@@ -15,7 +16,7 @@ import authenticationService from '../../../services/authentication';
 
 controller.name     = 'login';
 controller.middlewares = [
-    global.middlewares.auth.userLoginRequired
+    $.config.middleware.auth.userLoginRequired
 ];
 
 // ################################
@@ -24,11 +25,11 @@ controller.middlewares = [
 
 controller.logout = (req, res, middleware) => {
     LoginToken.remove({
-        userId: middleware['auth.require-login']._id,
+        userId: middleware['auth.require-login'].userId,
         deviceId: req.headers['X-Device-Id'],
         userAgent: req.headers['user-agent']
     }, err => {
-        if (err) return res.fail('an error has occurred while logging out', global.errorCodes.http.INTERNAL_SERVER_ERROR);
+        if (err) return res.fail('an error has occurred while logging out', $.params.error.http.INTERNAL_SERVER_ERROR);
 
         return res.success('logged out successfully');
     });

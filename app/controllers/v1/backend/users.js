@@ -2,7 +2,7 @@
 // CONTROLLER: register
 // ######################################################
 
-import $            from '../../core/$';
+import $            from '../../../../core/$';
 let controller      = {};
 const User          = $.model.User;
 const LoginToken    = $.model.LoginToken;
@@ -14,17 +14,23 @@ const mge           = $.module.monerr;
 
 controller.name     = 'register';
 controller.middlewares = [
-    'api-key'
+    'api-key', 'auth/require-admin-login', 'pagination'
 ];
 
 // ################################
 // CUSTOM FUNCTIONS
 // ################################
 
-controller.index = (req, res, middleware) => {
+controller.readAll = (req, res, middleware) => {
     // insert controller logic here
 
-    res.success(null, 'all functioning properly');
+    User.count(middleware.pagination.search(['username']), function (err, count) {
+        User.find(middleware.pagination.search(['username']), null, middleware.pagination.select, function (err, data) {
+            res.success(data, 'users retrieved successfully', null, null, {
+                totalItems: count
+            });
+        });
+    });
 };
 
 // ################################

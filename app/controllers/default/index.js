@@ -2,8 +2,9 @@
 // CONTROLLER: register
 // ######################################################
 
+import $            from '../../../core/$';
 let controller      = {};
-const User            = global.model.User;
+const User          = $.model.User;
 
 // ################################
 // MODIFY THIS!

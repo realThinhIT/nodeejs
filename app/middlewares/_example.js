@@ -2,8 +2,9 @@
 // MIDDLEWARE:
 // ######################################################
 
+import $            from '../../core/$';
 let middleware      = {};
-const User          = global.model.User;
+const User          = $.model.User;
 
 // ################################
 // MODIFY THIS!

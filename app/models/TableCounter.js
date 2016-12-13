@@ -2,10 +2,11 @@
 // MODEL: TableCounter
 // ######################################################
 
-let mongoose        = global.app.mongoose;
+import $            from '../../core/$';
+let mongoose        = $.module.mongoose;
 let Schema          = mongoose.Schema;
 import md5          from 'md5';
-import validator    from '../../core/modules/pvalidator';
+let validator       = $.module.pvalidator;
 
 // ################################
 
@@ -39,6 +40,10 @@ modelSchema.pre('save', function (next) {
 
         this.createdAt = currentDate;
         this.updatedAt = currentDate;
+    }
+
+    if (!this.status) {
+        this.status = global.consts.STATUS_ACTIVE;
     }
 
     next();
