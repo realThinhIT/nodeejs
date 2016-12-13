@@ -99,7 +99,7 @@ modelSchema.pre('save', function (next) {
     }
 
     if (!this.status) {
-        this.status = global.consts.STATUS_ACTIVE;
+        this.status = $.param.const.STATUS_ACTIVE;
     }
 
     this.password = md5(this.password);

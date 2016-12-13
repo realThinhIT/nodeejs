@@ -24,8 +24,8 @@ middleware.beforeAction = (req, res, done) => {
     };
 
     if (req.query.sortBy != null) {
-        pagination.select = {};
-        pagination.select[req.query.sortBy] = (req.query.sort != null) ? ( (req.query.sort === 'ASC') ? 1 : -1 ) : -1; 
+        pagination.select.sort = {};
+        pagination.select.sort[req.query.sortBy] = (req.query.sort != null) ? ( (req.query.sort === 'ASC') ? 1 : -1 ) : -1; 
     }
 
     if (req.query.q != null) {

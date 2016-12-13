@@ -42,7 +42,7 @@ export default {
         prandom: prandom,
         ppopulate: ppopulate
     },
-    params: {
+    param: {
         error: errorCodes,
         detail: detailCodes,
         const: consts

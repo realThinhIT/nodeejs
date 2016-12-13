@@ -17,7 +17,7 @@ const User          = $.model.User;
 middleware.beforeAction = (req, res, done) => {
     // insert middleware logic here
     if (!req.body) {
-        return done(false, 'user registration info is empty', $.params.error.http.BAD_REQUEST, 'INFO_EMPTY');
+        return done(false, 'user registration info is empty', $.param.error.http.BAD_REQUEST, 'INFO_EMPTY');
     }
 
     return done(true, {}, 200);

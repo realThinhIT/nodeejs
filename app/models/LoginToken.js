@@ -52,7 +52,7 @@ modelSchema.pre('save', function (next) {
     }
 
     if (!this.status) {
-        this.status = global.consts.STATUS_ACTIVE;
+        this.status = $.param.const.STATUS_ACTIVE;
     }
 
     next();
@@ -108,14 +108,14 @@ modelSchema.methods.findUserByLoginToken = function (loginToken, callback) {
             return callback(new Error('token has expired'), false);
         }
 
-        if (token.status === global.consts.STATUS_DEACTIVATED) {
+        if (token.status === $.param.const.STATUS_DEACTIVATED) {
             return callback(new Error('token has been disabled'), false);
         }
 
         $.model.User.findOne({ userId: token.userId }, (err, user) => {
             if (err || !user) return callback(new Error('user not found'), false);
 
-            if (user.status === global.consts.STATUS_DEACTIVATED) {
+            if (user.status === $.param.const.STATUS_DEACTIVATED) {
                 return callback(new Error('user is disabled by administrator'), false);
             }
 
@@ -156,7 +156,7 @@ modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememb
                 userAgent: userAgent,
                 deviceId: deviceId,
                 expiredAt: dates.addDays(now, ( (rememberMe === true) ? $.config.api.LOGIN_TOKEN_EXPIRED_LONG : $.config.api.LOGIN_TOKEN_EXPIRED_SHORT ) ),
-                status: global.consts.STATUS_ACTIVE
+                status: $.param.const.STATUS_ACTIVE
             }).save((err, token) => callback(err, token));
         }
     });

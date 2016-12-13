@@ -1,0 +1,48 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'D:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Users\\Admin\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'run',
+1 verbose cli   'dev' ]
+2 info using npm@3.10.8
+3 info using node@v4.5.0
+4 verbose run-script [ 'predev', 'dev', 'postdev' ]
+5 info lifecycle node-express-rest-api-starter-pack@1.0.0~predev: node-express-rest-api-starter-pack@1.0.0
+6 silly lifecycle node-express-rest-api-starter-pack@1.0.0~predev: no script for predev, continuing
+7 info lifecycle node-express-rest-api-starter-pack@1.0.0~dev: node-express-rest-api-starter-pack@1.0.0
+8 verbose lifecycle node-express-rest-api-starter-pack@1.0.0~dev: unsafe-perm in lifecycle true
+9 verbose lifecycle node-express-rest-api-starter-pack@1.0.0~dev: PATH: C:\Users\Admin\AppData\Roaming\npm\node_modules\npm\bin\node-gyp-bin;D:\LINUX\www\node-rest\node_modules\.bin;C:\Python27\;C:\Python27\Scripts;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\Program Files (x86)\Skype\Phone\;D:\xampp\php;C:\Program Files\mingw-w64\x86_64-6.1.0-posix-seh-rt_v5-rev0\mingw64\bin;C:\ProgramData\ComposerSetup\bin;D:\Program Files\nodejs\;D:\Program Files\Git\cmd;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\110\Tools\Binn\;C:\Program Files (x86)\GtkSharp\2.12\bin;D:\Program Files\MongoDB\Server\3.2\bin;C:\ProgramData\chocolatey\bin;C:\ProgramData\chocolatey\bin;D:\Android_SDK\platform-tools;D:\Android_SDK;D:\Android_SDK\tools;C:\Program Files (x86)\Microsoft Emulator Manager\1.0\;C:\Users\Admin\AppData\Local\Microsoft\WindowsApps;C:\Users\Admin\AppData\Roaming\Composer\vendor\bin;C:\Users\Admin\AppData\Local\atom\bin;C:\Users\Admin\AppData\Roaming\npm;C:\Program Files (x86)\Microsoft VS Code\bin
+10 verbose lifecycle node-express-rest-api-starter-pack@1.0.0~dev: CWD: D:\LINUX\www\node-rest
+11 silly lifecycle node-express-rest-api-starter-pack@1.0.0~dev: Args: [ '/d /s /c', 'forever -w server-dev.js' ]
+12 silly lifecycle node-express-rest-api-starter-pack@1.0.0~dev: Returned: code: 3221225786  signal: null
+13 info lifecycle node-express-rest-api-starter-pack@1.0.0~dev: Failed to exec dev script
+14 verbose stack Error: node-express-rest-api-starter-pack@1.0.0 dev: `forever -w server-dev.js`
+14 verbose stack Exit status 3221225786
+14 verbose stack     at EventEmitter.<anonymous> (C:\Users\Admin\AppData\Roaming\npm\node_modules\npm\lib\utils\lifecycle.js:255:16)
+14 verbose stack     at emitTwo (events.js:87:13)
+14 verbose stack     at EventEmitter.emit (events.js:172:7)
+14 verbose stack     at ChildProcess.<anonymous> (C:\Users\Admin\AppData\Roaming\npm\node_modules\npm\lib\utils\spawn.js:40:14)
+14 verbose stack     at emitTwo (events.js:87:13)
+14 verbose stack     at ChildProcess.emit (events.js:172:7)
+14 verbose stack     at maybeClose (internal/child_process.js:829:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
+15 verbose pkgid node-express-rest-api-starter-pack@1.0.0
+16 verbose cwd D:\LINUX\www\node-rest\app
+17 error Windows_NT 10.0.14393
+18 error argv "D:\\Program Files\\nodejs\\node.exe" "C:\\Users\\Admin\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js" "run" "dev"
+19 error node v4.5.0
+20 error npm  v3.10.8
+21 error code ELIFECYCLE
+22 error node-express-rest-api-starter-pack@1.0.0 dev: `forever -w server-dev.js`
+22 error Exit status 3221225786
+23 error Failed at the node-express-rest-api-starter-pack@1.0.0 dev script 'forever -w server-dev.js'.
+23 error Make sure you have the latest version of node.js and npm installed.
+23 error If you do, this is most likely a problem with the node-express-rest-api-starter-pack package,
+23 error not with npm itself.
+23 error Tell the author that this fails on your system:
+23 error     forever -w server-dev.js
+23 error You can get information on how to open an issue for this project with:
+23 error     npm bugs node-express-rest-api-starter-pack
+23 error Or if that isn't available, you can get their info via:
+23 error     npm owner ls node-express-rest-api-starter-pack
+23 error There is likely additional logging output above.
+24 verbose exit [ 1, true ]

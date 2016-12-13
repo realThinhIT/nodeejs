@@ -17,7 +17,7 @@ const User          = $.model.User;
 middleware.beforeAction = (req, res, done) => {
     // insert middleware logic here
     if (req.get('X-Api-Key') !== $.config.api.API_KEY) {
-        return done(false, 'invalid api key', $.params.error.http.INVALID_CREDENTIALS, $.params.detail.auth.INVALID_API_KEY);
+        return done(false, 'invalid api key', $.param.error.http.INVALID_CREDENTIALS, $.param.detail.auth.INVALID_API_KEY);
     }
 
     return done(true, {}, 200);
