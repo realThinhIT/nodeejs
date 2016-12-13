@@ -6,8 +6,8 @@ import $            from '../../../../core/$';
 let controller      = {};
 const User          = $.model.User;
 const LoginToken    = $.model.LoginToken;
-const mge           = $.module.monerr;
-const obj           = $.module.pobj;
+const mge           = $.module.mongooserr;
+const obj           = $.module.pobject;
 
 import authenticationService from '../../../services/authentication';
 
