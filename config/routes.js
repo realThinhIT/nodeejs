@@ -60,5 +60,76 @@ export default [
             //     callback: 'forgotPassword'
             // }
         ],
-    }
+    },
+
+    // backend
+    {
+        group: '/v1/backend',
+
+        endPoints: [
+            // users
+            {
+                verb: 'post',
+                path: '/users',
+                controller: 'v1/backend/users',
+                callback: 'create',
+            },
+            {
+                verb: 'get',
+                path: '/users',
+                controller: 'v1/backend/users',
+                callback: 'readAll',
+            },
+            {
+                verb: 'get',
+                path: '/users/:id',
+                controller: 'v1/backend/users',
+                callback: 'readOne',
+            },
+            {
+                verb: 'put',
+                path: '/users/:id',
+                controller: 'v1/backend/users',
+                callback: 'update',
+            },
+            {
+                verb: 'delete',
+                path: '/users/:id',
+                controller: 'v1/backend/users',
+                callback: 'delete',
+            }
+        ],
+    },
 ];
+
+// CRUD endPoints
+            // {
+            //     verb: 'post',
+            //     path: '/users',
+            //     controller: 'v1/backend/users',
+            //     callback: 'create',
+            // },
+            // {
+            //     verb: 'get',
+            //     path: '/users',
+            //     controller: 'v1/backend/users',
+            //     callback: 'readAll',
+            // },
+            // {
+            //     verb: 'get',
+            //     path: '/users/:id',
+            //     controller: 'v1/backend/users',
+            //     callback: 'readOne',
+            // },
+            // {
+            //     verb: 'put',
+            //     path: '/users/:id',
+            //     controller: 'v1/backend/users',
+            //     callback: 'update',
+            // },
+            // {
+            //     verb: 'delete',
+            //     path: '/users/:id',
+            //     controller: 'v1/backend/users',
+            //     callback: 'delete',
+            // }

@@ -19,8 +19,8 @@ middleware.beforeAction = (req, res, done) => {
     let pagination = {};
 
     pagination.select = {
-        skip: parseInt(req.query.selectPerPage) * (parseInt(req.query.page) - 1),
-        limit: (parseInt(req.query.selectPerPage)) ? parseInt(req.query.selectPerPage) : null
+        skip: parseInt(req.query.itemsPerPage) * (parseInt(req.query.page) - 1),
+        limit: (parseInt(req.query.itemsPerPage)) ? parseInt(req.query.itemsPerPage) : null
     };
 
     if (req.query.sortBy != null) {

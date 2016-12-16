@@ -6,13 +6,15 @@ import $            from '../../../../core/$';
 let controller      = {};
 const User          = $.model.User;
 const LoginToken    = $.model.LoginToken;
-const mge           = $.module.mongooserr;
+const mge           = $.module.pmongooserr;
+const obj           = $.module.pobject;
+import md5          from 'md5';
 
 // ################################
 // MODIFY THIS!
 // ################################
 
-controller.name     = 'register';
+controller.name     = 'users';
 controller.middlewares = [
     'api-key', 'auth/require-admin-login', 'pagination'
 ];
@@ -24,12 +26,71 @@ controller.middlewares = [
 controller.readAll = (req, res, middleware) => {
     // insert controller logic here
 
-    User.count(middleware.pagination.search(['username']), function (err, count) {
-        User.find(middleware.pagination.search(['username']), null, middleware.pagination.select, function (err, data) {
-            res.success(data, 'users retrieved successfully', null, null, {
+    User.count(middleware.pagination.search(['username']), (err, count) => {
+        User.find(middleware.pagination.search(['username']), null, middleware.pagination.select, (err, data) => {
+            return res.success(data, 'users retrieved successfully', null, null, {
                 totalItems: count
             });
         });
+    });
+};
+
+controller.readOne = (req, res, middleware) => {
+    User.find({ userId: req.params.id }, (err, data) => {
+        if (err || data.length === 0) {
+            return res.fail('this user does not exist');
+        }
+
+        return res.success(data, 'user retrieved successfully');
+    });
+};
+
+controller.update = (req, res, middleware) => {
+    let updateValues = obj.selectKeys(req.body, [
+        "username",
+        "password"
+    ]);
+
+    if (updateValues.password != null) {
+        updateValues.password = md5(updateValues.password);
+    }
+
+    User.findOneAndUpdate({ userId: req.params.id }, {
+        $set: updateValues
+    }, { new: true }, (err, data) => {
+        if (err || data.length === 0) {
+            return res.fail('cannot update this user');
+        }
+
+        return res.success(data, 'user updated successfully');
+    });
+};
+
+controller.create = (req, res, middleware) => {
+    User.count({ username: req.body.username }, (err, count) => {
+        if (count > 0) {
+            return res.fail('username is duplicated!', $.param.error.http.BAD_REQUEST, $.param.detail.user.DUPLICATED_USERNAME);
+        }
+    });
+
+    let user = new User(req.body);
+
+    user.save((err, data) => {
+        if (err) {
+            return res.fail('cannot create new user', $.param.error.http.INTERNAL_SERVER_ERROR, null, mge(err));
+        }
+
+        return res.success(data, 'user created successfully');
+    });
+};
+
+controller.delete = (req, res, middleware) => {
+    User.remove({ userId: req.params.id }, function (err) {
+        if (err) {
+            return res.fail('cannot delete this user', $.param.error.http.INTERNAL_SERVER_ERROR);
+        }
+
+        return res.success(null, 'user deleted successfully');
     });
 };
 
