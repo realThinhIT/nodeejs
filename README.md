@@ -1,4 +1,4 @@
-# es6-node-express-mongoose-rest-api
+# Express + Mongoose RESTful API built in ES6 with peace in mind!
 
 Starter pack to build RESTful APIs with NodeJS + ExpressJS + MongoDB (Mongoose).
 
