@@ -1,4 +1,6 @@
-# Express + Mongoose RESTful API built in ES6 with peace in mind!
+# Express + Mongoose RESTful API built in ES6
+## with middlewares, authentication and a lot more
+### integration with AngularJS is available!
 
 Starter pack to build RESTful APIs with NodeJS + ExpressJS + MongoDB (Mongoose).
 
