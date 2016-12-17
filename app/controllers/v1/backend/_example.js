@@ -36,8 +36,8 @@ controller.readAll = (req, res, middleware) => {
 };
 
 controller.readOne = (req, res, middleware) => {
-    ExampleModel.find({ rowId: req.params.id }, (err, data) => {
-        if (err || data.length === 0) {
+    ExampleModel.findOne({ rowId: req.params.id }, (err, data) => {
+        if (err) {
             return res.fail('this _example does not exist');
         }
 
@@ -54,7 +54,7 @@ controller.update = (req, res, middleware) => {
     ExampleModel.findOneAndUpdate({ rowId: req.params.id }, {
         $set: updateValues
     }, { new: true }, (err, data) => {
-        if (err || data.length === 0) {
+        if (err) {
             return res.fail('cannot update this _example');
         }
 

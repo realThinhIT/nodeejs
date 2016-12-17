@@ -37,7 +37,7 @@ controller.readAll = (req, res, middleware) => {
 
 controller.readOne = (req, res, middleware) => {
     User.find({ userId: req.params.id }, (err, data) => {
-        if (err || data.length === 0) {
+        if (err) {
             return res.fail('this user does not exist');
         }
 
