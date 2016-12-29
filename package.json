@@ -7,10 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "forever -w server-dev.js",
     "clean...": "rm -rf build && mkdir build",
-    "clean": "rmdir build /s /q && mkdir build",
+    "clean": "rm -rf build && mkdir build",
     "build-server": "babel ./ -s -D -d ./build --ignore node_modules,node_modules/*",
     "build": "npm run clean && npm run build-server",
     "start": "forever start ./build/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/realThinhIT/express-mongoose-es6-rest-api.git"
   },
   "author": "ThinhIT (thinhit.net)",
   "license": "MIT",
@@ -23,7 +27,9 @@
     "body-parser": "^1.15.2",
     "dot-object": "^1.5.4",
     "express": "^4.14.0",
+    "forever": "^0.15.3",
     "glob": "^7.1.0",
+    "lodash": "^4.17.2",
     "md5": "^2.2.1",
     "mongodb": "^2.2.10",
     "mongoose": "^4.6.6",
