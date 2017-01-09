@@ -2,11 +2,8 @@
 // MODEL: TableCounter
 // ######################################################
 
-import $            from '../../core/$';
-let mongoose        = $.module.mongoose;
+let mongoose        = Nodee.module.mongoose;
 let Schema          = mongoose.Schema;
-import md5          from 'md5';
-let validator       = $.module.pvalidator;
 
 // ################################
 
@@ -43,7 +40,7 @@ modelSchema.pre('save', function (next) {
     }
 
     if (!this.status) {
-        this.status = $.param.const.STATUS_ACTIVE;
+        this.status = Nodee.param.const.STATUS_ACTIVE;
     }
 
     next();
@@ -93,7 +90,7 @@ modelSchema.statics.autoIncrement = function (columnId, callback) {
     this.model(modelName).findOneAndUpdate({
         columnId: columnId
     }, {
-        $inc: { counter: 1 }
+        Nodeeinc: { counter: 1 }
     }, { new: true, upsert: true }, function (err, inc) {
         callback(err, inc.counter);
     });

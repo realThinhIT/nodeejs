@@ -1,14 +1,11 @@
 // ######################################################
-// MODEL: _example
+// MODEL: LoginToken
 // ######################################################
 
-import $            from '../../core/$';
-let mongoose        = $.module.mongoose;
+let mongoose        = Nodee.module.mongoose;
 let Schema          = mongoose.Schema;
-import md5          from 'md5';
-let validator       = $.module.pvalidator;
-let dates           = $.module.pdate;
-let random          = $.module.prandom;
+let dates           = Nodee.module.pdate;
+let random          = Nodee.module.prandom;
 
 // ################################
 
@@ -52,7 +49,7 @@ modelSchema.pre('save', function (next) {
     }
 
     if (!this.status) {
-        this.status = $.param.const.STATUS_ACTIVE;
+        this.status = Nodee.param.const.STATUS_ACTIVE;
     }
 
     next();
@@ -108,14 +105,14 @@ modelSchema.methods.findUserByLoginToken = function (loginToken, callback) {
             return callback(new Error('token has expired'), false);
         }
 
-        if (token.status === $.param.const.STATUS_DEACTIVATED) {
+        if (token.status === Nodee.param.const.STATUS_DEACTIVATED) {
             return callback(new Error('token has been disabled'), false);
         }
 
-        $.model.User.findOne({ userId: token.userId }, (err, user) => {
+        Nodee.model.User.findOne({ userId: token.userId }, (err, user) => {
             if (err || !user) return callback(new Error('user not found'), false);
 
-            if (user.status === $.param.const.STATUS_DEACTIVATED) {
+            if (user.status === Nodee.param.const.STATUS_DEACTIVATED) {
                 return callback(new Error('user is disabled by administrator'), false);
             }
 
@@ -124,7 +121,7 @@ modelSchema.methods.findUserByLoginToken = function (loginToken, callback) {
     });
 };
 
-modelSchema.methods.generateNewToken = () => random.string($.config.api.LOGIN_TOKEN_LENGTH);
+modelSchema.methods.generateNewToken = () => random.string(Nodee.config.api.LOGIN_TOKEN_LENGTH);
 
 modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememberMe, callback) {
     let now = new Date();
@@ -141,9 +138,9 @@ modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememb
         // _model means if the token bind to _model userAgent and deviceId exists
         if (token !== null && token._id) {
             this.model(modelName).findOneAndUpdate({ _id: token._id }, {
-                $set: {
+                Nodeeset: {
                     loginToken: this.model(modelName).schema.methods.generateNewToken(),
-                    expiredAt: dates.addDays(now, ( (rememberMe === true) ? $.config.api.LOGIN_TOKEN_EXPIRED_LONG : $.config.api.LOGIN_TOKEN_EXPIRED_SHORT ) ),
+                    expiredAt: dates.addDays(now, ( (rememberMe === true) ? Nodee.config.api.LOGIN_TOKEN_EXPIRED_LONG : Nodee.config.api.LOGIN_TOKEN_EXPIRED_SHORT ) ),
                     updatedAt: now,
                 }
             }, { new: true }, (err, token) => callback(err, token));
@@ -155,8 +152,8 @@ modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememb
                 loginToken: this.generateNewToken(),
                 userAgent: userAgent,
                 deviceId: deviceId,
-                expiredAt: dates.addDays(now, ( (rememberMe === true) ? $.config.api.LOGIN_TOKEN_EXPIRED_LONG : $.config.api.LOGIN_TOKEN_EXPIRED_SHORT ) ),
-                status: $.param.const.STATUS_ACTIVE
+                expiredAt: dates.addDays(now, ( (rememberMe === true) ? Nodee.config.api.LOGIN_TOKEN_EXPIRED_LONG : Nodee.config.api.LOGIN_TOKEN_EXPIRED_SHORT ) ),
+                status: Nodee.param.const.STATUS_ACTIVE
             }).save((err, token) => callback(err, token));
         }
     });

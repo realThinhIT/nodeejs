@@ -1,32 +1,39 @@
 // ######################################################
 // CORE: INIT
 // ######################################################
+/*eslint no-unused-vars: ["error", { "args": "none" }]*/
 
-import $            from './$';
+import dbConfig     from '../app/config/database';
 import glob         from 'glob';
 import path         from 'path';
+const log           = Nodee.module.plog;
 
 // clear the console
-if ($.config.global.LOG_CLEAR_CONSOLE_ON_STARTUP) {
-    $.module.plog.clear();
+if (Nodee.config.global.LOG_CLEAR_CONSOLE_ON_STARTUP) {
+    log.clear();
 }
 
-$.module.plog.put($.config.global.APP_NAME.toUpperCase() + '', true);
+log.put(Nodee.config.global.APP_NAME.toUpperCase() + '', true);
 
 // connect to database
-$.db = require('./db').default;
-$.db.init((err, db) => {
-    if (err) {
-        $.module.plog.putException(err);
-    }
-
+Nodee.db = require('./db').default;
+Nodee.db.init((err) => {
     // load the models
-    glob.sync('./app/models/*.js').forEach(file => {
-        const modelName = path.basename(file, '.js');
-        $.module.plog.put('[model] loading model: ' + modelName);
+    if (dbConfig.autoImportModels === true) {
+        log.put('[model] model auto loading is enabled');
 
-        $.model[modelName] = require('../app/models/' + modelName).default;
-    });
+        glob.sync('./app/models/*.js').forEach(file => {
+            const modelName = path.basename(file, '.js');
+
+            if (modelName !== '_example') {
+                log.put('[model] loading model: ' + modelName);
+
+                Nodee.model[modelName] = require('../app/models/' + modelName).default;
+            }
+        });
+    } else {
+        log.put('[model] model auto loading is disabled');
+    }
 
     // run the server
     require('./express');

@@ -2,11 +2,10 @@
 // CORE: DATABASE CONNECTOR
 // ######################################################
 
-import $            from './$';
-import db           from '../config/database';
+import db           from '../app/config/database';
 import mongoDb      from 'mongoose';
 
-const log           = $.module.plog;
+const log           = Nodee.module.plog;
 import bluebird     from 'bluebird';
 mongoDb.Promise     = bluebird;
 
@@ -50,7 +49,7 @@ connection.getConnection = () => {
 
 connection.close = () => {
     log.put('[db] closing current database...');
-    return _database.close();
+    return connection._database.close();
 };
 
 export default connection;

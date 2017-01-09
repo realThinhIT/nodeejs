@@ -1,37 +1,32 @@
 // ######################################################
-// CONTROLLER: login
+// CONTROLLER: logout
 // ######################################################
-
-import $            from '../../../../core/$';
+;
 let controller      = {};
-const User          = $.model.User;
-const LoginToken    = $.model.LoginToken;
-const mge           = $.module.mongooserr;
-
-import authenticationService from '../../../services/authentication';
+const LoginToken    = Nodee.model.LoginToken;
 
 // ################################
 // MODIFY THIS!
 // ################################
 
-controller.name     = 'login';
+controller.name     = 'logout';
 controller.middlewares = [
-    $.config.middleware.auth.userLoginRequired
+    Nodee.middleware.auth.userLoginRequired
 ];
 
 // ################################
 // CUSTOM FUNCTIONS
 // ################################
 
-controller.logout = (req, res, middleware) => {
+controller.logout = (req, res, pres, middleware) => {
     LoginToken.remove({
         userId: middleware['auth.require-login'].userId,
         deviceId: req.headers['X-Device-Id'],
         userAgent: req.headers['user-agent']
     }, err => {
-        if (err) return res.fail('an error has occurred while logging out', $.param.error.http.INTERNAL_SERVER_ERROR);
+        if (err) return pres.fail('an error has occurred while logging out', Nodee.param.error.http.INTERNAL_SERVER_ERROR);
 
-        return res.success('logged out successfully');
+        return pres.success('logged out successfully');
     });
 };
 

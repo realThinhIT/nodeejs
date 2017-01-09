@@ -2,12 +2,11 @@
 // CONTROLLER: register
 // ######################################################
 
-import $            from '../../../../core/$';
 let controller      = {};
-const User            = $.model.User;
-const LoginToken      = $.model.LoginToken;
-const mge             = $.module.mongooserr;
-const obj             = $.module.pobject;
+const User            = Nodee.model.User;
+const LoginToken      = Nodee.model.LoginToken;
+const mge             = Nodee.module.mongooserr;
+const obj             = Nodee.module.pobject;
 
 // ################################
 // MODIFY THIS!
@@ -22,19 +21,19 @@ controller.middlewares = [
 // CUSTOM FUNCTIONS
 // ################################
 
-controller.register = (req, res, middleware) => {
+controller.register = (req, res, pres, middleware) => {
     let newUser = new User(req.body);
 
     newUser.save((err, user) => {
         if (err) {
-            return res.fail('there was some errors in user registering', null, null, mge(err));
+            return pres.fail('there was some errors in user registering', null, null, mge(err));
         }
 
-        // return res.success(user);
+        // return pres.success(user);
 
         // grant this user a new access token
         (new LoginToken()).saveNewToken(user.userId, req.headers['user-agent'], req.headers['X-Device-Id'], ( (req.body.rememberMe === 1) ? true : false ), (err, token) => {
-            if (err || !token) return res.fail('an error has occurred while granting access token', 500);
+            if (err || !token) return pres.fail('an error has occurred while granting access token', 500);
 
             // remove sensitive information
             user = obj.selectKeys(user, [
@@ -53,7 +52,7 @@ controller.register = (req, res, middleware) => {
                 'status'
             ]);
 
-            return res.success({
+            return pres.success({
                 userInfo: user,
                 accessToken: token
             }, 'user registered successfully');

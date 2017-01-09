@@ -2,11 +2,8 @@
 // MODEL: _example
 // ######################################################
 
-import $            from '../../core/$';
-let mongoose        = $.module.mongoose;
+let mongoose        = Nodee.module.mongoose;
 let Schema          = mongoose.Schema;
-import md5          from 'md5';
-let validator       = $.module.pvalidator;
 
 // ################################
 

@@ -1,14 +1,14 @@
 // ######################################################
 // CORE: ROUTES CONFIGURES
 // ######################################################
+/*eslint no-unused-vars: ["error", { "args": "none" }]*/
 
-import $        from './$';
-import routes   from '../config/routes';
+import routes   from '../app/config/routes';
 import async    from 'async';
-const log       = $.module.plog;
+const log       = Nodee.module.plog;
 
 let validationProcess = (req, res, func, callback) => {
-    let response = $.module.presponse;
+    let response = Nodee.module.presponse;
     let middlewares = {};
     let validationPass = true;
 
@@ -26,7 +26,7 @@ let validationProcess = (req, res, func, callback) => {
 
         // execute the middlewares then get the callback
         try {
-            middleware = require('../app/middlewares/' + mid).default;
+            middleware = require(__DIR_APP + 'middlewares/' + mid).default;
         } catch (e) {
             validationPass = false;
 
@@ -59,15 +59,18 @@ export default app => {
         group.endPoints.forEach(point => {
             group.group = (group.group === '/') ? '' : group.group;
             let endPoint        = group.group + point.path;
+            let groupType       = group.type;
             let method          = point.verb;
             let callbackMethod  = point.callback;
-            let func = require('../app/controllers/' + point.controller).default;
+            let pointType       = point.type;
+            let apiOrWebType    = (pointType) ? pointType : groupType;
+            let func = require(__DIR_APP + 'controllers/' + point.controller).default;
 
             // throw an exception if the callback function is illegal
             if (typeof(func[callbackMethod]) !== 'function') {
                 let message = '[route] callback function \'' + callbackMethod + '\' (' + typeof(func[callbackMethod]) + ') is not available at ' + endPoint;
 
-                log.throwException(message);
+                log.putException(message);
             }
 
             if (!(func.middlewares instanceof Array)) {
@@ -75,16 +78,30 @@ export default app => {
             }
 
             let callbackFunction = (req, res, next) => {
-                let response = $.module.presponse;
+                let response = Nodee.module.presponse;
+
+                // set default headers
+                if (apiOrWebType === 'api' || apiOrWebType === 'web') {
+                    if (Nodee.config[apiOrWebType].DEFAULT_TYPE !== null) {
+                        res.type(Nodee.config[apiOrWebType].DEFAULT_TYPE);
+                    }
+                    
+                    if (Nodee.config[apiOrWebType].DEFAULT_HEADERS !== null) {
+                        for (const key of Object.keys(Nodee.config[apiOrWebType].DEFAULT_HEADERS)) {
+                            res.set(key, Nodee.config[apiOrWebType].DEFAULT_HEADERS[key]);
+                        }
+                    }
+                } else {
+                    apiOrWebType = 'unf';
+                    log.put('[route] endpoint/ group type ' + apiOrWebType + ' is invalid', false);
+                }
 
                 validationProcess(req, res, func, (validationPass, middlewares) => {
-                    if (validationPass === true) func[callbackMethod](req, response.to(res, next), middlewares);
+                    if (validationPass === true) func[callbackMethod](req, res, response.to(res, next), middlewares);
                 });
-
-                // next();
             };
 
-            log.put('[route] setup endpoint: ' + method.toUpperCase() + ' ' + endPoint);
+            log.put('[route] ' + apiOrWebType + ' endpoint: ' + method.toUpperCase() + ' ' + endPoint);
 
             // app.use(endPoint, callbackFunction);
 

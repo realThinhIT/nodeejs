@@ -2,12 +2,11 @@
 // MODEL: user
 // ######################################################
 
-import $            from '../../core/$';
-let mongoose        = $.module.mongoose;
+let mongoose        = Nodee.module.mongoose;
 let Schema          = mongoose.Schema;
+let validator       = Nodee.module.pvalidator;
+let TableCounter    = Nodee.model.TableCounter;
 import md5          from 'md5';
-let validator       = $.module.pvalidator;
-let TableCounter    = $.model.TableCounter;
 
 // ################################
 
@@ -99,7 +98,7 @@ modelSchema.pre('save', function (next) {
     }
 
     if (!this.status) {
-        this.status = $.param.const.STATUS_ACTIVE;
+        this.status = Nodee.param.const.STATUS_ACTIVE;
     }
 
     this.password = md5(this.password);
