@@ -1,5 +1,5 @@
 // ######################################################
-// MODEL: user
+// MODEL: User
 // ######################################################
 
 let mongoose        = Nodee.module.mongoose;
@@ -14,10 +14,10 @@ import md5          from 'md5';
 let modelName   = 'User';
 let timestamps  = true;
 
-const USERGROUP_ADMIN   = 'admin';
-const USERGROUP_MOD     = 'moderator';
-const USERGROUP_USER    = 'user';
-const USERGROUP_GUEST   = 'guest';
+const USERGROUP_ADMIN   = 1;
+const USERGROUP_MOD     = 2;
+const USERGROUP_USER    = 3;
+const USERGROUP_GUEST   = 4;
 
 // define schema
 const modelSchema = new Schema({
@@ -59,7 +59,7 @@ const modelSchema = new Schema({
         }
     },
     usergroup: {
-        type: String,
+        type: Number,
         validate: {
             validator: (value, cb) => {
                 if (value != USERGROUP_ADMIN && value != USERGROUP_MOD && value != USERGROUP_USER && value != USERGROUP_GUEST) {

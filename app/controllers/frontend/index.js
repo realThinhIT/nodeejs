@@ -9,9 +9,7 @@ let controller      = {};
 // ################################
 
 controller.name     = 'index';
-controller.middlewares = [
-
-];
+controller.middlewares = [];
 
 // ################################
 // CUSTOM FUNCTIONS
@@ -19,7 +17,8 @@ controller.middlewares = [
 
 controller.homepage = (req, res, pres, middleware) => {
     return pres.render('index', {
-        layout: false
+        layout: false,
+        appName: Nodee.config.global.APP_NAME
     });
 };
 
