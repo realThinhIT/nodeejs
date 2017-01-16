@@ -2,9 +2,8 @@
 // MIDDLEWARE:
 // ######################################################
 
-import $            from '../../core/$';
 let middleware      = {};
-const User          = $.model.User;
+const User          = Nodee.model.User;
 
 // ################################
 // MODIFY THIS!

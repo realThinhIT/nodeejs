@@ -10,6 +10,8 @@ import morgan       from 'morgan';
 import routes       from './routes';
 import exphbs       from 'express-handlebars';
 
+import cors         from 'cors';
+
 let app             = express();
 let apiConfig       = Nodee.config.api;
 let globalConfig    = Nodee.config.global;
@@ -18,6 +20,7 @@ let log             = Nodee.module.plog;
 // middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors());
 
 if (globalConfig.LOG_REQUEST) {
     log.put('[log] http request logging is enabled');
