@@ -27,7 +27,7 @@ middleware.beforeAction = (req, res, done) => {
         return logIn.findUserByLoginToken(login.token, (err, isValidated, user) => {
             if (err || !user || !isValidated) return done(false, 'invalid access token, token has been disabled or token has expired', Nodee.param.error.http.INVALID_CREDENTIALS, Nodee.param.detail.auth.INVALID_ACCESS_TOKEN);
 
-            if (user.usergroup !== 'admin') {
+            if (user.usergroup !== 1) {
                 return done(false, 'you must be an admin to get access to this functionality', Nodee.param.error.http.INVALID_CREDENTIALS, Nodee.param.detail.auth.INVALID_ACCESS_TOKEN);
             }
 

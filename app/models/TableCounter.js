@@ -90,7 +90,7 @@ modelSchema.statics.autoIncrement = function (columnId, callback) {
     this.model(modelName).findOneAndUpdate({
         columnId: columnId
     }, {
-        Nodeeinc: { counter: 1 }
+        $inc: { counter: 1 }
     }, { new: true, upsert: true }, function (err, inc) {
         callback(err, inc.counter);
     });

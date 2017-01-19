@@ -30,7 +30,8 @@ let validationProcess = (req, res, func, callback) => {
         } catch (e) {
             validationPass = false;
 
-            log.put('[middleware] error: ' + midName + ' doesn\'t exist', false);
+            log.putException('[middleware] error: ' + midName + ' doesn\'t exist', e);
+
             return response.to(res).fail('middleware named ' + midName + ' is not available');
         }
 
@@ -64,7 +65,7 @@ export default app => {
             let callbackMethod  = point.callback;
             let pointType       = point.type;
             let apiOrWebType    = (pointType) ? pointType : groupType;
-            let func = require(__DIR_APP + 'controllers/' + point.controller).default;
+            let func            = require(__DIR_APP + 'controllers/' + point.controller).default;
 
             // throw an exception if the callback function is illegal
             if (typeof(func[callbackMethod]) !== 'function') {
@@ -90,20 +91,22 @@ export default app => {
                         for (const key of Object.keys(Nodee.config[apiOrWebType].DEFAULT_HEADERS)) {
                             res.set(key, Nodee.config[apiOrWebType].DEFAULT_HEADERS[key]);
                         }
+
+                        validationProcess(req, res, func, (validationPass, middlewares) => {
+                            try {
+                                if (validationPass === true) func[callbackMethod](req, res, response.to(res, next), middlewares);
+                            } catch (e) {
+                                log.putException('[route] route refuse to finish, threw an exception', e);
+                            }
+                        });
                     }
                 } else {
                     apiOrWebType = 'unf';
                     log.put('[route] endpoint/ group type ' + apiOrWebType + ' is invalid', false);
                 }
-
-                validationProcess(req, res, func, (validationPass, middlewares) => {
-                    if (validationPass === true) func[callbackMethod](req, res, response.to(res, next), middlewares);
-                });
             };
 
             log.put('[route] ' + apiOrWebType + ' endpoint: ' + method.toUpperCase() + ' ' + endPoint);
-
-            // app.use(endPoint, callbackFunction);
 
             if (method === 'post') {
                 app.post(endPoint, callbackFunction);
