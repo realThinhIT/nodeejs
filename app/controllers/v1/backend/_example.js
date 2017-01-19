@@ -48,7 +48,7 @@ controller.update = (req, res, pres, middleware) => {
     ]);
 
     ExampleModel.findOneAndUpdate({ rowId: req.params.id }, {
-        Nodeeset: updateValues
+        $set: updateValues
     }, { new: true }, (err, data) => {
         if (err) {
             return pres.fail('cannot update this _example');

@@ -138,7 +138,7 @@ modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememb
         // _model means if the token bind to _model userAgent and deviceId exists
         if (token !== null && token._id) {
             this.model(modelName).findOneAndUpdate({ _id: token._id }, {
-                Nodeeset: {
+                $set: {
                     loginToken: this.model(modelName).schema.methods.generateNewToken(),
                     expiredAt: dates.addDays(now, ( (rememberMe === true) ? Nodee.config.api.LOGIN_TOKEN_EXPIRED_LONG : Nodee.config.api.LOGIN_TOKEN_EXPIRED_SHORT ) ),
                     updatedAt: now,

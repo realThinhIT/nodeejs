@@ -54,7 +54,7 @@ controller.update = (req, res, pres, middleware) => {
     }
 
     User.findOneAndUpdate({ userId: req.params.id }, {
-        Nodeeset: updateValues
+        $set: updateValues
     }, { new: true }, (err, data) => {
         if (err || data.length === 0) {
             return pres.fail('cannot update this user');
