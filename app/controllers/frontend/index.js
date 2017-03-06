@@ -15,8 +15,8 @@ controller.middlewares = [];
 // CUSTOM FUNCTIONS
 // ################################
 
-controller.homepage = (req, res, pres, middleware) => {
-    return pres.render('index', {
+controller.homepage = (req, res, middleware) => {
+    return res.render('index', {
         layout: false,
         appName: Nodee.config.global.APP_NAME
     });

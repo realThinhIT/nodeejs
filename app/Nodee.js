@@ -38,7 +38,7 @@ export default {
         pcallback: pcallback,
         presponse: presponse,
         pmongooserr: pmongooserr,
-        pobject: pobject,
+        pobject,
         pdate: pdate,
         pvalidator: pvalidator,
         prandom: prandom,

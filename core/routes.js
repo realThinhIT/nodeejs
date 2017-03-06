@@ -94,7 +94,7 @@ export default app => {
 
                         validationProcess(req, res, func, (validationPass, middlewares) => {
                             try {
-                                if (validationPass === true) func[callbackMethod](req, res, response.to(res, next), middlewares);
+                                if (validationPass === true) func[callbackMethod](req, response.to(res, next), middlewares, res);
                             } catch (e) {
                                 log.putException('[route] route refuse to finish, threw an exception', e);
                             }

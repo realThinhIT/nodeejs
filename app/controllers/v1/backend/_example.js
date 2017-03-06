@@ -19,29 +19,29 @@ controller.middlewares = [
 // CUSTOM FUNCTIONS
 // ################################
 
-controller.readAll = (req, res, pres, middleware) => {
+controller.readAll = (req, res, middleware) => {
     // insert controller logic here
 
     ExampleModel.count(middleware.pagination.search(['searchCol']), (err, count) => {
         ExampleModel.find(middleware.pagination.search(['searchCol']), null, middleware.pagination.select, (err, data) => {
-            return pres.success(data, '_examples retrieved successfully', null, null, {
+            return res.success(data, '_examples retrieved successfully', null, null, {
                 totalItems: count
             });
         });
     });
 };
 
-controller.readOne = (req, res, pres, middleware) => {
+controller.readOne = (req, res, middleware) => {
     ExampleModel.findOne({ rowId: req.params.id }, (err, data) => {
         if (err) {
-            return pres.fail('this _example does not exist');
+            return res.fail('this _example does not exist');
         }
 
-        return pres.success(data, '_example retrieved successfully');
+        return res.success(data, '_example retrieved successfully');
     });
 };
 
-controller.update = (req, res, pres, middleware) => {
+controller.update = (req, res, middleware) => {
     let updateValues = obj.selectKeys(req.body, [
         "fieldOne",
         "fieldTwo"
@@ -51,17 +51,17 @@ controller.update = (req, res, pres, middleware) => {
         $set: updateValues
     }, { new: true }, (err, data) => {
         if (err) {
-            return pres.fail('cannot update this _example');
+            return res.fail('cannot update this _example');
         }
 
-        return pres.success(data, '_example updated successfully');
+        return res.success(data, '_example updated successfully');
     });
 };
 
-controller.create = (req, res, pres, middleware) => {
+controller.create = (req, res, middleware) => {
     ExampleModel.count({ fieldOne: req.body.fieldOne }, (err, count) => {
         if (count > 0) {
-            return pres.fail('_example is duplicated!', Nodee.param.error.http.BAD_REQUEST, Nodee.param.detail.user.DUPLICATED_USERNAME);
+            return res.fail('_example is duplicated!', Nodee.param.error.http.BAD_REQUEST, Nodee.param.detail.user.DUPLICATED_USERNAME);
         }
     });
 
@@ -69,20 +69,20 @@ controller.create = (req, res, pres, middleware) => {
 
     exampleModel.save((err, data) => {
         if (err) {
-            return pres.fail('cannot create new _example', Nodee.param.error.http.INTERNAL_SERVER_ERROR, null, mge(err));
+            return res.fail('cannot create new _example', Nodee.param.error.http.INTERNAL_SERVER_ERROR, null, mge(err));
         }
 
-        return pres.success(data, '_example created successfully');
+        return res.success(data, '_example created successfully');
     });
 };
 
-controller.delete = (req, res, pres, middleware) => {
+controller.delete = (req, res, middleware) => {
     ExampleModel.remove({ rowId: req.params.id }, function (err) {
         if (err) {
-            return pres.fail('cannot delete this _example', Nodee.param.error.http.INTERNAL_SERVER_ERROR);
+            return res.fail('cannot delete this _example', Nodee.param.error.http.INTERNAL_SERVER_ERROR);
         }
 
-        return pres.success(null, '_example deleted successfully');
+        return res.success(null, '_example deleted successfully');
     });
 };
 

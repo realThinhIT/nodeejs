@@ -21,29 +21,29 @@ controller.middlewares = [
 // CUSTOM FUNCTIONS
 // ################################
 
-controller.readAll = (req, res, pres, middleware) => {
+controller.readAll = (req, res, middleware) => {
     // insert controller logic here
 
     User.count(middleware.pagination.search(['username']), (err, count) => {
         User.find(middleware.pagination.search(['username']), null, middleware.pagination.select, (err, data) => {
-            return pres.success(data, 'users retrieved successfully', null, null, {
+            return res.success(data, 'users retrieved successfully', null, null, {
                 totalItems: count
             });
         });
     });
 };
 
-controller.readOne = (req, res, pres, middleware) => {
+controller.readOne = (req, res, middleware) => {
     User.find({ userId: req.params.id }, (err, data) => {
         if (err) {
-            return pres.fail('this user does not exist');
+            return res.fail('this user does not exist');
         }
 
-        return pres.success(data, 'user retrieved successfully');
+        return res.success(data, 'user retrieved successfully');
     });
 };
 
-controller.update = (req, res, pres, middleware) => {
+controller.update = (req, res, middleware) => {
     let updateValues = obj.selectKeys(req.body, [
         "username",
         "password"
@@ -57,17 +57,17 @@ controller.update = (req, res, pres, middleware) => {
         $set: updateValues
     }, { new: true }, (err, data) => {
         if (err || data.length === 0) {
-            return pres.fail('cannot update this user');
+            return res.fail('cannot update this user');
         }
 
-        return pres.success(data, 'user updated successfully');
+        return res.success(data, 'user updated successfully');
     });
 };
 
-controller.create = (req, res, pres, middleware) => {
+controller.create = (req, res, middleware) => {
     User.count({ username: req.body.username }, (err, count) => {
         if (count > 0) {
-            return pres.fail('username is duplicated!', Nodee.param.error.http.BAD_REQUEST, Nodee.param.detail.user.DUPLICATED_USERNAME);
+            return res.fail('username is duplicated!', Nodee.param.error.http.BAD_REQUEST, Nodee.param.detail.user.DUPLICATED_USERNAME);
         }
     });
 
@@ -75,20 +75,20 @@ controller.create = (req, res, pres, middleware) => {
 
     user.save((err, data) => {
         if (err) {
-            return pres.fail('cannot create new user', Nodee.param.error.http.INTERNAL_SERVER_ERROR, null, mge(err));
+            return res.fail('cannot create new user', Nodee.param.error.http.INTERNAL_SERVER_ERROR, null, mge(err));
         }
 
-        return pres.success(data, 'user created successfully');
+        return res.success(data, 'user created successfully');
     });
 };
 
-controller.delete = (req, res, pres, middleware) => {
+controller.delete = (req, res, middleware) => {
     User.remove({ userId: req.params.id }, function (err) {
         if (err) {
-            return pres.fail('cannot delete this user', Nodee.param.error.http.INTERNAL_SERVER_ERROR);
+            return res.fail('cannot delete this user', Nodee.param.error.http.INTERNAL_SERVER_ERROR);
         }
 
-        return pres.success(null, 'user deleted successfully');
+        return res.success(null, 'user deleted successfully');
     });
 };
 

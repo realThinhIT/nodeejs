@@ -21,19 +21,19 @@ controller.middlewares = [
 // CUSTOM FUNCTIONS
 // ################################
 
-controller.register = (req, res, pres, middleware) => {
+controller.register = (req, res, middleware) => {
     let newUser = new User(req.body);
 
     newUser.save((err, user) => {
         if (err) {
-            return pres.fail('there was some errors in user registering', null, null, mge(err));
+            return res.fail('there was some errors in user registering', null, null, mge(err));
         }
 
-        // return pres.success(user);
+        // return res.success(user);
 
         // grant this user a new access token
         (new LoginToken()).saveNewToken(user.userId, req.headers['user-agent'], req.headers['X-Device-Id'], ( (req.body.rememberMe === 1) ? true : false ), (err, token) => {
-            if (err || !token) return pres.fail('an error has occurred while granting access token', 500);
+            if (err || !token) return res.fail('an error has occurred while granting access token', 500);
 
             // remove sensitive information
             user = obj.selectKeys(user, [
@@ -52,7 +52,7 @@ controller.register = (req, res, pres, middleware) => {
                 'status'
             ]);
 
-            return pres.success({
+            return res.success({
                 userInfo: user,
                 accessToken: token
             }, 'user registered successfully');
