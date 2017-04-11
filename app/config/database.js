@@ -2,6 +2,8 @@
 // this is configurations to work with MongoDB engine
 
 export default {
+    enable: false,
+
     // connection settings
     host:   'localhost',
     port:   '27017',

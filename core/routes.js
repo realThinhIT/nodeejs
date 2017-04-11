@@ -64,7 +64,7 @@ export default app => {
             let method          = point.verb;
             let callbackMethod  = point.callback;
             let pointType       = point.type;
-            let apiOrWebType    = (pointType) ? pointType : groupType;
+            let renderMethod    = (pointType) ? pointType : groupType;
             let func            = require(__DIR_APP + 'controllers/' + point.controller).default;
 
             // throw an exception if the callback function is illegal
@@ -82,31 +82,35 @@ export default app => {
                 let response = Nodee.module.presponse;
 
                 // set default headers
-                if (apiOrWebType === 'api' || apiOrWebType === 'web') {
-                    if (Nodee.config[apiOrWebType].DEFAULT_TYPE !== null) {
-                        res.type(Nodee.config[apiOrWebType].DEFAULT_TYPE);
+                let renderMethodConfig = Nodee.config.renderMethod[renderMethod];
+                if (renderMethodConfig) {
+                    if (renderMethodConfig.DEFAULT_TYPE !== null) {
+                        res.type(renderMethodConfig.DEFAULT_TYPE);
                     }
                     
-                    if (Nodee.config[apiOrWebType].DEFAULT_HEADERS !== null) {
-                        for (const key of Object.keys(Nodee.config[apiOrWebType].DEFAULT_HEADERS)) {
-                            res.set(key, Nodee.config[apiOrWebType].DEFAULT_HEADERS[key]);
+                    if (renderMethodConfig.DEFAULT_HEADERS !== null) {
+                        for (const key of Object.keys(renderMethodConfig.DEFAULT_HEADERS)) {
+                            res.set(key, renderMethodConfig.DEFAULT_HEADERS[key]);
                         }
 
                         validationProcess(req, res, func, (validationPass, middlewares) => {
-                            try {
-                                if (validationPass === true) func[callbackMethod](req, response.to(res, next), middlewares, res);
-                            } catch (e) {
-                                log.putException('[route] route refuse to finish, threw an exception', e);
-                            }
+                            renderMethodConfig.SETUP_FUNCTION(app, () => {
+                                try {
+                                    if (validationPass === true) func[callbackMethod](req, [res, response.to(res, next)], middlewares);
+                                } catch (e) {
+                                    log.putException('[route] route refuse to finish, threw an exception', e);
+                                }
+                            });
                         });
                     }
                 } else {
-                    apiOrWebType = 'unf';
-                    log.put('[route] endpoint/ group type ' + apiOrWebType + ' is invalid', false);
+                    renderMethod = 'unf';
+                    log.put('[route] endpoint/ group type ' + renderMethod + ' is invalid', false);
+                    next();
                 }
             };
 
-            log.put('[route] ' + apiOrWebType + ' endpoint: ' + method.toUpperCase() + ' ' + endPoint);
+            log.put('[route] ' + renderMethod + ' endpoint: ' + method.toUpperCase() + ' ' + endPoint);
 
             if (method === 'post') {
                 app.post(endPoint, callbackFunction);

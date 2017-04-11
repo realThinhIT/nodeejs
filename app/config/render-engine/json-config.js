@@ -23,4 +23,9 @@ export default {
     LOGIN_TOKEN_LENGTH:                     60,             // length of login token (characters)
     LOGIN_TOKEN_EXPIRED_SHORT:              5,              // expiration time in days (not remembering)
     LOGIN_TOKEN_EXPIRED_LONG:               30,             // expiration time in days (remembering)
+
+    SETUP_FUNCTION: function (app, next) {
+        app.set('json spaces', this.JSON_SPACES);
+        next();
+    }
 };

@@ -22,7 +22,7 @@
 export default [
     {
         group: '/',
-        type: 'web',
+        type: 'hbs',
 
         endPoints: [
             {
@@ -37,7 +37,7 @@ export default [
     // authentication
     {
         group: 'api/v1/authentication',
-        type: 'api',
+        type: 'json',
 
         endPoints: [
             {
@@ -70,7 +70,7 @@ export default [
     // backend
     {
         group: 'api/v1/backend',
-        type: 'api',
+        type: 'json',
 
         endPoints: [
             // users

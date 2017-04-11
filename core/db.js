@@ -6,6 +6,7 @@ import db           from '../app/config/database';
 import mongoDb      from 'mongoose';
 
 const log           = Nodee.module.plog;
+const cb            = Nodee.module.pcallback;
 import bluebird     from 'bluebird';
 mongoDb.Promise     = bluebird;
 
@@ -22,19 +23,24 @@ const mongoUrl = 'mongodb://' + loginInfo + db.host + ':' + db.port + '/' + db.d
 connection.init = callback => {
     log.put('[db] connecting to the database: ' + mongoUrl);
 
-    mongoDb.connect(mongoUrl, (err, db) => {
-        if (err) {
-            log.throwException(err);
-        }
+    if (db.enable == true) {
+        mongoDb.connect(mongoUrl, (err, db) => {
+            if (err) {
+                log.throwException(err);
+            }
 
-        log.put('[db] successfully connect to the database: ' + mongoUrl);
+            log.put('[db] successfully connect to the database: ' + mongoUrl);
 
-        connection._database = db;
+            connection._database = db;
 
-        if (typeof(callback) === 'function') {
-            callback(err, db);
-        }
-    });
+            cb(callback)(err, db);
+        });
+    } else {
+        log.put('[db] database is not enabled');
+        connection._database = null;
+
+        cb(callback)(null, null);
+    }
 };
 
 connection.getConnection = () => {

@@ -18,10 +18,10 @@ controller.middlewares = [
 // CUSTOM FUNCTIONS
 // ################################
 
-controller.index = (req, res, middleware) => {
+controller.index = (req, [res, pres], middleware) => {
     // insert controller logic here
 
-    res.success(null, 'all functioning properly');
+    pres.success(null, 'all functioning properly');
 };
 
 // ################################

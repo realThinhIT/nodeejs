@@ -5,8 +5,8 @@
 import mongoose         from 'mongoose';
 
 import globalConfig     from './config/global';
-import apiConfig        from './config/api-config';
-import webConfig        from './config/web-config';
+import jsonConfig       from './config/render-engine/json-config';
+import hbsConfig        from './config/render-engine/hbs-config';
 import dbConfig         from './config/database';
 
 import middlewareGroups from './config/middlewares';
@@ -27,9 +27,11 @@ import ppopulate        from './modules/nodee/ppopulate';
 export default {
     config: {
         global: globalConfig,
-        api: apiConfig,
-        web: webConfig,
         db: dbConfig,
+        renderMethod: {
+            hbs: hbsConfig,
+            json: jsonConfig,
+        },
     },
     module: {
         mongoose: mongoose,
