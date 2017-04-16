@@ -1,6 +1,6 @@
 // API CONFIGURATIONS
 // this is common configurations for API system
-import exphbs       from 'express-handlebars';
+import exphbs from 'express-handlebars';
 
 export default {
     // api default headers
@@ -10,12 +10,17 @@ export default {
         'Pragma': 'no-cache',
         'Expires': '0'
     },
+
+    // handlebars config
+    extname: '.hbs',
+    defaultLayout: 'main',
+    viewsPath: __DIR_APP + 'views',
+
     SETUP_FUNCTION:     function (app, next) {
-        let hbsConfig = require(__DIR_APP + 'config/handlebars').default;
-        if (hbsConfig.viewsPath) app.set('views', hbsConfig.viewsPath);
-        let hbs = exphbs.create(hbsConfig);
-        app.engine('.hbs', hbs.engine);
-        app.set('view engine', '.hbs');
+        if (this.viewsPath) app.set('views', this.viewsPath);
+        let hbs = exphbs.create(this);
+        app.engine(this.extname, hbs.engine);
+        app.set('view engine', this.extname);
         app.enable('view cache');
         next();
     }

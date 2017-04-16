@@ -2,27 +2,27 @@
 // CORE: Nodee
 // ######################################################
 
-import mongoose         from 'mongoose';
+import mongoose from 'mongoose';
 
-import globalConfig     from './config/global';
-import jsonConfig       from './config/render-engine/json-config';
-import hbsConfig        from './config/render-engine/hbs-config';
-import dbConfig         from './config/database';
+import globalConfig from './config/global';
+import jsonConfig from './config/render-engine/json';
+import hbsConfig from './config/render-engine/hbs';
+import dbConfig from './config/database';
 
 import middlewareGroups from './config/middlewares';
-import errorCodes       from './config/params/error-codes';
-import detailCodes      from './config/params/detail-codes';
-import consts           from './config/params/consts';
+import errorCodes from './config/params/error-codes';
+import detailCodes from './config/params/detail-codes';
+import consts from './config/params/consts';
 
-import log              from './modules/nodee/plog';
-import pcallback        from './modules/nodee/pcallback';
-import presponse        from './modules/nodee/presponse';
-import pmongooserr      from './modules/nodee/pmongooserr';
-import pobject          from './modules/nodee/pobject';
-import pdate            from './modules/nodee/pdate';
-import pvalidator       from './modules/nodee/pvalidator';
-import prandom          from './modules/nodee/prandom';
-import ppopulate        from './modules/nodee/ppopulate';
+import log from './modules/nodee/plog';
+import pcallback from './modules/nodee/pcallback';
+import presponse  from './modules/nodee/presponse';
+import pmongooserr from './modules/nodee/pmongooserr';
+import pobject from './modules/nodee/pobject';
+import pdate from './modules/nodee/pdate';
+import pvalidator from './modules/nodee/pvalidator';
+import prandom from './modules/nodee/prandom';
+import ppopulate from './modules/nodee/ppopulate';
 
 export default {
     config: {

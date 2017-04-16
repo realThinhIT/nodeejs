@@ -2,7 +2,7 @@
 // this is configurations to work with MongoDB engine
 
 export default {
-    enable: false,
+    enable: true, // enable database using in this project
 
     // connection settings
     host:   'localhost',
@@ -10,8 +10,4 @@ export default {
     dbName: 'test',
     user:   '',
     pass:   '',
-
-    // auto import databases
-    // so that you can call it by Nodee.model[Model]?
-    autoImportModels: true
 };
