@@ -2,13 +2,14 @@
 // CORE: DATABASE CONNECTOR
 // ######################################################
 
-import db           from '../app/config/database';
-import mongoDb      from 'mongoose';
+import Nodee from '../app/Nodee';
+import db from '../app/config/database';
+import mongoDb from 'mongoose';
 
-const log           = Nodee.module.plog;
-const cb            = Nodee.module.pcallback;
-import bluebird     from 'bluebird';
-mongoDb.Promise     = bluebird;
+const log = Nodee.module.plog;
+const cb = Nodee.module.pcallback;
+import bluebird from 'bluebird';
+mongoDb.Promise = bluebird;
 
 let connection = {};
 connection._database = null;

@@ -2,8 +2,9 @@
 // MODEL: _example
 // ######################################################
 
-let mongoose        = Nodee.module.mongoose;
-let Schema          = mongoose.Schema;
+import Nodee from '../Nodee';
+let mongoose = Nodee.module.mongoose;
+let Schema = mongoose.Schema;
 
 // ################################
 

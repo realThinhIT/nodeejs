@@ -1,9 +1,10 @@
 // ######################################################
 // CONTROLLER: logout
 // ######################################################
-;
-let controller      = {};
-const LoginToken    = Nodee.model.LoginToken;
+
+import Nodee from '../../../Nodee';
+let controller = {};
+const LoginToken = Nodee.model.LoginToken;
 
 // ################################
 // MODIFY THIS!

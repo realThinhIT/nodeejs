@@ -2,11 +2,12 @@
 // CONTROLLER: register
 // ######################################################
 
-let controller      = {};
-const User            = Nodee.model.User;
-const LoginToken      = Nodee.model.LoginToken;
-const mge             = Nodee.module.mongooserr;
-const obj             = Nodee.module.pobject;
+import Nodee from '../../../Nodee';
+let controller = {};
+const User = Nodee.model.User;
+const LoginToken = Nodee.model.LoginToken;
+const mge = Nodee.module.mongooserr;
+const obj = Nodee.module.pobject;
 
 // ################################
 // MODIFY THIS!

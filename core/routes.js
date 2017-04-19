@@ -3,9 +3,10 @@
 // ######################################################
 /*eslint no-unused-vars: ["error", { "args": "none" }]*/
 
-import routes   from '../app/config/routes';
-import async    from 'async';
-const log       = Nodee.module.plog;
+import Nodee from '../app/Nodee';
+import routes from '../app/config/routes';
+import async from 'async';
+const log = Nodee.module.plog;
 
 let validationProcess = (req, res, func, callback) => {
     let response = Nodee.module.presponse;

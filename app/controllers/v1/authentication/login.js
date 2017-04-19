@@ -2,10 +2,11 @@
 // CONTROLLER: login
 // ######################################################
 
-let controller      = {};
-const User          = Nodee.model.User;
-const LoginToken    = Nodee.model.LoginToken;
-const obj           = Nodee.module.pobject;
+import Nodee from '../../../Nodee';
+let controller = {};
+const User = Nodee.model.User;
+const LoginToken = Nodee.model.LoginToken;
+const obj = Nodee.module.pobject;
 
 import authenticationService from '../../../services/authentication';
 

@@ -2,8 +2,9 @@
 // CONTROLLER: register
 // ######################################################
 
-let controller      = {};
-const mge           = Nodee.module.mongooserr;
+import Nodee from '../Nodee';
+let controller = {};
+const mge = Nodee.module.mongooserr;
 
 // ################################
 // MODIFY THIS!

@@ -1,9 +1,10 @@
 // ######################################################
-// MIDDLEWARE:
+// MIDDLEWARE: _example
 // ######################################################
 
-let middleware      = {};
-const User          = Nodee.model.User;
+import Nodee from '../Nodee';
+let middleware = {};
+const User = Nodee.model.User;
 
 // ################################
 // MODIFY THIS!

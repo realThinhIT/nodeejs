@@ -6,7 +6,6 @@
         "node": true
     },
     "globals": {
-        "Nodee" : true,
         "__DIR_APP": true,
         "__DIR_BASE": true,
         "__DIR_CORE": true

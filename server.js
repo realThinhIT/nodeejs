@@ -11,6 +11,4 @@ global.__DIR_BASE   = __dirname + '/';
 global.__DIR_APP    = __dirname + '/app/';
 global.__DIR_CORE   = __dirname + '/core/';
 
-global.Nodee = require(__DIR_APP + 'Nodee').default;
-
 require('./core/init');

@@ -3,9 +3,10 @@
 // ######################################################
 /*eslint no-unused-vars: ["error", { "args": "none" }]*/
 
-import glob         from 'glob';
-import path         from 'path';
-const log           = Nodee.module.plog;
+import Nodee from '../app/Nodee';
+import glob from 'glob';
+import path from 'path';
+const log = Nodee.module.plog;
 
 // clear the console
 if (Nodee.config.global.LOG_CLEAR_CONSOLE_ON_STARTUP) {

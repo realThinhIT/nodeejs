@@ -2,10 +2,11 @@
 // MODEL: LoginToken
 // ######################################################
 
-let mongoose        = Nodee.module.mongoose;
-let Schema          = mongoose.Schema;
-let dates           = Nodee.module.pdate;
-let random          = Nodee.module.prandom;
+import Nodee from '../Nodee';
+let mongoose = Nodee.module.mongoose;
+let Schema = mongoose.Schema;
+let dates = Nodee.module.pdate;
+let random = Nodee.module.prandom;
 
 // ################################
 

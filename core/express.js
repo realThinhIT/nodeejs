@@ -3,6 +3,7 @@
 // ######################################################
 
 // set the server up
+import Nodee from '../app/Nodee';
 import express      from 'express';
 
 import bodyParser   from 'body-parser';

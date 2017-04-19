@@ -2,11 +2,12 @@
 // CONTROLLER: users
 // ######################################################
 
-let controller      = {};
-const User          = Nodee.model.User;
-const mge           = Nodee.module.pmongooserr;
-const obj           = Nodee.module.pobject;
-import md5          from 'md5';
+import Nodee from '../../../Nodee';
+let controller = {};
+const User = Nodee.model.User;
+const mge = Nodee.module.pmongooserr;
+const obj = Nodee.module.pobject;
+import md5 from 'md5';
 
 // ################################
 // MODIFY THIS!

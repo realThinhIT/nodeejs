@@ -2,9 +2,10 @@
 // MIDDLEWARE: authentication/require-login
 // ######################################################
 
-let middleware      = {};
-const User          = Nodee.model.User;
-const LoginToken    = Nodee.model.LoginToken;
+import Nodee from '../../Nodee';
+let middleware = {};
+const User = Nodee.model.User;
+const LoginToken = Nodee.model.LoginToken;
 
 import authenticationService from '../../services/authentication';
 

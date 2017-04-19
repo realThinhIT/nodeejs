@@ -2,11 +2,12 @@
 // MODEL: User
 // ######################################################
 
-let mongoose        = Nodee.module.mongoose;
-let Schema          = mongoose.Schema;
-let validator       = Nodee.module.pvalidator;
-let TableCounter    = Nodee.model.TableCounter;
-import md5          from 'md5';
+import Nodee from '../Nodee';
+let mongoose = Nodee.module.mongoose;
+let Schema = mongoose.Schema;
+let validator = Nodee.module.pvalidator;
+let TableCounter = Nodee.model.TableCounter;
+import md5 from 'md5';
 
 // ################################
 

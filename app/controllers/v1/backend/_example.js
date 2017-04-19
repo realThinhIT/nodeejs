@@ -2,9 +2,10 @@
 // CONTROLLER: _example
 // ######################################################
 
-let controller      = {};
-const mge           = Nodee.module.pmongooserr;
-const obj           = Nodee.module.pobject;
+import Nodee from '../../../Nodee';
+let controller = {};
+const mge = Nodee.module.pmongooserr;
+const obj = Nodee.module.pobject;
 
 // ################################
 // MODIFY THIS!
