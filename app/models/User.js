@@ -2,11 +2,11 @@
 // MODEL: User
 // ######################################################
 
-import Nodee from '../Nodee';
-let mongoose = Nodee.module.mongoose;
-let Schema = mongoose.Schema;
-let validator = Nodee.module.pvalidator;
-let TableCounter = Nodee.model.TableCounter;
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
+import {PValidator} from '../modules/nodee';
+import TableCounter from './TableCounter';
+import {Const} from '../config';
 import md5 from 'md5';
 
 // ################################
@@ -43,7 +43,7 @@ const modelSchema = new Schema({
             },
             {
                 validator: (value, cb) => {
-                    cb(validator.length(value, 6, 20));
+                    cb(PValidator.length(value, 6, 20));
                 },
                 message: 'username is allowed to be between 6 - 20 characters'
             }
@@ -54,7 +54,7 @@ const modelSchema = new Schema({
         required: [true, 'password is required'],
         validate: {
             validator: (value, cb) => {
-                cb(validator.length(value, 6, 20));
+                cb(PValidator.length(value, 6, 20));
             },
             message: 'password is allowed to be between 6 - 20 characters'
         }
@@ -99,7 +99,7 @@ modelSchema.pre('save', function (next) {
     }
 
     if (!this.status) {
-        this.status = Nodee.param.const.STATUS_ACTIVE;
+        this.status = Const.STATUS_ACTIVE;
     }
 
     this.password = md5(this.password);

@@ -2,12 +2,9 @@
 // CORE: DATABASE CONNECTOR
 // ######################################################
 
-import Nodee from '../app/Nodee';
-import db from '../app/config/database';
+import {DatabaseConfig} from '../config';
 import mongoDb from 'mongoose';
-
-const log = Nodee.module.plog;
-const cb = Nodee.module.pcallback;
+import {PLog, PCallback} from '../modules/nodee';
 import bluebird from 'bluebird';
 mongoDb.Promise = bluebird;
 
@@ -15,38 +12,38 @@ let connection = {};
 connection._database = null;
 
 // MongoDb
-let loginInfo = (db.user !== '') ? db.user : '';
-loginInfo += (db.pass !== '') ? ':' + db.user : '';
+let loginInfo = (DatabaseConfig.user !== '') ? DatabaseConfig.user : '';
+loginInfo += (DatabaseConfig.pass !== '') ? ':' + DatabaseConfig.user : '';
 loginInfo += (loginInfo !== '') ? '@' : '';
 
-const mongoUrl = 'mongodb://' + loginInfo + db.host + ':' + db.port + '/' + db.dbName;
+const mongoUrl = 'mongodb://' + loginInfo + DatabaseConfig.host + ':' + DatabaseConfig.port + '/' + DatabaseConfig.dbName;
 
 connection.init = callback => {
-    log.put('[db] connecting to the database: ' + mongoUrl);
+    PLog.put('[db] connecting to the database: ' + mongoUrl);
 
-    if (db.enable == true) {
+    if (DatabaseConfig.enable == true) {
         mongoDb.connect(mongoUrl, (err, db) => {
             if (err) {
-                log.throwException(err);
+                PLog.throwException(err);
             }
 
-            log.put('[db] successfully connect to the database: ' + mongoUrl);
+            PLog.put('[db] successfully connect to the database: ' + mongoUrl);
 
             connection._database = db;
 
-            cb(callback)(err, db);
+            PCallback(callback)(err, db);
         });
     } else {
-        log.put('[db] database is not enabled');
+        PLog.put('[db] database is not enabled');
         connection._database = null;
 
-        cb(callback)(null, null);
+        PCallback(callback)(null, null);
     }
 };
 
 connection.getConnection = () => {
     if (connection._database === null || connection._database === undefined) {
-        log.put('[db] reconnect to the database...');
+        PLog.put('[db] reconnect to the database...');
 
         connection.init();
     }
@@ -55,7 +52,7 @@ connection.getConnection = () => {
 };
 
 connection.close = () => {
-    log.put('[db] closing current database...');
+    PLog.put('[db] closing current database...');
     return connection._database.close();
 };
 

@@ -1,5 +1,5 @@
-import cb   from './pcallback.js';
-import _    from 'lodash';
+import cb from './pcallback';
+import _ from 'lodash';
 let _res;
 let _next;
 let _sent;

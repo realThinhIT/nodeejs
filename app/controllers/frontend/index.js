@@ -2,8 +2,8 @@
 // CONTROLLER: index
 // ######################################################
 
-import Nodee from '../../Nodee';
 let controller      = {};
+import {GlobalConfig} from '../../config';
 
 // ################################
 // MODIFY THIS!
@@ -19,7 +19,7 @@ controller.middlewares = [];
 controller.homepage = (req, [res, pres], middleware) => {
     return pres.render('index', {
         layout: false,
-        appName: Nodee.config.global.APP_NAME
+        appName: GlobalConfig.APP_NAME
     });
 };
 

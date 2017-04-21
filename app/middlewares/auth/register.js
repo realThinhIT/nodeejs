@@ -2,9 +2,8 @@
 // MIDDLEWARE: authentication/register
 // ######################################################
 
-import Nodee from '../../Nodee';
 let middleware = {};
-const User = Nodee.model.User;
+import {ErrorCode} from '../../config';
 
 // ################################
 // MODIFY THIS!
@@ -17,7 +16,7 @@ const User = Nodee.model.User;
 middleware.beforeAction = (req, res, done) => {
     // insert middleware logic here
     if (!req.body) {
-        return done(false, 'user registration info is empty', Nodee.param.error.http.BAD_REQUEST, 'INFO_EMPTY');
+        return done(false, 'user registration info is empty', ErrorCode.http.BAD_REQUEST, 'INFO_EMPTY');
     }
 
     return done(true, {}, 200);

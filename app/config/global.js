@@ -10,10 +10,6 @@ export default {
     LOG_REQUEST:    true,
     LOG_CLEAR_CONSOLE_ON_STARTUP:   true,
 
-    // auto import models
-    // so that you can call it by Nodee.model[Model]?
-    autoImportModels: true,
-
     // api security
     API_KEY:        'TvGpPbCwebLVA0YeswemQgYPCRKno8XaTUCaTuFz',     // recommended to change this for every app
 

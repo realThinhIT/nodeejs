@@ -2,9 +2,9 @@
 // CONTROLLER: logout
 // ######################################################
 
-import Nodee from '../../../Nodee';
 let controller = {};
-const LoginToken = Nodee.model.LoginToken;
+import {LoginToken} from '../../../models';
+import {MiddlewareConfig, ErrorCode, DetailCode} from '../../../config';
 
 // ################################
 // MODIFY THIS!
@@ -12,7 +12,7 @@ const LoginToken = Nodee.model.LoginToken;
 
 controller.name     = 'logout';
 controller.middlewares = [
-    Nodee.middleware.auth.userLoginRequired
+    MiddlewareConfig.auth.userLoginRequired
 ];
 
 // ################################
@@ -25,7 +25,7 @@ controller.logout = (req, [res, pres], middleware) => {
         deviceId: req.headers['X-Device-Id'],
         userAgent: req.headers['user-agent']
     }, err => {
-        if (err) return pres.fail('an error has occurred while logging out', Nodee.param.error.http.INTERNAL_SERVER_ERROR);
+        if (err) return pres.fail('an error has occurred while logging out', ErrorCode.http.INTERNAL_SERVER_ERROR);
 
         return pres.success('logged out successfully');
     });

@@ -2,9 +2,9 @@
 // MODEL: TableCounter
 // ######################################################
 
-import Nodee from '../Nodee';
-let mongoose = Nodee.module.mongoose;
-let Schema = mongoose.Schema;
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
+import {Const} from '../config';
 
 // ################################
 
@@ -41,7 +41,7 @@ modelSchema.pre('save', function (next) {
     }
 
     if (!this.status) {
-        this.status = Nodee.param.const.STATUS_ACTIVE;
+        this.status = Const.STATUS_ACTIVE;
     }
 
     next();

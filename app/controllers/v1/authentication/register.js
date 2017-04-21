@@ -2,12 +2,9 @@
 // CONTROLLER: register
 // ######################################################
 
-import Nodee from '../../../Nodee';
 let controller = {};
-const User = Nodee.model.User;
-const LoginToken = Nodee.model.LoginToken;
-const mge = Nodee.module.mongooserr;
-const obj = Nodee.module.pobject;
+import {User, LoginToken} from '../../../models';
+import {PMongooserr, PObject} from '../../../modules/nodee';
 
 // ################################
 // MODIFY THIS!
@@ -27,7 +24,7 @@ controller.register = (req, [res, pres], middleware) => {
 
     newUser.save((err, user) => {
         if (err) {
-            return pres.fail('there was some errors in user registering', null, null, mge(err));
+            return pres.fail('there was some errors in user registering', null, null, PMongooserr(err));
         }
 
         // return pres.success(user);
@@ -37,7 +34,7 @@ controller.register = (req, [res, pres], middleware) => {
             if (err || !token) return pres.fail('an error has occurred while granting access token', 500);
 
             // remove sensitive information
-            user = obj.selectKeys(user, [
+            user = PObject.selectKeys(user, [
                 'userId',
                 'username',
                 'email',
@@ -46,7 +43,7 @@ controller.register = (req, [res, pres], middleware) => {
                 'usergroup'
             ]);
 
-            token = obj.selectKeys(token, [
+            token = PObject.selectKeys(token, [
                 'loginToken',
                 'updatedAt',
                 'expiredAt',

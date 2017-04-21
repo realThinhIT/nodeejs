@@ -2,10 +2,10 @@
 // CONTROLLER: _example
 // ######################################################
 
-import Nodee from '../../../Nodee';
 let controller = {};
-const mge = Nodee.module.pmongooserr;
-const obj = Nodee.module.pobject;
+import {ExampleModel} from '../../../models';
+import {PMongooserr, PObject} from '../../../modules/nodee';
+import {ErrorCode, DetailCode} from '../../../config';
 
 // ################################
 // MODIFY THIS!
@@ -43,7 +43,7 @@ controller.readOne = (req, [res, pres], middleware) => {
 };
 
 controller.update = (req, [res, pres], middleware) => {
-    let updateValues = obj.selectKeys(req.body, [
+    let updateValues = PObject.selectKeys(req.body, [
         "fieldOne",
         "fieldTwo"
     ]);
@@ -62,7 +62,7 @@ controller.update = (req, [res, pres], middleware) => {
 controller.create = (req, [res, pres], middleware) => {
     ExampleModel.count({ fieldOne: req.body.fieldOne }, (err, count) => {
         if (count > 0) {
-            return pres.fail('_example is duplicated!', Nodee.param.error.http.BAD_REQUEST, Nodee.param.detail.user.DUPLICATED_USERNAME);
+            return pres.fail('_example is duplicated!', ErrorCode.http.BAD_REQUEST, DetailCode.user.DUPLICATED_USERNAME);
         }
     });
 
@@ -70,7 +70,7 @@ controller.create = (req, [res, pres], middleware) => {
 
     exampleModel.save((err, data) => {
         if (err) {
-            return pres.fail('cannot create new _example', Nodee.param.error.http.INTERNAL_SERVER_ERROR, null, mge(err));
+            return pres.fail('cannot create new _example', ErrorCode.http.INTERNAL_SERVER_ERROR, null, mge(err));
         }
 
         return pres.success(data, '_example created successfully');
@@ -80,7 +80,7 @@ controller.create = (req, [res, pres], middleware) => {
 controller.delete = (req, [res, pres], middleware) => {
     ExampleModel.remove({ rowId: req.params.id }, function (err) {
         if (err) {
-            return pres.fail('cannot delete this _example', Nodee.param.error.http.INTERNAL_SERVER_ERROR);
+            return pres.fail('cannot delete this _example', ErrorCode.http.INTERNAL_SERVER_ERROR);
         }
 
         return pres.success(null, '_example deleted successfully');

@@ -2,12 +2,10 @@
 // MIDDLEWARE: authentication/require-login
 // ######################################################
 
-import Nodee from '../../Nodee';
 let middleware = {};
-const User = Nodee.model.User;
-const LoginToken = Nodee.model.LoginToken;
-
-import authenticationService from '../../services/authentication';
+import {LoginToken} from '../../models';
+import {ErrorCode, DetailCode} from '../../config';
+import {AuthenticationService} from '../../services';
 
 // ################################
 // MODIFY THIS!
@@ -20,13 +18,13 @@ import authenticationService from '../../services/authentication';
 middleware.beforeAction = (req, res, done) => {
     // insert middleware logic here
 
-    authenticationService.getAuthorizationHeader(req, (err, login) => {
-        if (err || login.type !== 'bearer') return done(false, 'invalid authentication type', Nodee.param.error.http.BAD_REQUEST, Nodee.param.detail.auth.INVALID_AUTH_TYPE);
+    AuthenticationService.getAuthorizationHeader(req, (err, login) => {
+        if (err || login.type !== 'bearer') return done(false, 'invalid authentication type', ErrorCode.http.BAD_REQUEST, DetailCode.auth.INVALID_AUTH_TYPE);
 
         let logIn = new LoginToken();
 
         return logIn.findUserByLoginToken(login.token, (err, isValidated, user) => {
-            if (err || !user || !isValidated) return done(false, 'invalid access token, token has been disabled or token has expired', Nodee.param.error.http.INVALID_CREDENTIALS, Nodee.param.detail.auth.INVALID_ACCESS_TOKEN);
+            if (err || !user || !isValidated) return done(false, 'invalid access token, token has been disabled or token has expired', ErrorCode.http.INVALID_CREDENTIALS, DetailCode.auth.INVALID_ACCESS_TOKEN);
 
             return done(true, user, 200);
         });

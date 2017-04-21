@@ -2,11 +2,10 @@
 // CONTROLLER: users
 // ######################################################
 
-import Nodee from '../../../Nodee';
 let controller = {};
-const User = Nodee.model.User;
-const mge = Nodee.module.pmongooserr;
-const obj = Nodee.module.pobject;
+import {User} from '../../../models';
+import {PMongooserr, PObject} from '../../../modules/nodee';
+import {ErrorCode, DetailCode} from '../../../config';
 import md5 from 'md5';
 
 // ################################
@@ -45,7 +44,7 @@ controller.readOne = (req, [res, pres], middleware) => {
 };
 
 controller.update = (req, [res, pres], middleware) => {
-    let updateValues = obj.selectKeys(req.body, [
+    let updateValues = PObject.selectKeys(req.body, [
         "username",
         "password"
     ]);
@@ -68,7 +67,7 @@ controller.update = (req, [res, pres], middleware) => {
 controller.create = (req, [res, pres], middleware) => {
     User.count({ username: req.body.username }, (err, count) => {
         if (count > 0) {
-            return pres.fail('username is duplicated!', Nodee.param.error.http.BAD_REQUEST, Nodee.param.detail.user.DUPLICATED_USERNAME);
+            return pres.fail('username is duplicated!', ErrorCode.http.BAD_REQUEST, DetailCode.user.DUPLICATED_USERNAME);
         }
     });
 
@@ -76,7 +75,7 @@ controller.create = (req, [res, pres], middleware) => {
 
     user.save((err, data) => {
         if (err) {
-            return pres.fail('cannot create new user', Nodee.param.error.http.INTERNAL_SERVER_ERROR, null, mge(err));
+            return pres.fail('cannot create new user', ErrorCode.http.INTERNAL_SERVER_ERROR, null, PMongooserr(err));
         }
 
         return pres.success(data, 'user created successfully');
@@ -86,7 +85,7 @@ controller.create = (req, [res, pres], middleware) => {
 controller.delete = (req, [res, pres], middleware) => {
     User.remove({ userId: req.params.id }, function (err) {
         if (err) {
-            return pres.fail('cannot delete this user', Nodee.param.error.http.INTERNAL_SERVER_ERROR);
+            return pres.fail('cannot delete this user', ErrorCode.http.INTERNAL_SERVER_ERROR);
         }
 
         return pres.success(null, 'user deleted successfully');

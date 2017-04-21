@@ -1,7 +1,7 @@
 // ROUTES CONFIGURATIONS
 //
 // DEMO CONFIGURATIONS FOR A GROUP ##########
-// this will be the configuration for /api/students -> controller: v1/students.getAllStudents()
+// this will be the configuration for /students -> controller: v1/students.getAllStudents()
 // - type: 'api' for APIs/ 'web' for webapp
 //   you can define 'type' for a single endpoint 
 // {
@@ -36,7 +36,7 @@ export default [
 
     // authentication
     {
-        group: 'api/v1/authentication',
+        group: '/v1/authentication',
         type: 'json',
 
         endPoints: [
@@ -69,7 +69,7 @@ export default [
 
     // backend
     {
-        group: 'api/v1/backend',
+        group: '/v1/backend',
         type: 'json',
 
         endPoints: [

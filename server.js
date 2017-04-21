@@ -9,6 +9,6 @@
 
 global.__DIR_BASE   = __dirname + '/';
 global.__DIR_APP    = __dirname + '/app/';
-global.__DIR_CORE   = __dirname + '/core/';
+global.__DIR_CORE   = __dirname + '/app/core/';
 
-require('./core/init');
+require(__DIR_CORE + 'init');

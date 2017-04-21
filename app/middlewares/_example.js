@@ -2,9 +2,8 @@
 // MIDDLEWARE: _example
 // ######################################################
 
-import Nodee from '../Nodee';
 let middleware = {};
-const User = Nodee.model.User;
+import {ErrorCode, DetailCode} from '../config';
 
 // ################################
 // MODIFY THIS!
