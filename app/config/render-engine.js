@@ -15,8 +15,9 @@ export default {
         extname: '.hbs',
         defaultLayout: 'main',
         viewsPath: __DIR_APP + 'views',
+        layoutsDir: __DIR_APP + 'views',
 
-        SETUP_FUNCTION:     function (app, next) {
+        SETUP_FUNCTION: function (app, next) {
             if (this.viewsPath) app.set('views', this.viewsPath);
             let hbs = exphbs.create(this);
             app.engine(this.extname, hbs.engine);
