@@ -66,7 +66,7 @@ controller.create = (req, [res, pres], middleware) => {
         let exampleModel = new ExampleModel(req.body);
         exampleModel.save((err, data) => {
             if (err) {
-                return pres.fail('cannot create new _example', ErrorCode.http.INTERNAL_SERVER_ERROR, null, mge(err));
+                return pres.fail('cannot create new _example', ErrorCode.http.INTERNAL_SERVER_ERROR, null, PMongooserr(err));
             }
 
             return pres.success(data, '_example created successfully');
