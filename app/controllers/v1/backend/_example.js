@@ -21,8 +21,6 @@ controller.middlewares = [
 // ################################
 
 controller.readAll = (req, [res, pres], middleware) => {
-    // insert controller logic here
-
     ExampleModel.count(middleware.pagination.search(['searchCol']), (err, count) => {
         ExampleModel.find(middleware.pagination.search(['searchCol']), null, middleware.pagination.select, (err, data) => {
             return pres.success(data, '_examples retrieved successfully', null, null, {
@@ -64,16 +62,15 @@ controller.create = (req, [res, pres], middleware) => {
         if (count > 0) {
             return pres.fail('_example is duplicated!', ErrorCode.http.BAD_REQUEST, DetailCode.user.DUPLICATED_USERNAME);
         }
-    });
 
-    let exampleModel = new ExampleModel(req.body);
+        let exampleModel = new ExampleModel(req.body);
+        exampleModel.save((err, data) => {
+            if (err) {
+                return pres.fail('cannot create new _example', ErrorCode.http.INTERNAL_SERVER_ERROR, null, mge(err));
+            }
 
-    exampleModel.save((err, data) => {
-        if (err) {
-            return pres.fail('cannot create new _example', ErrorCode.http.INTERNAL_SERVER_ERROR, null, mge(err));
-        }
-
-        return pres.success(data, '_example created successfully');
+            return pres.success(data, '_example created successfully');
+        });
     });
 };
 

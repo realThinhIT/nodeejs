@@ -69,16 +69,16 @@ controller.create = (req, [res, pres], middleware) => {
         if (count > 0) {
             return pres.fail('username is duplicated!', ErrorCode.http.BAD_REQUEST, DetailCode.user.DUPLICATED_USERNAME);
         }
-    });
 
-    let user = new User(req.body);
+        let user = new User(req.body);
 
-    user.save((err, data) => {
-        if (err) {
-            return pres.fail('cannot create new user', ErrorCode.http.INTERNAL_SERVER_ERROR, null, PMongooserr(err));
-        }
+        user.save((err, data) => {
+            if (err) {
+                return pres.fail('cannot create new user', ErrorCode.http.INTERNAL_SERVER_ERROR, null, PMongooserr(err));
+            }
 
-        return pres.success(data, 'user created successfully');
+            return pres.success(data, 'user created successfully');
+        });
     });
 };
 
