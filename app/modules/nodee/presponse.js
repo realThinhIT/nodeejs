@@ -59,7 +59,13 @@ export default {
     },
 
     render(view, locals, ...otherArgs) {
-        return _res.render(view, locals, otherArgs[0]);
+        if (_sent === false) {
+            _res.render(view, locals, ...otherArgs);
+
+            _sent = true;
+        } else {
+            _next();
+        }
     },
 
     set(key, value) {
