@@ -3,16 +3,15 @@
 // ######################################################
 
 import {RouteConfig, RenderEngineConfig} from '../config';
-import async from 'async';
+import _async from 'async';
 import {PLog, PCallback, PResponse} from '../modules/nodee';
 
 let validationProcess = (req, res, func, callback) => {
-    let response = PResponse;
     let middlewares = {};
     let validationPass = true;
 
     // set and execute the middlewares
-    async.each(func.middlewares, (mid, callback) => {
+    _async.each(func.middlewares, (mid, callback) => {
         let middleware = null;
 
         let midName = mid.replace(/\//g, '.');
@@ -31,16 +30,16 @@ let validationProcess = (req, res, func, callback) => {
 
             PLog.putException('[middleware] error: ' + midName + ' doesn\'t exist', e);
 
-            return response.to(res).fail('middleware named ' + midName + ' is not available');
+            return (new PResponse(res)).fail('middleware named ' + midName + ' is not available');
         }
 
-        middleware.beforeAction(req, response.to(res),
+        middleware.beforeAction(req, (new PResponse(res)),
             (isValidated, data, code, detailCode) => {
                 if (!isValidated || isValidated === null || isValidated === undefined) {
                     validationPass = false;
 
                     // PLog.put('[middleware] failed to execute middleware ' + mid + ' at ' + endPoint + ': ' + data , false);
-                    return response.to(res).fail('the app failed in executing middleware ' + midName + ( (typeof(data) === 'string') ? ': ' + data : '' ), code || 500, detailCode);
+                    return new PResponse(res).fail('the app failed in executing middleware ' + midName + ( (typeof(data) === 'string') ? ': ' + data : '' ), code || 500, detailCode);
                 } else {
                     middlewares[midName] = data;
 
@@ -78,8 +77,6 @@ export default app => {
             }
 
             let callbackFunction = (req, res, next) => {
-                let response = PResponse;
-
                 // set default headers
                 let renderMethodConfig = RenderEngineConfig[renderMethod];
                 if (renderMethodConfig) {
@@ -95,7 +92,7 @@ export default app => {
                         validationProcess(req, res, func, (validationPass, middlewares) => {
                             renderMethodConfig.SETUP_FUNCTION(app, () => {
                                 try {
-                                    if (validationPass === true) func[callbackMethod](req, [res, response.to(res, next)], middlewares);
+                                    if (validationPass === true) func[callbackMethod](req, [res, (new PResponse(res, next))], middlewares);
                                 } catch (e) {
                                     PLog.putException('[route] route refuse to finish, threw an exception', e);
                                 }
