@@ -40,5 +40,24 @@ export default {
         });
 
         return newObj;
+    },
+
+    path: (obj, path) => {
+        let parts = path.split('.');
+
+        let levelValue = obj;
+        for (let i = 0; i < parts.length - 1; i++) {
+            try {
+                levelValue = levelValue[parts[i]];
+                
+                if (typeof levelValue === undefined) {
+                    return null;
+                }
+            } catch (e) {
+                return null;
+            }
+        }
+
+        return levelValue;
     }
 };

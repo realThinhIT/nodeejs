@@ -27,6 +27,13 @@ let modelSchema = new Schema({
     safe: true
 });
 
+// modelSchema.virtual('members', {
+//     ref: 'ForeignModel',
+//     localField: 'thisModelField',
+//     foreignField: 'equalForeignModelField',
+//     justOne: false
+// });
+
 // ################################
 // PRE-EXECUTIONS
 // ################################
