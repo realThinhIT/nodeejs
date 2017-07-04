@@ -24,7 +24,8 @@ let modelSchema = new Schema({
     updatedAt: Date,
 }, {
     collection: modelName,
-    safe: true
+    safe: true,
+    toJSON: { virtuals: true }
 });
 
 // modelSchema.virtual('members', {
