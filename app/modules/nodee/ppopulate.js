@@ -1,4 +1,4 @@
-export default module = {
+export default {
     populate(array, defaultValues) {
         // populate
         for (let prop in defaultValues) {

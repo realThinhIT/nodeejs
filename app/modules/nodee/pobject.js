@@ -1,5 +1,5 @@
 export default {
-    deleteKeys: (obj, deletes) => {
+    deleteKeys(obj, deletes) {
         deletes = deletes || [];
 
         deletes.forEach(value => {
@@ -15,7 +15,7 @@ export default {
         });
     },
 
-    selectKeys: (obj, selects) => {
+    selectKeys(obj, selects) {
         let newObj = {};
         selects = selects || [];
 
@@ -42,7 +42,7 @@ export default {
         return newObj;
     },
 
-    path: (obj, path) => {
+    path(obj, path) {
         let parts = path.split('.');
 
         let levelValue = obj;

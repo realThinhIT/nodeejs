@@ -27,7 +27,7 @@ connection.init = callback => {
                 PLog.throwException(err);
             }
 
-            PLog.put('[db] successfully connect to the database: ' + mongoUrl);
+            PLog.put('[db] successfully connected to the database: ' + mongoUrl);
 
             connection._database = db;
 

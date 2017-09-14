@@ -142,7 +142,10 @@ modelSchema.methods.saveNewToken = function (userId, userAgent, deviceId, rememb
             this.model(modelName).findOneAndUpdate({ _id: token._id }, {
                 $set: {
                     loginToken: this.model(modelName).schema.methods.generateNewToken(),
-                    expiredAt: PDate.addDays(now, ( (rememberMe === true) ? GlobalConfig.LOGIN_TOKEN_EXPIRED_LONG : GlobalConfig.LOGIN_TOKEN_EXPIRED_SHORT ) ),
+                    expiredAt: PDate.addDays(now, ( 
+                        (rememberMe === true) ? 
+                            GlobalConfig.LOGIN_TOKEN_EXPIRED_LONG : GlobalConfig.LOGIN_TOKEN_EXPIRED_SHORT ) 
+                        ),
                     updatedAt: now,
                 }
             }, { new: true }, (err, token) => callback(err, token));

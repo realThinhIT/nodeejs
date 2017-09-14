@@ -1,4 +1,4 @@
-const obj             = require('./pobject').default;
+const obj = require('./pobject').default;
 
 export default err => {
         let errorFields = [];

@@ -45,8 +45,8 @@ controller.readOne = (req, [res, pres], middleware) => {
 
 controller.update = (req, [res, pres], middleware) => {
     let updateValues = PObject.selectKeys(req.body, [
-        "username",
-        "password"
+        'username',
+        'password'
     ]);
 
     if (updateValues.password != null) {

@@ -40,5 +40,11 @@
     "nodemon": "^1.11.0",
     "path": "^0.12.7",
     "request": "^2.81.0"
+  },
+  "standard": {
+    "parser": "babel-eslint"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.0.0"
   }
 }

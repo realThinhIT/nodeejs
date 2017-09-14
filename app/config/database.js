@@ -2,7 +2,7 @@
 // this is configurations to work with MongoDB engine
 
 export default {
-    enable: true, // enable database using in this project
+    enable: false, // enable database using in this project
 
     // connection settings
     host:   'localhost',

@@ -30,30 +30,37 @@ controller.register = (req, [res, pres], middleware) => {
         // return pres.success(user);
 
         // grant this user a new access token
-        (new LoginToken()).saveNewToken(user.userId, req.headers['user-agent'], req.headers['X-Device-Id'], ( (req.body.rememberMe === 1) ? true : false ), (err, token) => {
-            if (err || !token) return pres.fail('an error has occurred while granting access token', 500);
+        (new LoginToken()).saveNewToken(
+            user.userId, 
+            req.headers['user-agent'], 
+            req.headers['X-Device-Id'], 
+            ( (req.body.rememberMe === 1) ? true : false ), 
+            (err, token) => {
+                if (err || !token) {
+                    return pres.fail('an error has occurred while granting access token', 500);
+                }
 
-            // remove sensitive information
-            user = PObject.selectKeys(user, [
-                'userId',
-                'username',
-                'email',
-                'name',
-                'socialIds',
-                'usergroup'
-            ]);
+                // remove sensitive information
+                user = PObject.selectKeys(user, [
+                    'userId',
+                    'username',
+                    'email',
+                    'name',
+                    'socialIds',
+                    'usergroup'
+                ]);
 
-            token = PObject.selectKeys(token, [
-                'loginToken',
-                'updatedAt',
-                'expiredAt',
-                'status'
-            ]);
+                token = PObject.selectKeys(token, [
+                    'loginToken',
+                    'updatedAt',
+                    'expiredAt',
+                    'status'
+                ]);
 
-            return pres.success({
-                userInfo: user,
-                accessToken: token
-            }, 'user registered successfully');
+                return pres.success({
+                    userInfo: user,
+                    accessToken: token
+                }, 'user registered successfully');
         });
     });
 };

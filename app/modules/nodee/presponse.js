@@ -23,8 +23,8 @@ export default class PResponse {
         additionalData = additionalData || {};
 
         let json = {
-            status:     parseInt(success),
-            code:       parseInt(statusCode),
+            status: parseInt(success),
+            code: parseInt(statusCode),
         };
 
         if (detailCode !== null && detailCode !== undefined) {

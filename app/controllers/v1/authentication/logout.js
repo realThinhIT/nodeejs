@@ -25,7 +25,9 @@ controller.logout = (req, [res, pres], middleware) => {
         deviceId: req.headers['X-Device-Id'],
         userAgent: req.headers['user-agent']
     }, err => {
-        if (err) return pres.fail('an error has occurred while logging out', ErrorCode.http.INTERNAL_SERVER_ERROR);
+        if (err) {
+            return pres.fail('an error has occurred while logging out', ErrorCode.http.INTERNAL_SERVER_ERROR);
+        }
 
         return pres.success('logged out successfully');
     });

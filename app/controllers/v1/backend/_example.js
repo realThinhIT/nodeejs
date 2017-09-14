@@ -42,8 +42,8 @@ controller.readOne = (req, [res, pres], middleware) => {
 
 controller.update = (req, [res, pres], middleware) => {
     let updateValues = PObject.selectKeys(req.body, [
-        "fieldOne",
-        "fieldTwo"
+        'fieldOne',
+        'fieldTwo'
     ]);
 
     ExampleModel.findOneAndUpdate({ rowId: req.params.id }, {

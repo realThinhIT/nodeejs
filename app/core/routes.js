@@ -39,7 +39,11 @@ let validationProcess = (req, res, func, callback) => {
                     validationPass = false;
 
                     // PLog.put('[middleware] failed to execute middleware ' + mid + ' at ' + endPoint + ': ' + data , false);
-                    return new PResponse(res).fail('the app failed in executing middleware ' + midName + ( (typeof(data) === 'string') ? ': ' + data : '' ), code || 500, detailCode);
+                    return new PResponse(res).fail(
+                        'the app failed in executing middleware ' + midName + ( (typeof(data) === 'string') ? ': ' + data : '' ), 
+                        code || 500, 
+                        detailCode
+                    );
                 } else {
                     middlewares[midName] = data;
 
@@ -90,9 +94,11 @@ export default app => {
                         }
 
                         validationProcess(req, res, func, (validationPass, middlewares) => {
-                            renderMethodConfig.SETUP_FUNCTION(app, () => {
+                            renderMethodConfig.SETUP_FUNCTION(app, async () => {
                                 try {
-                                    if (validationPass === true) func[callbackMethod](req, [res, (new PResponse(res, next))], middlewares);
+                                    if (validationPass === true) {
+                                        await func[callbackMethod](req, [res, (new PResponse(res, next))], middlewares);
+                                    }
                                 } catch (e) {
                                     PLog.putException('[route] route refuse to finish, threw an exception', e);
                                 }
@@ -118,6 +124,8 @@ export default app => {
                 app.delete(endPoint, callbackFunction);
             } else if (method === 'all') {
                 app.all(endPoint, callbackFunction);
+            } else {
+                PLog.putException('[route] invalid http verb \'' + method.toUpperCase() + '\' at ' + endPoint);
             }
         });
     });
