@@ -1,7 +1,7 @@
 {
-  "name": "nodee",
+  "name": "nodeejs",
   "version": "1.0.0",
-  "description": "Nodee - Starter pack to build RESTful API with NodeJS + ExpressJS + Mongoose",
+  "description": "NodeeJS - Starter pack to build RESTful API with NodeJS + ExpressJS + Mongoose",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/realThinhIT/nodee.git"
+    "url": "git://github.com/realThinhIT/nodeejs.git"
   },
   "author": "ThinhIT (thinhit.net)",
   "license": "MIT",

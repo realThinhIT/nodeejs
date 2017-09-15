@@ -2,9 +2,6 @@
 // MIDDLEWARE: _example
 // ######################################################
 
-let middleware = {};
-import {ErrorCode, DetailCode} from '../config';
-
 // ################################
 // MODIFY THIS!
 // after finish verifying, send
@@ -13,12 +10,8 @@ import {ErrorCode, DetailCode} from '../config';
 // ################################
 
 // execute before controller
-middleware.beforeAction = (req, res, done) => {
+export default async (req, res, done) => {
     // insert middleware logic here
 
     return done(true, {}, 200);
 };
-
-// ################################
-
-export default middleware;

@@ -2,8 +2,6 @@
 // MIDDLEWARE: pagination
 // ######################################################
 
-let middleware = {};
-
 // ################################
 // MODIFY THIS!
 // after finish verifying, send
@@ -12,7 +10,7 @@ let middleware = {};
 // ################################
 
 // execute before controller
-middleware.beforeAction = (req, res, done) => {
+export default (req, res, done) => {
     // insert middleware logic here
 
     let pagination = {};
@@ -33,9 +31,7 @@ middleware.beforeAction = (req, res, done) => {
         pagination.search = function (fields) {
             if (fields instanceof Array) {
                 condition = {
-                    $or: [
-
-                    ]
+                    $or: []
                 }
 
                 let i = 0;
@@ -55,7 +51,3 @@ middleware.beforeAction = (req, res, done) => {
 
     return done(true, pagination, 200);
 };
-
-// ################################
-
-export default middleware;

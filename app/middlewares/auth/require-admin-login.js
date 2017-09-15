@@ -2,10 +2,10 @@
 // MIDDLEWARE: authentication/require-login
 // ######################################################
 
-let middleware = {};
-import {LoginToken} from '../../models';
-import {ErrorCode, DetailCode} from '../../config';
-import {AuthenticationService} from '../../services';
+import Nodee from '../../nodee';
+const { LoginToken } = Nodee.Models;
+const { ErrorCode, DetailCode } = Nodee.Config;
+const { AuthenticationService } = Nodee.Services;
 
 // ################################
 // MODIFY THIS!
@@ -15,7 +15,7 @@ import {AuthenticationService} from '../../services';
 // ################################
 
 // execute before controller
-middleware.beforeAction = (req, res, done) => {
+export default (req, res, done) => {
     // insert middleware logic here
 
     AuthenticationService.getAuthorizationHeader(req, (err, login) => {
@@ -34,7 +34,3 @@ middleware.beforeAction = (req, res, done) => {
         });
     });
 };
-
-// ################################
-
-export default middleware;

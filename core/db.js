@@ -2,9 +2,9 @@
 // CORE: DATABASE CONNECTOR
 // ######################################################
 
-import {DatabaseConfig} from '../config';
+import { DatabaseConfig } from '../config';
 import mongoDb from 'mongoose';
-import {PLog, PCallback} from '../modules/nodee';
+import { PLog, PCallback } from './modules/nodee';
 import bluebird from 'bluebird';
 mongoDb.Promise = bluebird;
 

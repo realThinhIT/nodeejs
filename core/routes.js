@@ -2,16 +2,16 @@
 // CORE: ROUTES CONFIGURES
 // ######################################################
 
-import {RouteConfig, RenderEngineConfig} from '../config';
+import { RouteConfig, RenderEngineConfig } from '../config';
 import _async from 'async';
-import {PLog, PCallback, PResponse} from '../modules/nodee';
+import { PLog, PCallback, PResponse } from './modules/nodee';
 
-let validationProcess = (req, res, func, callback) => {
+let validationProcess = (req, res, _middlewares, callback) => {
     let middlewares = {};
     let validationPass = true;
 
     // set and execute the middlewares
-    _async.each(func.middlewares, (mid, callback) => {
+    _async.each(_middlewares, (mid, callback) => {
         let middleware = null;
 
         let midName = mid.replace(/\//g, '.');
@@ -33,7 +33,7 @@ let validationProcess = (req, res, func, callback) => {
             return (new PResponse(res)).fail('middleware named ' + midName + ' is not available');
         }
 
-        middleware.beforeAction(req, (new PResponse(res)),
+        middleware(req, (new PResponse(res)),
             (isValidated, data, code, detailCode) => {
                 if (!isValidated || isValidated === null || isValidated === undefined) {
                     validationPass = false;
@@ -67,20 +67,37 @@ export default app => {
             let callbackMethod  = point.callback;
             let pointType       = point.type;
             let renderMethod    = (pointType) ? pointType : groupType;
-            let func            = require(__DIR_APP + 'controllers/' + point.controller).default;
 
-            // throw an exception if the callback function is illegal
-            if (typeof(func[callbackMethod]) !== 'function') {
-                let message = '[route] callback function \'' + callbackMethod + '\' (' + typeof(func[callbackMethod]) + ') is not available at ' + endPoint;
+            // process controller data 
+            let controllerPoint = point.controller.split('@');
+            point.controller = controllerPoint[0];
+            callbackMethod = controllerPoint[1] ? controllerPoint[1] : 'index';
 
-                PLog.putException(message);
+            let controllerClass;
+
+            try {
+                controllerClass = require(__DIR_APP + 'controllers/' + point.controller).default;
+            } catch (e) {
+                controllerClass = undefined;
             }
 
-            if (!(func.middlewares instanceof Array)) {
-                PLog.put('[middleware] warning: ' + callbackMethod + '.middlewares is not available', false);
+            // throw an exception if the callback function is illegal
+            if (typeof(controllerClass) !== 'function') {
+                let message = '[route] controller \'' + point.controller + '\' (' + typeof(controllerClass) + ') is not available at ' + endPoint;
+
+                return PLog.putException(message);
             }
 
             let callbackFunction = (req, res, next) => {
+                // create new instance of controller
+                const _controller = new controllerClass(req, [res, (new PResponse(res, next))], callbackMethod);
+
+                if (typeof(_controller[callbackMethod]) !== 'function') {
+                    let message = '[route] callback function \'' + callbackMethod + '\' (' + typeof(_controller[callbackMethod]) + ') is not available at ' + endPoint;
+    
+                    return PLog.putException(message);
+                }
+
                 // set default headers
                 let renderMethodConfig = RenderEngineConfig[renderMethod];
                 if (renderMethodConfig) {
@@ -93,15 +110,19 @@ export default app => {
                             res.set(key, renderMethodConfig.DEFAULT_HEADERS[key]);
                         }
 
-                        validationProcess(req, res, func, (validationPass, middlewares) => {
-                            renderMethodConfig.SETUP_FUNCTION(app, async () => {
-                                try {
-                                    if (validationPass === true) {
-                                        await func[callbackMethod](req, [res, (new PResponse(res, next))], middlewares);
+                        validationProcess(req, res, _controller.middlewares(callbackMethod), 
+                            (validationPass, middlewares) => {
+                                renderMethodConfig.SETUP_FUNCTION(app, async () => {
+                                    try {
+                                        if (validationPass === true) {
+                                            await _controller.setMiddlewareData(middlewares);
+                                            await _controller.beforeController(callbackMethod);
+                                            await _controller[callbackMethod]();
+                                            await _controller.afterController(callbackMethod);
+                                        }
+                                    } catch (e) {
+                                        return PLog.putException('[route] route refuse to finish, threw an exception', e);
                                     }
-                                } catch (e) {
-                                    PLog.putException('[route] route refuse to finish, threw an exception', e);
-                                }
                             });
                         });
                     }

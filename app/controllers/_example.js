@@ -2,28 +2,19 @@
 // CONTROLLER: register
 // ######################################################
 
-let controller = {};
-import {PMongooserr} from '../../../modules/nodee';
+import Nodee from '../nodee';
+const { PMongooserr, PObject } = Nodee.Utils;
 
 // ################################
 // MODIFY THIS!
 // ################################
 
-controller.name     = 'register';
-controller.middlewares = [
-    'api-key'
-];
+export default class ExampleController extends Nodee.Core.Controller {
+    middlewares() {
+        return [];
+    }
 
-// ################################
-// CUSTOM FUNCTIONS
-// ################################
-
-controller.index = (req, [res, pres], middleware) => {
-    // insert controller logic here
-
-    pres.success(null, 'all functioning properly');
-};
-
-// ################################
-
-export default controller;
+    async index() {
+        this.send.success(null, 'all functioning properly');
+    }
+}

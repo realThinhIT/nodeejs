@@ -10,8 +10,8 @@ import routes from './routes';
 import cors from 'cors';
 
 let app = express();
-import {GlobalConfig} from '../config';
-import {PLog, PCallback} from '../modules/nodee';
+import { GlobalConfig } from '../config';
+import { PLog, PCallback } from './modules/nodee';
 
 // middlewares
 app.use(bodyParser.urlencoded({ extended: true }));

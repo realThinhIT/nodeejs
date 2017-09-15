@@ -2,13 +2,15 @@
 // MODEL: TableCounter
 // ######################################################
 
+import { NodeeModel } from '../nodee';
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
-import {Const} from '../config';
+
+const { Const } = NodeeModel.Config;
 
 // ################################
-
 // model configurations
+// ################################
 let modelName   = 'TableCounter';
 let timestamps  = true;
 

@@ -2,12 +2,14 @@
 // MODEL: User
 // ######################################################
 
+import { NodeeModel } from '../nodee';
 import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
-import {PValidator} from '../modules/nodee';
-import TableCounter from './TableCounter';
-import {Const} from '../config';
 import md5 from 'md5';
+import TableCounter from './TableCounter';
+const Schema = mongoose.Schema;
+
+const { PValidator } = NodeeModel.Utils;
+const { Const } = NodeeModel.Config;
 
 // ################################
 

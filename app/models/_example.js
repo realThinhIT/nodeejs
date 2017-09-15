@@ -6,8 +6,8 @@ import mongoose from 'mongoose';
 let Schema = mongoose.Schema;
 
 // ################################
-
 // model configurations
+// ################################
 let modelName   = '_example';
 let timestamps  = true;
 

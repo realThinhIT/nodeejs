@@ -2,27 +2,14 @@
 // CONTROLLER: index
 // ######################################################
 
-let controller      = {};
-import {GlobalConfig} from '../../config';
+import Nodee from '../../nodee';
+const { GlobalConfig } = Nodee.Config;
 
-// ################################
-// MODIFY THIS!
-// ################################
-
-controller.name     = 'index';
-controller.middlewares = [];
-
-// ################################
-// CUSTOM FUNCTIONS
-// ################################
-
-controller.homepage = (req, [res, pres], middleware) => {
-    return pres.render('index', {
-        layout: false,
-        appName: GlobalConfig.APP_NAME
-    });
-};
-
-// ################################
-
-export default controller;
+export default class IndexController extends Nodee.Core.Controller {
+    homepage() {
+        return this.send.render('index', {
+            layout: false,
+            appName: GlobalConfig.APP_NAME
+        });
+    }
+}

@@ -2,8 +2,8 @@
 // MIDDLEWARE: API KEY AUTHENTICATION
 // ######################################################
 
-let middleware = {};
-import {ErrorCode, DetailCode, GlobalConfig} from '../config';
+import Nodee from '../nodee';
+const { GlobalConfig, ErrorCode, DetailCode } = Nodee.Config;
 
 // ################################
 // MODIFY THIS!
@@ -12,8 +12,7 @@ import {ErrorCode, DetailCode, GlobalConfig} from '../config';
 // to pass to the controller.
 // ################################
 
-// execute before controller
-middleware.beforeAction = (req, res, done) => {
+export default (req, res, done) => {
     // insert middleware logic here
     if (req.get('X-Api-Key') !== GlobalConfig.API_KEY) {
         return done(false, 'invalid api key', ErrorCode.http.INVALID_CREDENTIALS, DetailCode.auth.INVALID_API_KEY);
@@ -21,7 +20,3 @@ middleware.beforeAction = (req, res, done) => {
 
     return done(true, {}, 200);
 };
-
-// ################################
-
-export default middleware;

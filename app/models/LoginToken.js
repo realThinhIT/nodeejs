@@ -2,16 +2,17 @@
 // MODEL: LoginToken
 // ######################################################
 
+import { NodeeModel } from '../nodee';
 import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
 import User from './User';
+const Schema = mongoose.Schema;
 
-import {PRandom, PDate} from '../modules/nodee';
-import {Const, GlobalConfig} from '../config';
+const { PRandom, PDate } = NodeeModel.Utils;
+const { Const, GlobalConfig } = NodeeModel.Config;
 
 // ################################
-
 // model configurations
+// ################################
 let modelName   = 'LoginToken';
 let timestamps  = true;
 
