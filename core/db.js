@@ -22,7 +22,7 @@ connection.init = callback => {
     PLog.put('[db] connecting to the database: ' + mongoUrl);
 
     if (DatabaseConfig.enable == true) {
-        mongoDb.connect(mongoUrl, (err, db) => {
+        mongoDb.connect(mongoUrl, { useMongoClient: true }, (err, db) => {
             if (err) {
                 PLog.throwException(err);
             }
