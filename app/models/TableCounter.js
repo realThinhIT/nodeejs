@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const { Const } = NodeeModel.Config;
+const { Exception } = NodeeModel.Core;
 
 // ################################
 // model configurations
@@ -89,13 +90,19 @@ modelSchema.post('delete', function () {
 // ################################
 // CUSTOM METHODS
 // ################################
-modelSchema.statics.autoIncrement = function (columnId, callback) {
-    this.model(modelName).findOneAndUpdate({
-        columnId: columnId
-    }, {
-        $inc: { counter: 1 }
-    }, { new: true, upsert: true }, function (err, inc) {
-        callback(err, inc.counter);
+modelSchema.statics.autoIncrement = async function (columnId) {
+    return new Promise((resolve, reject) => {
+        this.model(modelName).findOneAndUpdate({
+            columnId: columnId
+        }, {
+            $inc: { counter: 1 }
+        }, { new: true, upsert: true }, (err, inc) => {
+            if (err) {
+                reject(new Exception(err, 'server_error'));
+            }
+    
+            resolve(inc.counter);
+        });
     });
 };
 

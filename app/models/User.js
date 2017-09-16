@@ -10,6 +10,7 @@ const Schema = mongoose.Schema;
 
 const { PValidator } = NodeeModel.Utils;
 const { Const } = NodeeModel.Config;
+const { Exception } = NodeeModel.Core;
 
 // ################################
 
@@ -32,20 +33,22 @@ const modelSchema = new Schema({
 
         validate: [
             {
-                validator: (value, cb) => {
-                    _model.model(modelName).count({ username: _model.username }, (err, count) => {
-                        if (err) {
-                            return cb(err);
-                        }
-
-                        return cb(!count);
+                validator: value => {
+                    return new Promise((resolve, reject) => {
+                        _model.model(modelName).count({ username: _model.username }, (err, count) => {
+                            if (err) {
+                                reject(err);
+                            }
+    
+                            resolve(!count);
+                        });
                     });
                 },
                 message: 'username is duplicated'
             },
             {
-                validator: (value, cb) => {
-                    cb(PValidator.length(value, 6, 20));
+                validator: value => {
+                    return PValidator.length(value, 6, 20);
                 },
                 message: 'username is allowed to be between 6 - 20 characters'
             }
@@ -55,8 +58,8 @@ const modelSchema = new Schema({
         type: String,
         required: [true, 'password is required'],
         validate: {
-            validator: (value, cb) => {
-                cb(PValidator.length(value, 6, 20));
+            validator: value => {
+                return PValidator.length(value, 6, 20);
             },
             message: 'password is allowed to be between 6 - 20 characters'
         }
@@ -64,11 +67,11 @@ const modelSchema = new Schema({
     usergroup: {
         type: Number,
         validate: {
-            validator: (value, cb) => {
+            validator: value => {
                 if (value != USERGROUP_ADMIN && value != USERGROUP_MOD && value != USERGROUP_USER && value != USERGROUP_GUEST) {
-                    cb(false);
+                    return false;
                 } else {
-                    cb(true);
+                    return true;
                 }
             },
             message: 'usergroup is invalid'
@@ -86,9 +89,7 @@ const modelSchema = new Schema({
 // ################################
 // PRE-EXECUTIONS
 // ################################
-modelSchema.pre('save', function (next) {
-    var _self = this;
-
+modelSchema.pre('save', async function (next) {
     if (timestamps) {
         let currentDate = new Date();
 
@@ -106,13 +107,9 @@ modelSchema.pre('save', function (next) {
 
     this.password = md5(this.password);
 
-    TableCounter.autoIncrement('userId', function (err, id) {
-        _self.userId = id;
+    this.userId = await TableCounter.autoIncrement('userId');
 
-        next();
-    });
-
-    // next();
+    next();
 });
 
 modelSchema.pre('update', function (next) {
@@ -155,13 +152,19 @@ modelSchema.post('delete', function () {
 // ################################
 // CUSTOM METHODS
 // ################################
-modelSchema.methods.findByUsernameAndPassword = function (username, password, callback) {
-    if (!username || !password) {
-        return callback(Error('username or password is not defined'));
-    }
-
-    this.model(modelName).findOne({ username: username, password: md5(password) }, (err, user) => {
-        callback(err, user);
+modelSchema.methods.findByUsernameAndPassword = async function (username, password) {
+    return new Promise((resolve, reject) => {
+        if (!username || !password) {
+            reject(new Exception('username or password is not defined', 'user_pass_not_defined'));
+        }
+    
+        this.model(modelName).findOne({ username: username, password: md5(password) }, (err, user) => {
+            if (err) {
+                reject(new Exception(err, 'server_error'));
+            }
+    
+            resolve(user);
+        });
     });
 };
 

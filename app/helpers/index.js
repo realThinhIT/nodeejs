@@ -1,0 +1,1 @@
+export { default as AuthenticationHelper } from './authentication';

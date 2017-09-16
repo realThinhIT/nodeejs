@@ -5,7 +5,7 @@
 import Nodee from '../../nodee';
 const { LoginToken } = Nodee.Models;
 const { ErrorCode, DetailCode } = Nodee.Config;
-const { AuthenticationService } = Nodee.Services;
+const { AuthenticationHelper } = Nodee.Helpers;
 
 // ################################
 // MODIFY THIS!
@@ -18,7 +18,7 @@ const { AuthenticationService } = Nodee.Services;
 export default (req, res, done) => {
     // insert middleware logic here
 
-    AuthenticationService.getAuthorizationHeader(req, (err, login) => {
+    AuthenticationHelper.getAuthorizationHeader(req, (err, login) => {
         if (err || login.type !== 'bearer') return done(false, 'invalid authentication type', ErrorCode.http.BAD_REQUEST, DetailCode.auth.INVALID_AUTH_TYPE);
 
         let logIn = new LoginToken();

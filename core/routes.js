@@ -11,7 +11,7 @@ let validationProcess = (req, res, _middlewares, callback) => {
     let validationPass = true;
 
     // set and execute the middlewares
-    _async.each(_middlewares, (mid, callback) => {
+    _async.each(_middlewares, async (mid, callback) => {
         let middleware = null;
 
         let midName = mid.replace(/\//g, '.');
@@ -33,7 +33,7 @@ let validationProcess = (req, res, _middlewares, callback) => {
             return (new PResponse(res)).fail('middleware named ' + midName + ' is not available');
         }
 
-        middleware(req, (new PResponse(res)),
+        await middleware(req, (new PResponse(res)),
             (isValidated, data, code, detailCode) => {
                 if (!isValidated || isValidated === null || isValidated === undefined) {
                     validationPass = false;
@@ -74,7 +74,7 @@ export default app => {
             callbackMethod = controllerPoint[1] ? controllerPoint[1] : 'index';
 
             let controllerClass;
-
+            
             try {
                 controllerClass = require(__DIR_APP + 'controllers/' + point.controller).default;
             } catch (e) {

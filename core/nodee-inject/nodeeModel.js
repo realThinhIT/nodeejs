@@ -7,12 +7,10 @@ import * as Core from '../';
 import * as Config from '../../config';
 import * as Modules from '../../app/modules';
 import * as Utils from '../modules/nodee';
-import * as Services from '../../app/services';
 
 export default {
     Core,
     Config,
     Modules,
-    Utils,
-    Services
+    Utils
 };

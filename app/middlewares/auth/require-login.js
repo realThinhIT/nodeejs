@@ -5,7 +5,7 @@
 import Nodee from '../../nodee';
 const { LoginToken } = Nodee.Models;
 const { ErrorCode, DetailCode } = Nodee.Config;
-const { AuthenticationService } = Nodee.Services;
+const { AuthenticationHelper } = Nodee.Helpers;
 
 // ################################
 // MODIFY THIS!
@@ -15,18 +15,48 @@ const { AuthenticationService } = Nodee.Services;
 // ################################
 
 // execute before controller
-export default (req, res, done) => {
+export default async (req, res, done) => {
     // insert middleware logic here
 
-    AuthenticationService.getAuthorizationHeader(req, (err, login) => {
-        if (err || login.type !== 'bearer') return done(false, 'invalid authentication type', ErrorCode.http.BAD_REQUEST, DetailCode.auth.INVALID_AUTH_TYPE);
+    let loginInfo;
+    try {
+        loginInfo = await AuthenticationHelper.getAuthorizationHeader(req);
+        
+        if (loginInfo.type !== 'bearer') {
+            throw new Error('invalid authentication type');
+        }
+    } catch (e) {
+        return done(
+            false, 
+            'invalid authentication type', 
+            ErrorCode.http.BAD_REQUEST, 
+            DetailCode.auth.INVALID_AUTH_TYPE
+        );
+    }
 
-        let logIn = new LoginToken();
+    let logIn = new LoginToken();
+    return logIn.findUserByLoginToken(loginInfo.token, (err, isValidated, user) => {
+        if (err || !user || !isValidated) {
+            return done(
+                false, 
+                'invalid access token, token has been disabled or token has expired', 
+                ErrorCode.http.INVALID_CREDENTIALS, 
+                DetailCode.auth.INVALID_ACCESS_TOKEN
+            );
+        }
 
-        return logIn.findUserByLoginToken(login.token, (err, isValidated, user) => {
-            if (err || !user || !isValidated) return done(false, 'invalid access token, token has been disabled or token has expired', ErrorCode.http.INVALID_CREDENTIALS, DetailCode.auth.INVALID_ACCESS_TOKEN);
-
-            return done(true, user, 200);
-        });
+        return done(true, user, 200);
     });
+
+    // AuthenticationHelper.getAuthorizationHeader(req, (err, login) => {
+    //     if (err || login.type !== 'bearer') return done(false, 'invalid authentication type', ErrorCode.http.BAD_REQUEST, DetailCode.auth.INVALID_AUTH_TYPE);
+
+    //     let logIn = new LoginToken();
+
+    //     return logIn.findUserByLoginToken(login.token, (err, isValidated, user) => {
+    //         if (err || !user || !isValidated) return done(false, 'invalid access token, token has been disabled or token has expired', ErrorCode.http.INVALID_CREDENTIALS, DetailCode.auth.INVALID_ACCESS_TOKEN);
+
+    //         return done(true, user, 200);
+    //     });
+    // });
 };
