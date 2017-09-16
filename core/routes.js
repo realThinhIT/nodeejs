@@ -92,7 +92,7 @@ export default app => {
 
             let callbackFunction = (req, res, next) => {
                 // create new instance of controller
-                const _controller = new controllerClass(req, [res, (new PResponse(res, next))], callbackMethod);
+                const _controller = new controllerClass(req, [res, next], callbackMethod);
 
                 if (typeof(_controller[callbackMethod]) !== 'function') {
                     let message = '[route] callback function \'' + callbackMethod + '\' (' + typeof(_controller[callbackMethod]) + ') is not available at ' + endPoint;

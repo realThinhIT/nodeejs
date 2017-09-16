@@ -1,79 +1,104 @@
 // ######################################################
-// CONTROLLER: _example
+// CONTROLLER: examples
 // ######################################################
 
 import Nodee from '../../../nodee';
+import md5 from 'md5';
 const { ExampleModel } = Nodee.Models;
 const { PMongooserr, PObject } = Nodee.Utils;
 const { ErrorCode, DetailCode } = Nodee.Config;
 
-export default class ExampleClass extends Nodee.Core.Controller {
+export default class ExampleController extends Nodee.Core.Controller {
     middlewares() {
         return ['api-key', 'auth/this.require-admin-login', 'pagination'];
     }
 
-    readAll() {
-        ExampleModel.count(this.middleware.pagination.search(['searchCol']), (err, count) => {
-            ExampleModel.find(this.middleware.pagination.search(['searchCol']), null, this.middleware.pagination.select, 
-                (err, data) => {
-                    return this.send.success(data, '_examples retrieved successfully', null, null, {
-                        totalItems: count
-                    });
-            });
-        });
-    }
+    async readAll() {
+        let count = await ExampleModel.count(this.middleware.pagination.search(['searchColumn']));
+        let examples = await ExampleModel.find(
+            this.middleware.pagination.search(['searchColumn']), 
+            null, 
+            this.middleware.pagination.select
+        );
 
-    readOne() {
-        ExampleModel.findOne({ rowId: this.req.params.id }, (err, data) => {
-            if (err) {
-                return this.send.fail('this _example does not exist');
+        return this.send.success(examples, 'examples retrieved successfully', null, null, {
+                totalItems: count
             }
-    
-            return this.send.success(data, '_example retrieved successfully');
-        });
+        );
     }
 
-    update() {
+    async readOne() {
+        let example;
+        try {
+            example = await ExampleModel.find({ exampleId: this.req.params.id });
+
+            if (!example) {
+                throw new Error();
+            }
+        } catch (e) {
+            return this.send.fail('this example does not exist');
+        }
+
+        return this.send.success(example, 'example retrieved successfully');
+    }
+
+    async update() {
         let updateValues = PObject.selectKeys(this.req.body, [
-            'fieldOne',
-            'fieldTwo'
+            'username',
+            'password'
         ]);
     
-        ExampleModel.findOneAndUpdate({ rowId: this.req.params.id }, {
-            $set: updateValues
-        }, { new: true }, (err, data) => {
-            if (err) {
-                return this.send.fail('cannot update this _example');
-            }
+        if (updateValues.password != null) {
+            updateValues.password = md5(updateValues.password);
+        }
     
-            return this.send.success(data, '_example updated successfully');
-        });
+        let example;
+        try {
+            example = await ExampleModel.findOneAndUpdate({ exampleId: this.req.params.id }, {
+                $set: updateValues
+            }, { new: true });
+        } catch (e) {
+            return this.send.fail('cannot update this example');
+        }
+
+        return this.send.success(example, 'example updated successfully');
     }
 
-    create() {
-        ExampleModel.count({ fieldOne: this.req.body.fieldOne }, (err, count) => {
-            if (count > 0) {
-                return this.send.fail('_example is duplicated!', ErrorCode.http.BAD_this.REQUEST, DetailCode.user.DUPLICATED_USERNAME);
-            }
-    
-            let exampleModel = new ExampleModel(this.req.body);
-            exampleModel.save((err, data) => {
-                if (err) {
-                    return this.send.fail('cannot create new _example', ErrorCode.http.INTERNAL_SERVER_ERROR, null, PMongooserr(err));
-                }
-    
-                return this.send.success(data, '_example created successfully');
-            });
-        });
+    async create() {
+        let count = await ExampleModel.count({ username: this.req.body.username });
+        if (count > 0) {
+            return this.send.fail(
+                'username is duplicated!', 
+                ErrorCode.http.BAD_REQUEST, 
+                DetailCode.example.DUPLICATED_USERNAME
+            );
+        }
+
+        let example;
+        try {
+            example = await example.save();
+        } catch (e) {
+            return this.send.fail(
+                'cannot create new example', 
+                ErrorCode.http.INTERNAL_SERVER_ERROR, 
+                null, 
+                PMongooserr(e)
+            );
+        }
+
+        return this.send.success(example, 'example created successfully');
     }
 
-    delete() {
-        ExampleModel.remove({ rowId: this.req.params.id }, (err) => {
-            if (err) {
-                return this.send.fail('cannot delete this _example', ErrorCode.http.INTERNAL_SERVER_ERROR);
-            }
-    
-            return this.send.success(null, '_example deleted successfully');
-        });
+    async delete() {
+        try {
+            await ExampleModel.remove({ exampleId: this.req.params.id });
+        } catch (e) {
+            return this.send.fail(
+                'cannot delete this example', 
+                ErrorCode.http.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return this.send.success(null, 'example deleted successfully');
     }
 }

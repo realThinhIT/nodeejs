@@ -1,3 +1,5 @@
+import PResponse from '../modules/nodee/presponse';
+
 export default class BaseController {
     /**
      * Creates an instance of BaseController.
@@ -6,11 +8,11 @@ export default class BaseController {
      * @param {any} [res, pres] 
      * @memberof BaseController
      */
-    constructor(req, [res, pres], action) {
+    constructor(req, [res, next], action) {
         this.req = req;
         this.res = res;
-        this.send = pres;
         this.action = action;
+        this.send = new PResponse(res, next);
     }
 
     /**
