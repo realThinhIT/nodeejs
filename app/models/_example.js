@@ -1,99 +1,57 @@
 // ######################################################
-// MODEL: _example
+// MODEL: User
 // ######################################################
 
+import { NodeeModel } from '../nodee';
 import mongoose from 'mongoose';
-let Schema = mongoose.Schema;
+import md5 from 'md5';
+import TableCounter from './TableCounter';
+const Schema = mongoose.Schema;
 
-// ################################
-// model configurations
-// ################################
-let modelName   = '_example';
-let timestamps  = true;
+const { PValidator } = NodeeModel.Utils;
+const { Const } = NodeeModel.Config;
+const { Exception } = NodeeModel.Core;
 
-// define schema
-let modelSchema = new Schema({
-    username: {
-        type: String,
-        required: [true, 'username is required'],
-        unique: true,
-    },
-
-    status: Number,
-    createdAt: Date,
-    updatedAt: Date,
-}, {
-    collection: modelName,
-    safe: true,
-    toJSON: { virtuals: true }
-});
-
-// modelSchema.virtual('members', {
-//     ref: 'ForeignModel',
-//     localField: 'thisModelField',
-//     foreignField: 'equalForeignModelField',
-//     justOne: false
-// });
-
-// ################################
-// PRE-EXECUTIONS
-// ################################
-modelSchema.pre('save', function (next) {
-    if (timestamps) {
-        let currentDate = new Date();
-
-        this.createdAt = currentDate;
-        this.updatedAt = currentDate;
+export default new (class ExampleModel extends NodeeModel.Core.Model {
+    schema() {
+        return {
+            status: Number,
+            createdAt: Date,
+            updatedAt: Date,
+        };
     }
 
-    next();
-});
+    custom(m, _self) {
+        // modelSchema.virtual('members', {
+        //     ref: 'ForeignModel',
+        //     localField: 'thisModelField',
+        //     foreignField: 'equalForeignModelField',
+        //     justOne: false
+        // });
 
-modelSchema.pre('update', function (next) {
-    if (timestamps) {
-        this.updatedAt = new Date();
+        m.pre('save', function (next) {
+            if (_self.timestamps) {
+                let currentDate = new Date();
+        
+                this.createdAt = currentDate;
+                this.updatedAt = currentDate;
+            }
+        
+            next();
+        });
+        
+        m.pre('update', function (next) {
+            if (_self.timestamps) {
+                this.updatedAt = new Date();
+            }
+        
+            next();
+        });
+
+        // modelSchema.methods.findSomething = async function () {
+        //     return new Promise((resolve, reject) => {
+        // 
+        //     });
+        // };
     }
-
-    next();
-});
-
-modelSchema.pre('find', function (next) {
-
-    next();
-});
-
-modelSchema.pre('delete', function (next) {
-
-    next();
-});
-
-// ################################
-// POST-EXECUTIONS
-// ################################
-modelSchema.post('save', function () {
-
-});
-
-modelSchema.post('update', function () {
-
-});
-
-modelSchema.post('find', function () {
-
-});
-
-modelSchema.post('delete', function () {
-
-});
-
-// ################################
-// CUSTOM METHODS
-// ################################
-// modelSchema.methods.findSomething = function (callback) {
-//     callback();
-// };
-
-// ################################
-
-let _model = mongoose.model(modelName, modelSchema);
-export default _model;
+})().create();

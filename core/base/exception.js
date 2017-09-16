@@ -1,4 +1,11 @@
-class Exception extends Error {
+export default class Exception extends Error {
+    /**
+     * Construct an custom Exception
+     * 
+     * @param {any} message 
+     * @param {any} code 
+     * @memberof Exception
+     */
     constructor(message, code) {
         super();
 

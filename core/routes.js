@@ -79,6 +79,8 @@ export default app => {
                 controllerClass = require(__DIR_APP + 'controllers/' + point.controller).default;
             } catch (e) {
                 controllerClass = undefined;
+                
+                return PLog.putException(e);
             }
 
             // throw an exception if the callback function is illegal
