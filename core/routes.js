@@ -80,7 +80,7 @@ export default app => {
             } catch (e) {
                 controllerClass = undefined;
                 
-                return PLog.putException(e);
+                return PLog.putException('[route] an error occurred while creating a new controller \'' + point.controller + '\' instance at ' + endPoint, e);
             }
 
             // throw an exception if the callback function is illegal
