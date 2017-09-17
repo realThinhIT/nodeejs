@@ -3,6 +3,7 @@
 
 export default {
     enable: true, // enable database using in this project
+    driver: 'mongoose',
 
     // connection settings
     host: 'localhost',

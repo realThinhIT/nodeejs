@@ -3,13 +3,11 @@
 // ######################################################
 
 import { NodeeModel } from '../nodee';
-import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
 
-const { Const } = NodeeModel.Config;
+const { Const, DetailCode } = NodeeModel.Config;
 const { Exception } = NodeeModel.Core;
 
-export default new (class TableCounter extends NodeeModel.Core.Model {
+export default new (class TableCounter extends NodeeModel.Core.MongooseModel {
     schema() {
         return {
             columnId: {
@@ -54,10 +52,11 @@ export default new (class TableCounter extends NodeeModel.Core.Model {
                 _self.collection().findOneAndUpdate({
                     columnId: columnId
                 }, {
+                    updatedAt: new Date(),
                     $inc: { counter: 1 }
                 }, { new: true, upsert: true }, (err, inc) => {
                     if (err) {
-                        reject(new Exception(err, 'server_error'));
+                        reject(new Exception(err, DetailCode.common.SERVER_ERROR));
                     }
             
                     resolve(inc.counter);

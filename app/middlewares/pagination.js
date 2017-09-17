@@ -12,7 +12,6 @@
 // execute before controller
 export default (req, res, done) => {
     // insert middleware logic here
-
     let pagination = {};
 
     pagination.select = {

@@ -3,15 +3,13 @@
 // ######################################################
 
 import { NodeeModel } from '../nodee';
-import mongoose from 'mongoose';
 import User from './User';
-const Schema = mongoose.Schema;
 
 const { PRandom, PDate } = NodeeModel.Utils;
-const { Const, GlobalConfig } = NodeeModel.Config;
+const { Const, GlobalConfig, DetailCode } = NodeeModel.Config;
 const { Exception } = NodeeModel.Core;
 
-export default new (class LoginToken extends NodeeModel.Core.Model {
+export default new (class LoginToken extends NodeeModel.Core.MongooseModel {
     schema() {
         return {
             userId: Number,
@@ -62,24 +60,24 @@ export default new (class LoginToken extends NodeeModel.Core.Model {
             return new Promise((resolve, reject) => {
                 _self.collection().findOne({ loginToken: loginToken }, (err, token) => {
                     if (err || !token) {
-                        reject(new Exception(err, 'server_error'));
+                        reject(new Exception(err, DetailCode.common.SERVER_ERROR));
                     }
             
                     if (token.expiredAt < new Date()) {
-                        reject(new Exception('token has expired', 'token_expired'));
+                        reject(new Exception('token has expired', DetailCode.loginToken.TOKEN_EXPIRED));
                     }
             
                     if (token.status === Const.STATUS_DEACTIVATED) {
-                        reject(new Exception('token has been disabled', 'token_disabled'));
+                        reject(new Exception('token has been disabled', DetailCode.loginToken.TOKEN_DISABLED));
                     }
             
                     User.findOne({ userId: token.userId }, (err, user) => {
                         if (err || !user) {
-                            reject(new Exception('user not found', 'user_not_found'));
+                            reject(new Exception('user not found', DetailCode.user.USER_NOT_FOUND));
                         }
             
                         if (user.status === Const.STATUS_DEACTIVATED) {
-                            reject(new Exception('user is disabled by administrator', 'user_disabled'));
+                            reject(new Exception('user is disabled by administrator', DetailCode.user.USER_DISABLED));
                         }
             
                         resolve(user);
@@ -100,7 +98,7 @@ export default new (class LoginToken extends NodeeModel.Core.Model {
                     deviceId: deviceId
                 }, (err, token) => {
                     if (err) {
-                        reject(new Exception(err, 'server_error'));
+                        reject(new Exception(err, DetailCode.common.SERVER_ERROR));
                     }
             
                     // _model means if the token bind to _model userAgent and deviceId exists
@@ -116,7 +114,7 @@ export default new (class LoginToken extends NodeeModel.Core.Model {
                             }
                         }, { new: true }, (err, token) => {
                             if (err) {
-                                reject(new Exception(err, 'server_error'));
+                                reject(new Exception(err, DetailCode.common.SERVER_ERROR));
                             }
             
                             resolve(token);
@@ -133,7 +131,7 @@ export default new (class LoginToken extends NodeeModel.Core.Model {
                             status: Const.STATUS_ACTIVE
                         }).save((err, token) => {
                             if (err) {
-                                reject(new Exception(err, 'server_error'));
+                                reject(new Exception(err, DetailCode.common.SERVER_ERROR));
                             }
             
                             resolve(token);

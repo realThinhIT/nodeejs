@@ -11,6 +11,6 @@ export default class ExampleController extends Nodee.Core.Controller {
     }
 
     async index() {
-        this.send.success(null, 'all functioning properly');
+        return this.send.success(null, 'all functioning properly');
     }
 }

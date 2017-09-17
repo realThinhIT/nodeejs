@@ -44,7 +44,8 @@ export default class LoginController extends Nodee.Core.Controller {
         } catch (e) {
             return this.send.fail(
                 'an error has occurred while authenticating', 
-                ErrorCode.http.INTERNAL_SERVER_ERROR
+                ErrorCode.http.INTERNAL_SERVER_ERROR,
+                e.code
             );
         }
 
@@ -52,7 +53,7 @@ export default class LoginController extends Nodee.Core.Controller {
             return this.send.fail(
                 'user not found',
                 ErrorCode.http.INVALID_CREDENTIALS, 
-                'USER_NOT_FOUND'
+                DetailCode.user.USER_NOT_FOUND
             );
         }
 
@@ -72,7 +73,8 @@ export default class LoginController extends Nodee.Core.Controller {
         } catch (e) {
             return this.send.fail(
                 'an error has occurred while granting access token', 
-                ErrorCode.http.INTERNAL_SERVER_ERROR
+                ErrorCode.http.INTERNAL_SERVER_ERROR,
+                DetailCode.common.SERVER_ERROR
             );
         }
 
@@ -108,7 +110,8 @@ export default class LoginController extends Nodee.Core.Controller {
         } catch (e) {
             return this.send.fail(
                 'an error has occurred while logging out', 
-                ErrorCode.http.INTERNAL_SERVER_ERROR
+                ErrorCode.http.INTERNAL_SERVER_ERROR,
+                DetailCode.common.SERVER_ERROR
             );
         }
     
@@ -145,7 +148,11 @@ export default class LoginController extends Nodee.Core.Controller {
                 throw new Error();
             }
         } catch (e) {
-            return this.send.fail('an error has occurred while granting access token', 500);
+            return this.send.fail(
+                'an error has occurred while granting access token', 
+                ErrorCode.http.INTERNAL_SERVER_ERROR,
+                DetailCode.common.SERVER_ERROR
+            );
         }
 
         // remove sensitive information

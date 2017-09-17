@@ -3,7 +3,7 @@
 // ######################################################
 
 import Nodee from '../../nodee';
-const { ErrorCode } = Nodee.Config;
+const { ErrorCode, DetailCode } = Nodee.Config;
 
 // ################################
 // MODIFY THIS!
@@ -16,7 +16,12 @@ const { ErrorCode } = Nodee.Config;
 export default (req, res, done) => {
     // insert middleware logic here
     if (!req.body) {
-        return done(false, 'user registration info is empty', ErrorCode.http.BAD_REQUEST, 'INFO_EMPTY');
+        return done(
+            false, 
+            'user registration info is empty', 
+            ErrorCode.http.BAD_REQUEST, 
+            DetailCode.register.INFO_EMPTY
+        );
     }
 
     return done(true, {}, 200);

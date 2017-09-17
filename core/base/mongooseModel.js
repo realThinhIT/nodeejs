@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 let Schema = mongoose.Schema;
 
-export default class Model {
+export default class MongooseModel {
     /**
      * Creates a new instance of model
      * 

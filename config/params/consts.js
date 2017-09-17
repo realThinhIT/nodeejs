@@ -4,4 +4,10 @@ export default {
     STATUS_ACTIVE: 101,
     STATUS_VERIFICATION: 102,
     STATUS_EXPIRED: 200,
+
+    // usergroups
+    USERGROUP_ADMIN: 1,
+    USERGROUP_MOD: 2,
+    USERGROUP_USER: 3,
+    USERGROUP_GUEST: 4
 }
