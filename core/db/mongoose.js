@@ -4,25 +4,24 @@
 
 import { PLog, PCallback } from '../modules/nodee';
 import { DbDriver } from '../';
-import mongoDb from 'mongoose';
+import mongoose from 'mongoose';
 import bluebird from 'bluebird';
-mongoDb.Promise = bluebird;
 
 export default class Mongoose extends DbDriver {
-    connectionString() {
-        let loginInfo = (this.config.user !== '') ? this.config.user : '';
-        loginInfo += (this.config.pass !== '') ? ':' + this.config.user : '';
-        loginInfo += (loginInfo !== '') ? '@' : '';
-
-        const mongoUrl = 'mongodb://' + loginInfo + this.config.host + ':' + this.config.port + '/' + this.config.dbName;
-
-        return mongoUrl;
+    driver() {
+        mongoose.Promise = bluebird;
+        return mongoose;
     }
 
     async connect() {
+        let loginInfo = (this.config.user !== '') ? this.config.user : '';
+        loginInfo += (this.config.pass !== '') ? ':' + this.config.user : '';
+        loginInfo += (loginInfo !== '') ? '@' : '';
+        const mongoUrl = 'mongodb://' + loginInfo + this.config.host + ':' + this.config.port + '/' + this.config.dbName;
+
         let connection;
         try {
-            connection = await mongoDb.connect(this.connectionString(), { useMongoClient: true });
+            connection = await this.driver.connect(mongoUrl, { useMongoClient: true });
         } catch (e) {
             throw e;
         }
