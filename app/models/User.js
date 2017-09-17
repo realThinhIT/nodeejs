@@ -87,7 +87,7 @@ export default new (class User extends NodeeModel.Core.MongooseModel {
             }
         
             if (!this.usergroup) {
-                this.usergroup = USERGROUP_USER;
+                this.usergroup = Const.USERGROUP_USER;
             }
         
             if (!this.status) {
