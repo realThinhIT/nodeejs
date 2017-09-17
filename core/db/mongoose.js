@@ -14,14 +14,21 @@ export default class Mongoose extends DbDriver {
     }
 
     async connect() {
-        let loginInfo = (this.config.user !== '') ? this.config.user : '';
-        loginInfo += (this.config.pass !== '') ? ':' + this.config.user : '';
+        let loginInfo = (this.getConfig('user') !== '') ? this.getConfig('user') : '';
+        loginInfo += (this.getConfig('pass') !== '') ? ':' + this.getConfig('user') : '';
         loginInfo += (loginInfo !== '') ? '@' : '';
-        const mongoUrl = 'mongodb://' + loginInfo + this.config.host + ':' + this.config.port + '/' + this.config.dbName;
+        const mongoUrl =
+            'mongodb://' 
+            + loginInfo 
+            + this.getConfig('host') 
+            + ':' 
+            + this.getConfig('port') 
+            + '/' 
+            + this.getConfig('dbName');
 
         let connection;
         try {
-            connection = await this.driver.connect(mongoUrl, { useMongoClient: true });
+            connection = await this.getDriver().connect(mongoUrl, { useMongoClient: true });
         } catch (e) {
             throw e;
         }
@@ -32,7 +39,7 @@ export default class Mongoose extends DbDriver {
 
     async getConnection() {
         try {
-            if (!this.connection) {
+            if (!this.getConnection()) {
                 await this.connect();
             }
         } catch (e) {

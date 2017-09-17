@@ -6,13 +6,14 @@ export default class DbDriver {
      * @memberof DbDriver
      */
     constructor(config) {
-        this.config = config;
-        this.driver = this.driver();
-        this.connection = undefined;
+        this._config = config;
+        this._driver = this.driver();
+        this._connection = undefined;
     }
 
     /**
      * Returns an instance of the driver module (mongoose, mysql..)
+     * This is user-defined!
      * 
      * @returns [a driver]
      * @memberof DbDriver
@@ -47,7 +48,26 @@ export default class DbDriver {
      * @memberof DbDriver
      */
     getConnection() {
-        return this.connection;
+        return this._connection;
+    }
+
+    /**
+     * Return the using driver
+     * 
+     * @returns 
+     * @memberof DbDriver
+     */
+    getDriver() {
+        return this._driver;
+    }
+
+    /**
+     * Return the database configuration
+     * 
+     * @memberof DbDriver
+     */
+    getConfig(name) {
+        return this._config[name];
     }
 
     /**
