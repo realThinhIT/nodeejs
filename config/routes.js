@@ -19,82 +19,82 @@
 // ##########################################
 
 export default [
-    {
-        group: '/',
-        type: 'hbs',
+  {
+    group: '/',
+    type: 'hbs',
 
-        endPoints: [
-            {
-                verb: 'all',
-                path: '/',
-                controller: 'frontend/index@homepage'
-            }
-        ],
-    },
+    endPoints: [
+      {
+        verb: 'all',
+        path: '/',
+        controller: 'frontend/index@homepage'
+      }
+    ],
+  },
 
-    // authentication
-    {
-        group: '/v1/authentication',
-        type: 'json',
+  // authentication
+  {
+    group: '/v1/authentication',
+    type: 'json',
 
-        endPoints: [
-            {
-                verb: 'post',
-                path: '/register',
-                controller: 'v1/authentication/authentication@register'
-            },
-            {
-                verb: 'post',
-                path: '/login',
-                controller: 'v1/authentication/authentication@login'
-            },
-            {
-                verb: 'post',
-                path: '/logout',
-                controller: 'v1/authentication/authentication@logout'
-            },
-            // {
-            //     verb: 'post',
-            //     path: '/forgotPassword',
-            //     controller: 'v1/authentication/forgot-password@forgotPassword',
-            // }
-        ],
-    },
+    endPoints: [
+      {
+        verb: 'post',
+        path: '/register',
+        controller: 'v1/authentication/authentication@register'
+      },
+      {
+        verb: 'post',
+        path: '/login',
+        controller: 'v1/authentication/authentication@login'
+      },
+      {
+        verb: 'post',
+        path: '/logout',
+        controller: 'v1/authentication/authentication@logout'
+      },
+      // {
+      //     verb: 'post',
+      //     path: '/forgotPassword',
+      //     controller: 'v1/authentication/forgot-password@forgotPassword',
+      // }
+    ],
+  },
 
-    // backend
-    {
-        group: '/v1/backend',
-        type: 'json',
+  // backend
+  {
+    group: '/v1/backend',
+    type: 'json',
 
-        endPoints: [
-            // users
-            {
-                verb: 'post',
-                path: '/users',
-                controller: 'v1/backend/users@create'
-            },
-            {
-                verb: 'get',
-                path: '/users',
-                controller: 'v1/backend/users@readAll'
-            },
-            {
-                verb: 'get',
-                path: '/users/:id',
-                controller: 'v1/backend/users@readOne'
-            },
-            {
-                verb: 'put',
-                path: '/users/:id',
-                controller: 'v1/backend/users@update'
-            },
-            // {
-            //     verb: 'delete',
-            //     path: '/users/:id',
-            //     controller: 'v1/backend/users@delete'
-            // }
-        ],
-    },
+    endPoints: [
+      // users
+      {
+        verb: 'post',
+        path: '/users',
+        controller: 'v1/backend/users@create'
+      },
+      {
+        verb: 'get',
+        path: '/users',
+        controller: 'v1/backend/users@readAll'
+      },
+      {
+        verb: 'get',
+        path: '/users/:id',
+        controller: 'v1/backend/users@readOne'
+      },
+      {
+        verb: 'put',
+        path: '/users/:id',
+        controller: 'v1/backend/users@update'
+      },
+      // {
+      //     verb: 'delete',
+      //     path: '/users/:id',
+      //     controller: 'v1/backend/users@delete'
+      // }
+    ],
+  },
 ];
 
 // CRUD endPoints
