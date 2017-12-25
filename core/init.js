@@ -7,15 +7,15 @@ import { GlobalConfig } from '../config';
 
 // clear the console
 if (GlobalConfig.PLog_CLEAR_CONSOLE_ON_STARTUP) {
-    PLog.clear();
+  PLog.clear();
 }
 
 PLog.put(GlobalConfig.APP_NAME.toUpperCase(), true);
 
 // connect to database
 require('./db').default().then((db) => {
-    // run the server
-    require('./express');
+  // run the server
+  require('./express');
 }).catch((err) => {
 
 });
