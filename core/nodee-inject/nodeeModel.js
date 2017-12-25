@@ -9,8 +9,8 @@ import * as Modules from '../../app/modules';
 import * as Utils from '../modules/nodee';
 
 export default {
-    Core,
-    Config,
-    Modules,
-    Utils
+  Core,
+  Config,
+  Modules,
+  Utils
 };

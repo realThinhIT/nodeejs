@@ -13,10 +13,10 @@ const { GlobalConfig, ErrorCode, DetailCode } = Nodee.Config;
 // ################################
 
 export default (req, res, done) => {
-    // insert middleware logic here
-    if (req.get('X-Api-Key') !== GlobalConfig.API_KEY) {
-        return done(false, 'invalid api key', ErrorCode.http.INVALID_CREDENTIALS, DetailCode.auth.INVALID_API_KEY);
-    }
+  // insert middleware logic here
+  if (req.get('X-Api-Key') !== GlobalConfig.API_KEY) {
+    return done(false, 'invalid api key', ErrorCode.http.INVALID_CREDENTIALS, DetailCode.auth.INVALID_API_KEY);
+  }
 
-    return done(true, {}, 200);
+  return done(true, {}, 200);
 };

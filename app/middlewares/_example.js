@@ -11,7 +11,7 @@
 
 // execute before controller
 export default async (req, res, done) => {
-    // insert middleware logic here
+  // insert middleware logic here
 
-    return done(true, {}, 200);
+  return done(true, {}, 200);
 };

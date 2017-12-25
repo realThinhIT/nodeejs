@@ -20,10 +20,10 @@ app.use(cors());
 app.use(express.static(__DIR_APP + '/views/static'));
 
 if (GlobalConfig.LOG_REQUEST) {
-    PLog.put('[PLog] http request PLogging is enabled');
-    app.use(morgan('dev'));
+  PLog.put('[PLog] http request PLogging is enabled');
+  app.use(morgan('dev'));
 } else {
-    PLog.put('[PLog] http request PLogging is disabled');
+  PLog.put('[PLog] http request PLogging is disabled');
 }
 
 // configure Routes
@@ -31,9 +31,9 @@ routes(app);
 
 // start the server
 app.listen(GlobalConfig.SERVER_PORT || 8080, err => {
-    if (err) {
-        PLog.putException(err);
-    }
+  if (err) {
+    PLog.putException(err);
+  }
 
-    PLog.put('[webserver] server listening on port ' + GlobalConfig.SERVER_PORT || 8080 + '.');
+  PLog.put('[webserver] server listening on port ' + GlobalConfig.SERVER_PORT || 8080 + '.');
 });

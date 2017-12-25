@@ -11,10 +11,10 @@ import * as Helpers from '../../app/helpers';
 import * as Models from '../../app/models';
 
 export default {
-    Core,
-    Config,
-    Modules,
-    Utils,
-    Helpers,
-    Models
+  Core,
+  Config,
+  Modules,
+  Utils,
+  Helpers,
+  Models
 };
