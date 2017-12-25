@@ -6,9 +6,20 @@ export default {
     driver: 'mongoose',
 
     // connection settings
-    host: 'localhost',
-    port: '27017',
-    dbName: 'test',
-    user: '',
-    pass: '',
+    common: {
+        host: 'localhost',
+        port: '27017',
+        dbName: 'test',
+        user: '',
+        pass: ''
+    },
+
+    // per-driver configurations
+    drivers: {
+        mongoose: {},
+        mysql: {
+            connectionMode: 'pool',     // 'connection' or 'pool'
+            connectionLimit: 10,        // for pooling only 
+        }
+    }
 };

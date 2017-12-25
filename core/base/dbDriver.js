@@ -29,7 +29,7 @@ export default class DbDriver {
      * @memberof DbDriver
      */
     driverName() {
-        return this.constructor.name;
+        return this.constructor.name.toLowerCase();
     }
 
     /**
@@ -62,12 +62,31 @@ export default class DbDriver {
     }
 
     /**
-     * Return the database configuration
+     * Returns the database configuration
      * 
+     * @param {string} name 
      * @memberof DbDriver
      */
     getConfig(name) {
-        return this._config[name];
+        if (name) {
+            return this._config['common'][name];
+        } else {
+            return this._config['common'];
+        }
+    }
+
+    /**
+     * Returns the per-driver configurations
+     * 
+     * @param {string} name 
+     * @memberof DbDriver
+     */
+    getDriverConfig(name) {
+        if (name) {
+            return this._config['drivers'][this.driverName()][name];
+        } else {
+            return this._config['drivers'][this.driverName()];
+        }
     }
 
     /**
