@@ -1,6 +1,8 @@
 build/*
 build
-node_modules/*
-node_modules
-!node_modules/nodee
-!node_modules/nodee/*
+/node_modules/*
+/node_modules
+
+!/app/node_modules/*
+!/app/node_modules/nodee/*
+!/app/node_modules
