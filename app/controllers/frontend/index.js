@@ -2,7 +2,7 @@
 // CONTROLLER: index
 // ######################################################
 
-import Nodee from '../../nodee';
+import Nodee from 'nodee';
 const { GlobalConfig } = Nodee.Config;
 
 export default class IndexController extends Nodee.Core.Controller {

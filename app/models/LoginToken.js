@@ -2,7 +2,7 @@
 // MODEL: LoginToken
 // ######################################################
 
-import { NodeeModel } from '../nodee';
+import NodeeModel from 'nodee/nodee-model';
 import User from './User';
 
 const { PRandom, PDate } = NodeeModel.Utils;

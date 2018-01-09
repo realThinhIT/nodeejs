@@ -2,7 +2,7 @@
 // MODEL: User
 // ######################################################
 
-import { NodeeModel } from '../nodee';
+import NodeeModel from 'nodee/nodee-model';
 import TableCounter from './TableCounter';
 import md5 from 'md5';
 

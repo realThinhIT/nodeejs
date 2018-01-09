@@ -2,7 +2,7 @@
 // MIDDLEWARE: _example
 // ######################################################
 
-import Nodee from '../nodee';
+import Nodee from 'nodee';
 const { Exception } = Nodee.Core;
 
 // #############################################

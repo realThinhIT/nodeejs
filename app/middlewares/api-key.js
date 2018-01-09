@@ -2,7 +2,7 @@
 // MIDDLEWARE: API KEY AUTHENTICATION
 // ######################################################
 
-import Nodee from '../nodee';
+import Nodee from 'nodee';
 const { GlobalConfig, ErrorCode, DetailCode } = Nodee.Config;
 const { Exception } = Nodee.Core;
 

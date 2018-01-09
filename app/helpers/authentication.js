@@ -1,4 +1,4 @@
-import { NodeeModel } from '../nodee';
+import NodeeModel from 'nodee/nodee-model';
 const { PCallback } = NodeeModel.Utils;
 
 export default {

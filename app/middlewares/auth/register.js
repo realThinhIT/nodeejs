@@ -2,7 +2,7 @@
 // MIDDLEWARE: authentication/register
 // ######################################################
 
-import Nodee from '../../nodee';
+import Nodee from 'nodee';
 const { ErrorCode, DetailCode } = Nodee.Config;
 const { Exception } = Nodee.Core;
 

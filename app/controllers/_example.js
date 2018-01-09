@@ -2,7 +2,7 @@
 // CONTROLLER: register
 // ######################################################
 
-import Nodee from '../nodee';
+import Nodee from 'nodee';
 const { PMongooserr, PObject } = Nodee.Utils;
 
 export default class ExampleController extends Nodee.Core.Controller {

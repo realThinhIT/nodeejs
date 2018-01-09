@@ -2,7 +2,7 @@
 // MIDDLEWARE: authentication/require-login
 // ######################################################
 
-import Nodee from '../../nodee';
+import Nodee from 'nodee';
 const { LoginToken } = Nodee.Models;
 const { ErrorCode, DetailCode } = Nodee.Config;
 const { AuthenticationHelper } = Nodee.Helpers;

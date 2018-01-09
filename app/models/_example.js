@@ -2,7 +2,7 @@
 // MODEL: User
 // ######################################################
 
-import { NodeeModel } from '../nodee';
+import NodeeModel from 'nodee-model';
 const { PValidator } = NodeeModel.Utils;
 const { Const } = NodeeModel.Config;
 const { Exception, MongooseModel } = NodeeModel.Core;

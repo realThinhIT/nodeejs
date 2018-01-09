@@ -2,8 +2,7 @@
 // MODEL: TableCounter
 // ######################################################
 
-import { NodeeModel } from '../nodee';
-
+import NodeeModel from 'nodee/nodee-model';
 const { Const, DetailCode } = NodeeModel.Config;
 const { Exception, MongooseModel } = NodeeModel.Core;
 

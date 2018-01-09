@@ -2,7 +2,7 @@
 // CONTROLLER: login
 // ######################################################
 
-import Nodee from '../../../nodee';
+import Nodee from 'nodee';
 const { User, LoginToken } = Nodee.Models;
 const { PObject, PMongooserr } = Nodee.Utils;
 const { AuthenticationHelper } = Nodee.Helpers;

@@ -2,7 +2,7 @@
 // CONTROLLER: users
 // ######################################################
 
-import Nodee from '../../../nodee';
+import Nodee from 'nodee';
 import md5 from 'md5';
 const { User } = Nodee.Models;
 const { PMongooserr, PObject } = Nodee.Utils;
