@@ -2,15 +2,15 @@
 // MIDDLEWARE: pagination
 // ######################################################
 
-// ################################
+// #############################################
 // MODIFY THIS!
-// after finish verifying, send
-// the done(isValidated, data, status, detailCode)
+// after finish verifying, send data 
+// or an Nodee.Core.Exception in case of failure 
 // to pass to the controller.
-// ################################
+// #############################################
 
 // execute before controller
-export default (req, res, done) => {
+export default async (req, res) => {
   // insert middleware logic here
   let pagination = {};
 
@@ -48,5 +48,5 @@ export default (req, res, done) => {
     }
   }
 
-  return done(true, pagination, 200);
+  return pagination;
 };

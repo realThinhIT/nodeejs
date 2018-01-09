@@ -15,20 +15,38 @@ export default class MongooseModel {
     };
 
     this.mongoose = mongoose;
-    this._model = new Schema(this.schema(), Object.assign({}, this.defaultSchemeOptions, this.schemaOptions()));
+    this._model = new Schema(this.shape(), Object.assign({}, this.defaultSchemeOptions, this.schemaOptions()));
 
-    this.pre = this._model.pre;
-    this.post = this._model.post;
-    this.virtual = this._model.virtual;
-    this.methods = this._model.methods;
-    this.statics = this._model.statics;
-
-    this.custom(this._model, this);
+    this.custom(this._model, this, this.instance());
   }
 
-  create() {
+  /**
+   * Creates an instance of mongoose model from ES6 class
+   * 
+   * @param {*} modelClass 
+   */
+  create(modelClass = class Default {}) {
+    this._model.loadClass(modelClass);
     this.__instance = mongoose.model(this.collectionName(), this._model);
     return this.__instance;
+  }
+
+  /**
+   * An utility to instantiate a model from ES6 class
+   * without having to heavily rely on custom method
+   * 
+   * @static
+   * @param {*} model 
+   * @returns an instantiated mongoose model
+   * @memberof MongooseModel
+   */
+  static create(model = class Default {}) {
+    let map = {
+      Model: model
+    };
+
+    const newModel = new map['Model']();
+    return newModel.create(model);
   }
 
   /**
@@ -49,16 +67,6 @@ export default class MongooseModel {
    */
   model() {
     return this._model;
-  }
-
-  /**
-   * Gets new model instance
-   * 
-   * @returns 
-   * @memberof Model
-   */
-  collection() {
-    return mongoose.model(this.collectionName());
   }
 
   instance() {
@@ -91,7 +99,7 @@ export default class MongooseModel {
    * @returns 
    * @memberof Model
    */
-  schema() {
+  shape() {
     return {};
   }
 
@@ -111,7 +119,7 @@ export default class MongooseModel {
    * @param {any} model 
    * @memberof Model
    */
-  customs(model, self) {
+  customs(model, self, collection) {
 
   }
 }

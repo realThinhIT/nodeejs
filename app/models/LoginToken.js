@@ -7,10 +7,10 @@ import User from './User';
 
 const { PRandom, PDate } = NodeeModel.Utils;
 const { Const, GlobalConfig, DetailCode } = NodeeModel.Config;
-const { Exception } = NodeeModel.Core;
+const { Exception, MongooseModel } = NodeeModel.Core;
 
-export default new (class LoginToken extends NodeeModel.Core.MongooseModel {
-  schema() {
+export default MongooseModel.create(class LoginToken extends MongooseModel {
+  shape() {
     return {
       userId: Number,
       loginToken: {
@@ -141,4 +141,4 @@ export default new (class LoginToken extends NodeeModel.Core.MongooseModel {
       });
     };
   }
-})().create();
+});

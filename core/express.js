@@ -17,7 +17,7 @@ import { PLog, PCallback } from './modules/nodee';
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-app.use(express.static(__DIR_APP + '/views/static'));
+app.use(express.static(__DIR_APP + '/public'));
 
 if (GlobalConfig.LOG_REQUEST) {
   PLog.put('[PLog] http request PLogging is enabled');

@@ -8,10 +8,10 @@ import md5 from 'md5';
 
 const { PValidator } = NodeeModel.Utils;
 const { Const, DetailCode } = NodeeModel.Config;
-const { Exception } = NodeeModel.Core;
+const { Exception, MongooseModel } = NodeeModel.Core;
 
-export default new (class User extends NodeeModel.Core.MongooseModel {
-  schema() {
+export default MongooseModel.create(class User extends MongooseModel {
+  shape() {
     return {
       userId: Number,
       username: {
@@ -125,4 +125,4 @@ export default new (class User extends NodeeModel.Core.MongooseModel {
       });
     };
   }
-})().create();
+});

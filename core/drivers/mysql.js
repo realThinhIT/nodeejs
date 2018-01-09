@@ -8,57 +8,46 @@ import mysql from 'mysql';
 import bluebird from 'bluebird';
 
 export default class MySQL extends DbDriver {
-  driver() {
+  get driver() {
     mysql.Promise = bluebird;
     return mysql;
   }
 
   async connect() {
-    let connection;
     try {
+      let connection;
       if (this.getDriverConfig('connectionMode') === 'connection') {
-        connection = await this.getDriver().createConnection({
-          host: this.getConfig('host'),
-          user: this.getConfig('user'),
-          password: this.getConfig('pass'),
-          database: this.getConfig('dbName')
+        connection = await this.driver.createConnection({
+          host: this.config('host'),
+          user: this.config('user'),
+          password: this.config('pass'),
+          database: this.config('dbName')
         });
         connection.connect();
       } else if (this.getDriverConfig('connectionMode') === 'pool') {
-        connection = await this.getDriver().createPool({
+        connection = await this.driver.createPool({
           connectionLimit: this.getDriverConfig('connectionLimit'),
-          host: this.getConfig('host'),
-          user: this.getConfig('user'),
-          password: this.getConfig('pass'),
-          database: this.getConfig('dbName')
+          host: this.config('host'),
+          user: this.config('user'),
+          password: this.config('pass'),
+          database: this.config('dbName')
         });
         connection = await connection.getConnection();
       } else {
-        throw new Error('Connection Mode specified is invalid! Only accepts pool or connection.');
+        throw new Error(`Connection Mode specified is invalid! Only accepts 'pool' or 'connection'.`);
       }
+
+      this._connection = connection;
     } catch (e) {
       throw e;
     }
 
-    this.connection = connection;
-    return connection;
-  }
-
-  async getConnection() {
-    try {
-      if (!this.getConnection()) {
-        await this.connect();
-      }
-    } catch (e) {
-      throw e;
-    }
-
-    return this.connection;
+    return this._connection;
   }
 
   async close() {
     try {
-      await this.connection.end();
+      await this._connection.end();
     } catch (e) {
       throw e;
     }

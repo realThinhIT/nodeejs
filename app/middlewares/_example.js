@@ -2,16 +2,22 @@
 // MIDDLEWARE: _example
 // ######################################################
 
-// ################################
-// MODIFY THIS!
-// after finish verifying, send
-// the done(isValidated, data, status, detailCode)
-// to pass to the controller.
-// ################################
+import Nodee from '../nodee';
+const { Exception } = Nodee.Core;
 
-// execute before controller
-export default async (req, res, done) => {
+// #############################################
+// MODIFY THIS!
+// after finish verifying, send data 
+// or an Nodee.Core.Exception in case of failure 
+// to pass to the controller.
+// #############################################
+
+export default async (req, res, done, previous) => {
   // insert middleware logic here
 
-  return done(true, {}, 200);
+  if (false) {
+    throw new Exception();
+  }
+
+  return {};
 };

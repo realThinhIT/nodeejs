@@ -5,57 +5,33 @@
 import { RouteConfig, RenderEngineConfig } from '../config';
 import _async from 'async';
 import { PLog, PCallback, PResponse } from './modules/nodee';
+import Exception from './base/exception';
 
-let validationProcess = (req, res, _middlewares, callback) => {
-  let middlewares = {};
-  let validationPass = true;
+let validationProcess = async (req, res, _middlewares) => {
+  let allMiddlewares = {};
 
-  // set and execute the middlewares
-  _async.each(_middlewares, async (mid, callback) => {
-    let middleware = null;
+  for (let middlewarePath of _middlewares) {
+    const midName = middlewarePath.replace(/\//g, '.');
 
-    let midName = mid.replace(/\//g, '.');
-
-    // if the validation is not pass somewhere,
-    // useful for a controller that has multiple middlewares
-    if (validationPass === false) {
-      return false;
-    }
-
-    // execute the middlewares then get the callback
+    // check if middleware defined availble
+    let middleware;
     try {
-      middleware = require(__DIR_APP + 'middlewares/' + mid).default;
+      middleware = require(__DIR_APP + 'middlewares/' + middlewarePath).default;
     } catch (e) {
-      validationPass = false;
-
-      PLog.putException('[middleware] error: ' + midName + ' doesn\'t exist', e);
-
-      return (new PResponse(res)).fail('middleware named ' + midName + ' is not available');
+      throw new Exception(`middleware named ${midName} is not available`);
     }
 
-    await middleware(req, (new PResponse(res)),
-      (isValidated, data, code, detailCode) => {
-        if (!isValidated || isValidated === null || isValidated === undefined) {
-          validationPass = false;
+    // execute middleware, push executed to previous
+    try {
+      const thisMiddleware = await middleware(req, new PResponse(res), allMiddlewares);
+      allMiddlewares[midName] = thisMiddleware;
+    } catch (e) {
+      throw new Exception(`middleware ${midName} could not complete: ${e.message}`);
+    }
+  }
 
-          // PLog.put('[middleware] failed to execute middleware ' + mid + ' at ' + endPoint + ': ' + data , false);
-          return new PResponse(res).fail(
-            'the app failed in executing middleware ' + midName + ( (typeof(data) === 'string') ? ': ' + data : '' ), 
-            code || 500, 
-            detailCode
-          );
-        } else {
-          middlewares[midName] = data;
-
-          callback(null);
-        }
-      }
-    );
-  },
-  err => {
-    callback(validationPass, middlewares);
-  });
-};
+  return allMiddlewares;
+}
 
 export default app => {
   RouteConfig.forEach(group => {
@@ -80,24 +56,21 @@ export default app => {
       } catch (e) {
         controllerClass = undefined;
         
-        return PLog.putException('[route] an error occurred while creating a new controller \'' + point.controller + '\' instance at ' + endPoint, e);
+        return PLog.putException(`[route] an error occurred while creating a new controller ${point.controller} instance at ${endPoint}`, e);
+      } finally {
+        // throw an exception if the callback function is illegal
+        if (typeof(controllerClass) !== 'function') {
+          return PLog.put(`[route] controller ${point.controller} (${typeof(controllerClass)}) is not available at ${endPoint}`, false);
+        }
       }
 
-      // throw an exception if the callback function is illegal
-      if (typeof(controllerClass) !== 'function') {
-        let message = '[route] controller \'' + point.controller + '\' (' + typeof(controllerClass) + ') is not available at ' + endPoint;
-
-        return PLog.putException(message);
-      }
-
-      let callbackFunction = (req, res, next) => {
+      // this will be executed when a route is entered
+      const callbackFunction = async (req, res, next) => {
         // create new instance of controller
         const _controller = new controllerClass(req, [res, next], callbackMethod);
 
         if (typeof(_controller[callbackMethod]) !== 'function') {
-          let message = '[route] callback function \'' + callbackMethod + '\' (' + typeof(_controller[callbackMethod]) + ') is not available at ' + endPoint;
-  
-          return PLog.putException(message);
+          return PLog.put(`[route] callback function ${callbackMethod} (${typeof(_controller[callbackMethod])}) is not available at ${endPoint}`, false);
         }
 
         // set default headers
@@ -111,32 +84,41 @@ export default app => {
             for (const key of Object.keys(renderMethodConfig.DEFAULT_HEADERS)) {
               res.set(key, renderMethodConfig.DEFAULT_HEADERS[key]);
             }
+          }
 
-            validationProcess(req, res, _controller.middlewares(callbackMethod), 
-              (validationPass, middlewares) => {
-                renderMethodConfig.SETUP_FUNCTION(app, async () => {
-                  try {
-                    if (validationPass === true) {
-                      await _controller.setMiddlewareData(middlewares);
-                      await _controller.beforeController(callbackMethod);
-                      await _controller[callbackMethod]();
-                      await _controller.afterController(callbackMethod);
-                    }
-                  } catch (e) {
-                    return PLog.putException('[route] route refuse to finish, threw an exception', e);
-                  }
-              });
-            });
+          // execute middlewares and route controller
+          let middlewares;
+          try {
+            middlewares = await validationProcess(req, res, _controller.middlewares(callbackMethod));
+          } catch (e) {
+            let message = `[middleware] middleware at ${endPoint} could not finish: ${e.message}`;
+
+            PLog.putException(message, e);
+            return (new PResponse(res)).fail(message);
+          }
+
+          await renderMethodConfig.SETUP_FUNCTION(app);
+          try {
+            await _controller.setMiddlewareData(middlewares);
+            await _controller.beforeController(callbackMethod);
+            await _controller[callbackMethod]();
+            await _controller.afterController(callbackMethod);
+          } catch (e) {
+            let message = `[route] route ${endPoint} refuse to finish, threw an exception: ${e.message}`;
+
+            PLog.putException(message, e);
+            return (new PResponse(res)).fail(message, e.code, e.detailCode);
           }
         } else {
           renderMethod = 'unf';
-          PLog.put('[route] endpoint/ group type ' + renderMethod + ' is invalid', false);
+          PLog.put(`[route] endpoint/ group type ${renderMethod} is invalid`, false);
           next();
         }
       };
 
-      PLog.put('[route] ' + renderMethod + ' endpoint: ' + method.toUpperCase() + ' ' + endPoint);
+      PLog.put(`[route] ${renderMethod} endpoint: ${method.toUpperCase()} ${endPoint}`);
 
+      // set up express routes
       if (method === 'post') {
         app.post(endPoint, callbackFunction);
       } else if (method === 'get') {
@@ -148,7 +130,7 @@ export default app => {
       } else if (method === 'all') {
         app.all(endPoint, callbackFunction);
       } else {
-        PLog.putException('[route] invalid http verb \'' + method.toUpperCase() + '\' at ' + endPoint);
+        PLog.putException(`[route] invalid http verb '${method.toUpperCase()}' at ${endPoint}`);
       }
     });
   });

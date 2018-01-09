@@ -5,10 +5,10 @@
 import { NodeeModel } from '../nodee';
 const { PValidator } = NodeeModel.Utils;
 const { Const } = NodeeModel.Config;
-const { Exception } = NodeeModel.Core;
+const { Exception, MongooseModel } = NodeeModel.Core;
 
-export default new (class ExampleModel extends NodeeModel.Core.Model {
-  schema() {
+export default MongooseModel.create(class ExampleModel extends MongooseModel {
+  shape() {
     return {
       status: Number,
       createdAt: Date,
@@ -17,11 +17,11 @@ export default new (class ExampleModel extends NodeeModel.Core.Model {
   }
 
   custom(m, _self) {
-    // modelSchema.virtual('members', {
-    //     ref: 'ForeignModel',
-    //     localField: 'thisModelField',
-    //     foreignField: 'equalForeignModelField',
-    //     justOne: false
+    // m.virtual('members', {
+    //   ref: 'ForeignModel',
+    //   localField: 'thisModelField',
+    //   foreignField: 'equalForeignModelField',
+    //   justOne: false
     // });
 
     m.pre('save', function (next) {
@@ -42,11 +42,11 @@ export default new (class ExampleModel extends NodeeModel.Core.Model {
     
       next();
     });
-
-    // modelSchema.methods.findSomething = async function () {
-    //     return new Promise((resolve, reject) => {
-    // 
-    //     });
-    // };
   }
-})().create();
+
+  // static async findSomething() {
+  //   return new Promise((resolve, reject) => {
+
+  //   });
+  // };
+});

@@ -17,13 +17,12 @@ export default {
     viewsPath: __DIR_APP + 'views',
     layoutsDir: __DIR_APP + 'views',
 
-    SETUP_FUNCTION: function (app, next) {
+    SETUP_FUNCTION: async function (app) {
       if (this.viewsPath) app.set('views', this.viewsPath);
       let hbs = exphbs.create(this);
       app.engine(this.extname, hbs.engine);
       app.set('view engine', this.extname);
       app.enable('view cache');
-      next();
     }
   },
 
@@ -42,9 +41,8 @@ export default {
     // json customizations
     JSON_SPACES: 4,          // recommend '0' for production
 
-    SETUP_FUNCTION: function (app, next) {
+    SETUP_FUNCTION: async function (app) {
       app.set('json spaces', this.JSON_SPACES);
-      next();
     }
   }
 }

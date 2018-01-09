@@ -41,7 +41,7 @@ export default class BaseController {
    * @returns 
    * @memberof BaseController
    */
-  controllerName() {
+  get controllerName() {
     return this.constructor.name;
   }
 

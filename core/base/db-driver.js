@@ -18,7 +18,7 @@ export default class DbDriver {
    * @returns [a driver]
    * @memberof DbDriver
    */
-  driver() {
+  get driver() {
     return {};
   }
 
@@ -28,7 +28,7 @@ export default class DbDriver {
    * @returns 
    * @memberof DbDriver
    */
-  driverName() {
+  get driverName() {
     return this.constructor.name.toLowerCase();
   }
 
@@ -38,7 +38,7 @@ export default class DbDriver {
    * @memberof DbDriver
    */
   async connect() {
-
+    return this._connection;
   }
 
   /**
@@ -47,7 +47,15 @@ export default class DbDriver {
    * @returns 
    * @memberof DbDriver
    */
-  getConnection() {
+  async getConnection() {
+    try {
+      if (!this._connection) {
+        await this.connect();
+      }
+    } catch (e) {
+      throw e;
+    }
+
     return this._connection;
   }
 
@@ -57,7 +65,7 @@ export default class DbDriver {
    * @returns 
    * @memberof DbDriver
    */
-  getDriver() {
+  get driver() {
     return this._driver;
   }
 
@@ -67,7 +75,11 @@ export default class DbDriver {
    * @param {string} name 
    * @memberof DbDriver
    */
-  getConfig(name) {
+  config(name) {
+    if (!this._config['common']) {
+      return null;
+    }
+
     if (name) {
       return this._config['common'][name];
     } else {
@@ -81,11 +93,17 @@ export default class DbDriver {
    * @param {string} name 
    * @memberof DbDriver
    */
-  getDriverConfig(name) {
+  driverConfig(name) {
+    if (
+      !this._config['drivers'] || (name && !this._config['drivers'][this.driverName][name])
+    ) {
+      return null;
+    }
+
     if (name) {
-      return this._config['drivers'][this.driverName()][name];
+      return this._config['drivers'][this.driverName][name];
     } else {
-      return this._config['drivers'][this.driverName()];
+      return this._config['drivers'][this.driverName];
     }
   }
 

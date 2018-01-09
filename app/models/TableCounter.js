@@ -5,10 +5,10 @@
 import { NodeeModel } from '../nodee';
 
 const { Const, DetailCode } = NodeeModel.Config;
-const { Exception } = NodeeModel.Core;
+const { Exception, MongooseModel } = NodeeModel.Core;
 
-export default new (class TableCounter extends NodeeModel.Core.MongooseModel {
-  schema() {
+export default MongooseModel.create(class TableCounter extends MongooseModel {
+  shape() {
     return {
       columnId: {
         type: String,
@@ -64,4 +64,4 @@ export default new (class TableCounter extends NodeeModel.Core.MongooseModel {
       });
     };
   }
-})().create();
+});

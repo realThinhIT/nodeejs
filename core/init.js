@@ -12,10 +12,8 @@ if (GlobalConfig.PLog_CLEAR_CONSOLE_ON_STARTUP) {
 
 PLog.put(GlobalConfig.APP_NAME.toUpperCase(), true);
 
-// connect to database
-require('./db').default().then((db) => {
-  // run the server
+try {
   require('./express');
-}).catch((err) => {
-
-});
+} catch (e) {
+  PLog.putException('[server] cannot run express server', e);
+}

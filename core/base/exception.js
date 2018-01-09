@@ -6,7 +6,7 @@ export default class Exception extends Error {
    * @param {any} code 
    * @memberof Exception
    */
-  constructor(message, code) {
+  constructor(message, code, detailCode) {
     super();
 
     if (message instanceof Error) {
@@ -16,6 +16,7 @@ export default class Exception extends Error {
     }
 
     this.code = code ? code : '_err';
+    this.detailCode = detailCode ? detailCode : '_err';
     this.stack = (new Error()).stack;
     this.name = this.constructor.name;
   }
