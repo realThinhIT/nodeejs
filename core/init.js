@@ -13,6 +13,7 @@ if (GlobalConfig.PLog_CLEAR_CONSOLE_ON_STARTUP) {
 PLog.put(GlobalConfig.APP_NAME.toUpperCase(), true);
 
 try {
+  require('./drivers').default();
   require('./express');
 } catch (e) {
   PLog.putException('[server] cannot run express server', e);

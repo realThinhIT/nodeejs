@@ -19,7 +19,7 @@ export default async () => {
       }
 
       try {
-        PLog.put(`[db] connecting to database using driver ${database.driverName()}`);
+        PLog.put(`[db] connecting to database using driver ${database.driverName}`);
         connection = await database.connect();
         PLog.put(`[db] successfully connected to the database`);
 

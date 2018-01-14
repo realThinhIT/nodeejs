@@ -7,7 +7,7 @@ export default class DbDriver {
    */
   constructor(config) {
     this._config = config;
-    this._driver = this.driver();
+    this._driver = this.driver;
     this._connection = undefined;
   }
 

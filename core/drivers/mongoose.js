@@ -17,7 +17,7 @@ export default class Mongoose extends DbDriver {
     let loginInfo = (this.config('user') !== '') ? this.config('user') : '';
     loginInfo += (this.config('pass') !== '') ? ':' + this.config('user') : '';
     loginInfo += (loginInfo !== '') ? '@' : '';
-    const mongoUrl = `mongodb://${loginInfo}${this.config('host')}${this.config('port')}/${this.config('dbName')}`;
+    const mongoUrl = `mongodb://${loginInfo}${this.config('host')}:${this.config('port')}/${this.config('dbName')}`;
 
     try {
       await this.setConnection(await this.driver.connect(mongoUrl, { useMongoClient: true }));
