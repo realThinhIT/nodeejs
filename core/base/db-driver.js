@@ -42,6 +42,13 @@ export default class DbDriver {
   }
 
   /**
+   * Sets connection
+   */
+  async setConnection(con = null) {
+    this._connection = con;
+  }
+
+  /**
    * Returns the existing connection
    * 
    * @returns 

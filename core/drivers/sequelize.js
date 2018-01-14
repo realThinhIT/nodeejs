@@ -1,22 +1,27 @@
 // ######################################################
-// CORE: DATABASE DRIVER: ExampleDriver
+// CORE: DATABASE DRIVER: SEQUELIZE
 // ######################################################
 
 import { PLog, PCallback } from '../modules/nodee';
 import { DbDriver } from '../';
-import ExampleDriver from 'ExampleDriver';
+import Sequelize from 'sequelize';
 import bluebird from 'bluebird';
 
-export default class ExampleDriver extends DbDriver {
+export default class Sequelize extends DbDriver {
   get driver() {
-    ExampleDriver.Promise = bluebird;
-    return ExampleDriver;
+    Sequelize.Promise = bluebird;
+    return Sequelize;
   }
 
   async connect() {
     let connection;
     try {
-      await this.setConnection(await this.driver.connect({}));
+      const sequelizeInstance = new (this.driver)({
+        database: this.config('dbName'),
+        username: this.config('user'),
+        password: this.config('pass'),
+        ...this.driverConfig()
+      });
     } catch (e) {
       throw e;
     }

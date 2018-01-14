@@ -37,17 +37,17 @@ export default class MySQL extends DbDriver {
         throw new Error(`Connection Mode specified is invalid! Only accepts 'pool' or 'connection'.`);
       }
 
-      this._connection = connection;
+      this.setConnection(connection);
     } catch (e) {
       throw e;
     }
 
-    return this._connection;
+    return this.getConnection();
   }
 
   async close() {
     try {
-      await this._connection.end();
+      await this.getConnection().end();
     } catch (e) {
       throw e;
     }

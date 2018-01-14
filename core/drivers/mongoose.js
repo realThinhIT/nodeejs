@@ -20,17 +20,17 @@ export default class Mongoose extends DbDriver {
     const mongoUrl = `mongodb://${loginInfo}${this.config('host')}${this.config('port')}/${this.config('dbName')}`;
 
     try {
-      this._connection = await this.driver.connect(mongoUrl, { useMongoClient: true });
+      await this.setConnection(await this.driver.connect(mongoUrl, { useMongoClient: true }));
     } catch (e) {
       throw e;
     }
 
-    return this._connection;
+    return this.getConnection();
   }
 
   async close() {
     try {
-      await this._connection.close();
+      await this.getConnection().close();
     } catch (e) {
       throw e;
     }

@@ -20,6 +20,16 @@ export default {
     mysql: {
       connectionMode: 'pool',     // 'connection' or 'pool'
       connectionLimit: 10,        // for pooling only 
-    }
+    },
+    sequelize: {
+      dialect: 'mysql',
+      pool: {
+        max: 10,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+      },
+      // storage: 'path/to/db.sqlite'
+    },
   }
 };
