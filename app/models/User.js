@@ -11,7 +11,7 @@ const { Const, DetailCode } = NodeeModel.Config;
 const { Exception, MongooseModel } = NodeeModel.Core;
 
 export default MongooseModel.create(class User extends MongooseModel {
-  shape() {
+  get shape() {
     return {
       userId: Number,
       username: {

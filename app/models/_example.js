@@ -8,7 +8,7 @@ const { Const } = NodeeModel.Config;
 const { Exception, MongooseModel } = NodeeModel.Core;
 
 export default MongooseModel.create(class ExampleModel extends MongooseModel {
-  shape() {
+  get shape() {
     return {
       status: Number,
       createdAt: Date,

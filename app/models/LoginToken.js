@@ -10,7 +10,7 @@ const { Const, GlobalConfig, DetailCode } = NodeeModel.Config;
 const { Exception, MongooseModel } = NodeeModel.Core;
 
 export default MongooseModel.create(class LoginToken extends MongooseModel {
-  shape() {
+  get shape() {
     return {
       userId: Number,
       loginToken: {

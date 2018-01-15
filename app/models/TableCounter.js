@@ -7,7 +7,7 @@ const { Const, DetailCode } = NodeeModel.Config;
 const { Exception, MongooseModel } = NodeeModel.Core;
 
 export default MongooseModel.create(class TableCounter extends MongooseModel {
-  shape() {
+  get shape() {
     return {
       columnId: {
         type: String,

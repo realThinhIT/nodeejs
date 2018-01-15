@@ -1,21 +1,25 @@
+import BaseModel from '../base/base-model';
 import mongoose from 'mongoose';
 let Schema = mongoose.Schema;
 
-export default class MongooseModel {
+export default class MongooseModel extends BaseModel {
   /**
    * Creates a new instance of model
    * 
    * @memberof Model
    */
-  constructor() {
+  constructor(...args) {
+    super(...args);
+
+    this.timestamps = true;
     this.defaultSchemeOptions = {
-      collection: this.collectionName(),
+      collection: this.collectionName,
       safe: true,
       toJSON: { virtuals: true }
     };
 
     this.mongoose = mongoose;
-    this._model = new Schema(this.shape(), Object.assign({}, this.defaultSchemeOptions, this.schemaOptions()));
+    this._model = new Schema(this.shape, Object.assign({}, this.defaultSchemeOptions, this.schemaOptions));
 
     this.custom(this._model, this, this.instance());
   }
@@ -27,7 +31,7 @@ export default class MongooseModel {
    */
   create(modelClass = class Default {}) {
     this._model.loadClass(modelClass);
-    this.__instance = mongoose.model(this.collectionName(), this._model);
+    this.__instance = mongoose.model(this.collectionName, this._model);
     return this.__instance;
   }
 
@@ -50,16 +54,6 @@ export default class MongooseModel {
   }
 
   /**
-   * Gets class name of Model
-   * 
-   * @returns 
-   * @memberof Model
-   */
-  modelName() {
-    return this.constructor.name;
-  }
-
-  /**
    * Gets the model instance (current schema)
    * 
    * @returns 
@@ -79,18 +73,8 @@ export default class MongooseModel {
    * @returns 
    * @memberof Model
    */
-  collectionName() {
-    return this.modelName();
-  }
-
-  /**
-   * Indentifies if this model uses timestamps
-   * 
-   * @returns 
-   * @memberof Model
-   */
-  timestamps() {
-    return true;
+  get collectionName() {
+    return this.modelName;
   }
 
   /**
@@ -99,7 +83,7 @@ export default class MongooseModel {
    * @returns 
    * @memberof Model
    */
-  shape() {
+  get shape() {
     return {};
   }
 
@@ -109,7 +93,7 @@ export default class MongooseModel {
    * @returns 
    * @memberof Model
    */
-  schemaOptions() {
+  get schemaOptions() {
     return this.defaultSchemeOptions;
   }
 
