@@ -23,6 +23,7 @@ export default {
     },
     sequelize: {
       dialect: 'mysql',
+      operatorsAliases: false,
       pool: {
         max: 10,
         min: 0,

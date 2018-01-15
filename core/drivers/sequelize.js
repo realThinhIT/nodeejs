@@ -7,7 +7,7 @@ import { DbDriver } from '../';
 import Sequelize from 'sequelize';
 import bluebird from 'bluebird';
 
-export default class Sequelize extends DbDriver {
+export default class SequelizeDriver extends DbDriver {
   get driver() {
     Sequelize.Promise = bluebird;
     return Sequelize;
@@ -22,6 +22,7 @@ export default class Sequelize extends DbDriver {
         password: this.config('pass'),
         ...this.driverConfig()
       });
+      this.setConnection(sequelizeInstance);
     } catch (e) {
       throw e;
     }
