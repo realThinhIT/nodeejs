@@ -58,7 +58,7 @@ export default MongooseModel.create(class LoginToken extends MongooseModel {
 
     m.methods.findUserByLoginToken = async function (loginToken) {
       return new Promise((resolve, reject) => {
-        _self.collection().findOne({ loginToken: loginToken }, (err, token) => {
+        _self.instance().findOne({ loginToken: loginToken }, (err, token) => {
           if (err || !token) {
             reject(new Exception(err, DetailCode.common.SERVER_ERROR));
           }
@@ -92,7 +92,7 @@ export default MongooseModel.create(class LoginToken extends MongooseModel {
       return new Promise((resolve, reject) => {
         let now = new Date();
         
-        _self.collection().findOne({
+        _self.instance().findOne({
           userId: userId,
           userAgent: userAgent,
           deviceId: deviceId
@@ -103,9 +103,9 @@ export default MongooseModel.create(class LoginToken extends MongooseModel {
       
           // _model means if the token bind to _model userAgent and deviceId exists
           if (token !== null && token._id) {
-            _self.collection().findOneAndUpdate({ _id: token._id }, {
+            _self.instance().findOneAndUpdate({ _id: token._id }, {
               $set: {
-                loginToken: _self.collection().schema.methods.generateNewToken(),
+                loginToken: _self.instance().schema.methods.generateNewToken(),
                 expiredAt: PDate.addDays(now, ( 
                   (rememberMe === true) ? 
                     GlobalConfig.LOGIN_TOKEN_EXPIRED_LONG : GlobalConfig.LOGIN_TOKEN_EXPIRED_SHORT ) 
@@ -122,7 +122,7 @@ export default MongooseModel.create(class LoginToken extends MongooseModel {
       
           // or it doesn't exist
           } else {
-            new (_self.collection())({
+            new (_self.instance())({
               userId: userId,
               loginToken: this.generateNewToken(),
               userAgent: userAgent,

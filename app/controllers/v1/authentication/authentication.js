@@ -14,7 +14,7 @@ export default class LoginController extends Nodee.Core.Controller {
       case 'login': 
         return ['api-key'];
       case 'logout':
-        return [ MiddlewareConfig.auth.userLoginRequired ];
+        return [ ...MiddlewareConfig.auth.userLoginRequired ];
       case 'register':
         return ['api-key', 'auth/register'];
     }

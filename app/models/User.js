@@ -23,7 +23,7 @@ export default MongooseModel.create(class User extends MongooseModel {
           {
             validator: value => {
               return new Promise((resolve, reject) => {
-                this.collection().count({ username: value }, (err, count) => {
+                this.instance().count({ username: value }, (err, count) => {
                   if (err) {
                     reject(err);
                   }
@@ -115,7 +115,7 @@ export default MongooseModel.create(class User extends MongooseModel {
           reject(new Exception('username or password is not defined', DetailCode.user.USERNAME_PASSWORD_NOT_DEFINED));
         }
       
-        _self.collection().findOne({ username: username, password: md5(password) }, (err, user) => {
+        _self.instance().findOne({ username: username, password: md5(password) }, (err, user) => {
           if (err) {
             reject(new Exception(err, DetailCode.common.SERVER_ERROR));
           }

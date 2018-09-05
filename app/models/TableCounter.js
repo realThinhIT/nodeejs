@@ -48,7 +48,7 @@ export default MongooseModel.create(class TableCounter extends MongooseModel {
     
     m.statics.autoIncrement = async function (columnId) {
       return new Promise((resolve, reject) => {
-        _self.collection().findOneAndUpdate({
+        _self.instance().findOneAndUpdate({
           columnId: columnId
         }, {
           updatedAt: new Date(),

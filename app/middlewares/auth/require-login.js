@@ -27,6 +27,7 @@ export default async (req, res) => {
     }
   } catch (e) {
     throw new Exception(
+      'invalid authentication method',
       ErrorCode.http.BAD_REQUEST, 
       DetailCode.auth.INVALID_AUTH_TYPE
     );

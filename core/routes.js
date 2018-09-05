@@ -22,12 +22,8 @@ let validationProcess = async (req, res, _middlewares) => {
     }
 
     // execute middleware, push executed to previous
-    try {
-      const thisMiddleware = await middleware(req, new PResponse(res), allMiddlewares);
-      allMiddlewares[midName] = thisMiddleware;
-    } catch (e) {
-      throw new Exception(`middleware ${midName} could not complete: ${e.message}`);
-    }
+    const thisMiddleware = await middleware(req, new PResponse(res), allMiddlewares);
+    allMiddlewares[midName] = thisMiddleware;
   }
 
   return allMiddlewares;
@@ -91,10 +87,10 @@ export default app => {
           try {
             middlewares = await validationProcess(req, res, _controller.middlewares(callbackMethod));
           } catch (e) {
-            let message = `[middleware] middleware at ${endPoint} could not finish: ${e.message}`;
+            let message = `[middleware] ${endPoint} could not finish: ${e.message}`;
 
             PLog.putException(message, e);
-            return (new PResponse(res)).fail(message);
+            return (new PResponse(res)).fail(message, e.code, e.detailCode, e.message);
           }
 
           await renderMethodConfig.SETUP_FUNCTION(app);
@@ -104,7 +100,7 @@ export default app => {
             await _controller[callbackMethod]();
             await _controller.afterController(callbackMethod);
           } catch (e) {
-            let message = `[route] route ${endPoint} refuse to finish, threw an exception: ${e.message}`;
+            let message = `[route] ${endPoint} refuse to finish, threw an exception: ${e.message}`;
 
             PLog.putException(message, e);
             return (new PResponse(res)).fail(message, e.code, e.detailCode);
