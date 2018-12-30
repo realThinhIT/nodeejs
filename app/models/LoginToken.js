@@ -9,7 +9,7 @@ const { PRandom, PDate } = NodeeModel.Utils;
 const { Const, GlobalConfig, DetailCode } = NodeeModel.Config;
 const { Exception, MongooseModel } = NodeeModel.Core;
 
-export default MongooseModel.create(class LoginToken extends MongooseModel {
+export default NodeeModel.Core.MongooseModel.create(class LoginToken extends MongooseModel {
   get shape() {
     return {
       userId: Number,

@@ -6,7 +6,7 @@ import NodeeModel from 'nodee/nodee-model';
 const { Const, DetailCode } = NodeeModel.Config;
 const { Exception, MongooseModel } = NodeeModel.Core;
 
-export default MongooseModel.create(class TableCounter extends MongooseModel {
+export default NodeeModel.Core.MongooseModel.create(class TableCounter extends MongooseModel {
   get shape() {
     return {
       columnId: {

@@ -10,7 +10,7 @@ const { PValidator } = NodeeModel.Utils;
 const { Const, DetailCode } = NodeeModel.Config;
 const { Exception, MongooseModel } = NodeeModel.Core;
 
-export default MongooseModel.create(class User extends MongooseModel {
+export default NodeeModel.Core.MongooseModel.create(class User extends MongooseModel {
   get shape() {
     return {
       userId: Number,

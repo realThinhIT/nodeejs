@@ -2,12 +2,12 @@
 // MODEL: User
 // ######################################################
 
-import NodeeModel from 'nodee-model';
+import NodeeModel from 'nodee/nodee-model';
 const { PValidator } = NodeeModel.Utils;
 const { Const } = NodeeModel.Config;
 const { Exception, MongooseModel } = NodeeModel.Core;
 
-export default MongooseModel.create(class ExampleModel extends MongooseModel {
+export default NodeeModel.Core.MongooseModel.create(class ExampleModel extends MongooseModel {
   get shape() {
     return {
       status: Number,
