@@ -12,7 +12,7 @@ const { Exception } = Nodee.Core;
 // to pass to the controller.
 // #############################################
 
-export default async (req, res, done, previous) => {
+export default async (req, res, previous) => {
   // insert middleware logic here
 
   if (false) {
