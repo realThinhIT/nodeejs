@@ -8,7 +8,7 @@
     "dev": "forever -w server-dev.js",
     "clean...": "rm -rf build && mkdir build",
     "clean": "rm -rf build && mkdir build",
-    "build-server": "babel ./ -s -D -d ./build --ignore node_modules,node_modules/*",
+    "build-server": "babel ./ -s -D -d ./build --ignore node_modules,node_modules/* && babel ./app/node_modules -s -D -d ./build/app/node_modules",
     "build": "npm run clean && npm run build-server",
     "start": "forever start ./build/server.js",
     "start-dev": "forever start ./server-dev.js"
